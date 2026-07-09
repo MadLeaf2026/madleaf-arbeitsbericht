@@ -97,6 +97,7 @@ body{font-family:'Satoshi',Arial,sans-serif;background:var(--bg);min-height:100v
 .moverlay{display:none;position:fixed;inset:0;background:rgba(23,56,45,.5);z-index:300;align-items:flex-end;justify-content:center}
 .moverlay.open{display:flex}
 .modal{background:var(--surface);border-radius:20px 20px 0 0;width:100%;max-width:480px;padding:20px 16px 32px;max-height:88vh;overflow-y:auto}
+.modal-full{background:var(--surface);border-radius:20px 20px 0 0;width:100%;padding:20px 16px 32px;height:92vh;overflow-y:auto}
 .modal h3{font-size:16px;font-weight:700;color:var(--text);margin-bottom:14px}
 .mclose{float:right;font-size:24px;color:var(--muted);cursor:pointer;background:none;border:none;line-height:1}
 .modal input,.modal select,.modal textarea{width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:8px;font-size:14px;font-family:'Satoshi',Arial,sans-serif;margin-bottom:10px;color:var(--text);background:var(--bg)}
@@ -167,7 +168,7 @@ body{font-family:'Satoshi',Arial,sans-serif;background:var(--bg);min-height:100v
 
 <div class="topbar">
   <div class="topbar-brand">
-    <div class="sub">MadLeaf · v3.1</div>
+    <div class="sub">MadLeaf · v3.2</div>
     <div class="title">Arbeitsbericht</div>
   </div>
   <div class="topbar-icons">
@@ -447,7 +448,7 @@ body{font-family:'Satoshi',Arial,sans-serif;background:var(--bg);min-height:100v
 </div>
 
 <div class="moverlay" id="m-prodotti">
-  <div class="modal">
+  <div class="modal-full">
     <button class="mclose" onclick="closeModal('m-prodotti')">×</button>
     <h3>Mittel auswählen</h3>
     <div id="psel-list"></div>
@@ -487,7 +488,7 @@ body{font-family:'Satoshi',Arial,sans-serif;background:var(--bg);min-height:100v
 </div>
 
 <div class="moverlay" id="m-new-azione">
-  <div class="modal">
+  <div class="modal-full">
     <button class="mclose" onclick="closeModal('m-new-azione')">×</button>
     <h3>Eigene Maßnahme</h3>
     <input type="text" id="na-label" placeholder="Kurzbezeichnung">
@@ -518,20 +519,16 @@ body{font-family:'Satoshi',Arial,sans-serif;background:var(--bg);min-height:100v
 <div class="moverlay" id="m-send">
   <div class="modal">
     <button class="mclose" onclick="closeModal('m-send')">×</button>
-    <h3>Bericht senden</h3>
+    <h3>Bericht erstellt ✓</h3>
     <p style="font-size:13px;color:var(--muted);margin-bottom:16px">
-      PDF wurde gespeichert. Wie möchten Sie den Bericht senden?
+      PDF gespeichert &amp; E-Mail automatisch gesendet. Auch per WhatsApp teilen?
     </p>
     <div style="display:flex;flex-direction:column;gap:10px">
-      <button class="btnmain" style="border-radius:10px;padding:14px" onclick="sendViaMail()">
-        <svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,12 2,6"/></svg>
-        Per E-Mail senden
-      </button>
       <button class="btnmain" style="border-radius:10px;padding:14px;background:#25d366" onclick="sendViaWhatsApp()">
         <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.554 4.116 1.526 5.845L.057 23.009a.75.75 0 0 0 .934.934l5.164-1.469A11.945 11.945 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.75a9.726 9.726 0 0 1-4.964-1.362l-.356-.212-3.685 1.048 1.048-3.685-.212-.356A9.726 9.726 0 0 1 2.25 12C2.25 6.615 6.615 2.25 12 2.25S21.75 6.615 21.75 12 17.385 21.75 12 21.75z"/></svg>
-        Per WhatsApp senden
+        Auch per WhatsApp senden
       </button>
-      <button class="mbtn s" onclick="closeModal('m-send');setTimeout(()=>{if(confirm(\"Neuen Bericht erstellen? Alle Daten werden zurückgesetzt.\")) resetAll();},200)">
+      <button class="mbtn s" onclick="closeModal('m-send');setTimeout(()=>{if(confirm('Neuen Bericht erstellen? Alle Daten werden zurückgesetzt.')) resetAll();},200)">
         Schließen
       </button>
     </div>
@@ -546,6 +543,8 @@ body{font-family:'Satoshi',Arial,sans-serif;background:var(--bg);min-height:100v
 // ═══════════════════════════════════
 const MAIL_SERVER = 'https://madleaf-mailserver.onrender.com';
 const MY_EMAIL    = 'giuseppe.maddalena@madleaf.de';
+const BREVO_KEY   = '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';
+const BREVO_FROM  = 'giuseppe.maddalena@madleaf.de';
 const MY_PHONE    = '+49 176 72002500';
 
 // ═══════════════════════════════════
@@ -1273,15 +1272,78 @@ async function generatePDF(){
       saveNachkontrollen(nk);
     }
 
-    hideSpinner();
-    // Apre modal con opzioni invio
-    openModal('m-send');
+    // Manda mail automaticamente via Brevo con PDF allegato
+    showSpinner('E-Mail wird gesendet...');
+    const pdfB64 = doc.output('datauristring').split(',')[1];
+    await sendViaBrevo(pdfB64);
 
   }catch(e){
     hideSpinner();
     console.error(e);
     showToast('Fehler beim Erstellen','red');
   }
+}
+
+async function sendViaBrevo(pdfB64){
+  const nc = _lastNextFmt ? `<br><br>📅 <strong>Nächste Kontrolle:</strong> ${_lastNextFmt}` : '';
+  const htmlBody = `
+    <div style="font-family:Arial,sans-serif;max-width:560px;margin:0 auto">
+      <div style="background:#17382d;padding:20px 24px;border-radius:12px 12px 0 0">
+        <p style="margin:0;color:#d9a64f;font-size:10px;letter-spacing:3px;text-transform:uppercase;font-weight:700">MADLEAF</p>
+        <p style="margin:4px 0 0;color:#fff;font-size:18px;font-weight:700">Arbeitsbericht</p>
+      </div>
+      <div style="background:#fcfbf8;padding:24px;border:1px solid rgba(23,56,45,0.12);border-top:none;border-radius:0 0 12px 12px">
+        <p style="color:#28251d;font-size:15px;line-height:1.7;margin:0 0 12px">Sehr geehrte Damen und Herren,</p>
+        <p style="color:#28251d;font-size:15px;line-height:1.7;margin:0 0 20px">
+          anbei erhalten Sie den Arbeitsbericht der Begehung vom <strong>${_lastDatumFmt}</strong>.${nc}
+        </p>
+        <p style="color:#28251d;font-size:15px;margin:0 0 4px">Mit freundlichen Grüßen</p>
+        <hr style="border:none;border-top:1px solid rgba(23,56,45,0.12);margin:16px 0">
+        <p style="margin:0;color:#17382d;font-size:16px;font-weight:700">Dr. Giuseppe Maddalena</p>
+        <p style="margin:2px 0 12px;color:#6f6c64;font-size:12px;text-transform:uppercase;letter-spacing:0.08em">Applied Entomology &amp; Environmental Risk</p>
+        <p style="margin:0;color:#28251d;font-size:13px">📞 ${MY_PHONE}</p>
+        <p style="margin:2px 0;color:#28251d;font-size:13px">✉ ${MY_EMAIL}</p>
+        <p style="margin:2px 0;color:#28251d;font-size:13px">🌐 www.madleaf.de</p>
+      </div>
+    </div>`;
+
+  const toEmail = state.kunde?.email || '';
+  const payload = {
+    sender: { name: 'MadLeaf – Dr. Giuseppe Maddalena', email: BREVO_FROM },
+    to: toEmail ? [{ email: toEmail, name: state.kunde.name }] : [],
+    cc: [{ email: MY_EMAIL, name: 'Dr. Giuseppe Maddalena' }],
+    subject: `MadLeaf – Arbeitsbericht ${_lastDatumFmt}`,
+    htmlContent: htmlBody,
+    attachment: [{ content: pdfB64, name: _lastFilename }]
+  };
+
+  // Se nessuna email cliente, manda solo a me
+  if (!toEmail) payload.to = [{ email: MY_EMAIL, name: 'Dr. Giuseppe Maddalena' }];
+
+  try {
+    const res = await fetch('https://api.brevo.com/v3/smtp/email', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'api-key': BREVO_KEY
+      },
+      body: JSON.stringify(payload)
+    });
+    hideSpinner();
+    if(res.ok){
+      showToast('PDF gespeichert & E-Mail gesendet ✓', 'gold');
+    } else {
+      const err = await res.json();
+      console.error('Brevo error:', err);
+      showToast('PDF gespeichert — E-Mail-Fehler', 'red');
+    }
+  } catch(e) {
+    hideSpinner();
+    showToast('PDF gespeichert — offline, E-Mail nicht gesendet', '');
+  }
+
+  // Apre modal solo per WhatsApp
+  openModal('m-send');
 }
 
 function sendViaMail(){
