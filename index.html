@@ -97,6 +97,7 @@ body{font-family:'Satoshi',Arial,sans-serif;background:var(--bg);min-height:100v
 .moverlay{display:none;position:fixed;inset:0;background:rgba(23,56,45,.5);z-index:300;align-items:flex-end;justify-content:center}
 .moverlay.open{display:flex}
 .modal{background:var(--surface);border-radius:20px 20px 0 0;width:100%;max-width:480px;padding:20px 16px 32px;max-height:88vh;overflow-y:auto}
+.modal-full{background:var(--surface);border-radius:20px 20px 0 0;width:100%;padding:20px 16px 32px;height:92vh;overflow-y:auto}
 .modal h3{font-size:16px;font-weight:700;color:var(--text);margin-bottom:14px}
 .mclose{float:right;font-size:24px;color:var(--muted);cursor:pointer;background:none;border:none;line-height:1}
 .modal input,.modal select,.modal textarea{width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:8px;font-size:14px;font-family:'Satoshi',Arial,sans-serif;margin-bottom:10px;color:var(--text);background:var(--bg)}
@@ -447,7 +448,7 @@ body{font-family:'Satoshi',Arial,sans-serif;background:var(--bg);min-height:100v
 </div>
 
 <div class="moverlay" id="m-prodotti">
-  <div class="modal">
+  <div class="modal-full">
     <button class="mclose" onclick="closeModal('m-prodotti')">×</button>
     <h3>Mittel auswählen</h3>
     <div id="psel-list"></div>
@@ -487,7 +488,7 @@ body{font-family:'Satoshi',Arial,sans-serif;background:var(--bg);min-height:100v
 </div>
 
 <div class="moverlay" id="m-new-azione">
-  <div class="modal">
+  <div class="modal-full">
     <button class="mclose" onclick="closeModal('m-new-azione')">×</button>
     <h3>Eigene Maßnahme</h3>
     <input type="text" id="na-label" placeholder="Kurzbezeichnung">
@@ -1029,11 +1030,10 @@ async function buildPDF(){
   // HEADER
   doc.setFillColor(...green);doc.rect(0,0,W,28,'F');
   doc.setFillColor(...gold);doc.rect(0,28,W,1.5,'F');
-  try{doc.addImage('logo.png','PNG',ml,6,28,16);}catch(e){}
-  doc.setTextColor(...gold);doc.setFontSize(9);doc.setFont('helvetica','bold');
-  doc.text('MADLEAF',ml+32,13);
-  doc.setTextColor(255,255,255);doc.setFontSize(15);doc.setFont('helvetica','bold');
-  doc.text('Arbeitsbericht',ml+32,21);
+  doc.setTextColor(...gold);doc.setFontSize(11);doc.setFont('helvetica','bold');
+  doc.text('MADLEAF',ml,14);
+  doc.setTextColor(255,255,255);doc.setFontSize(16);doc.setFont('helvetica','bold');
+  doc.text('Arbeitsbericht',ml,22);
   doc.setFontSize(9);doc.setFont('helvetica','normal');doc.setTextColor(200,220,210);
   doc.text(datumFmt,W-mr,17,{align:'right'});
   y=36;
@@ -1169,25 +1169,20 @@ async function buildPDF(){
     doc.text('Unterschrift nicht möglich.',ml,y+12);
     if(reason){const rl=doc.splitTextToSize(reason,half);doc.text(rl,ml,y+17);}
   }else{
-    doc.setDrawColor(220,216,210);doc.roundedRect(ml,y+8,half,26,2,2,'S');
-    try{doc.addImage(document.getElementById('sig-k').toDataURL('image/png'),'PNG',ml+1,y+9,half-2,24);}catch(e){}
+    doc.setDrawColor(220,216,210);doc.roundedRect(ml,y+6,half,40,2,2,'S');
+    try{doc.addImage(document.getElementById('sig-k').toDataURL('image/png'),'PNG',ml+1,y+7,half-2,38);}catch(e){}
   }
 
   // Firma mia
   const sigX=ml+half+10;
   doc.setTextColor(...gray);doc.setFontSize(8);doc.setFont('helvetica','normal');
   doc.text('Unterschrift MadLeaf',sigX,y);
-  try{doc.addImage('Signature_giuseppe.png','PNG',sigX,y+8,half,20,undefined,'FAST');}
+  try{doc.addImage('Signature_giuseppe.png','PNG',sigX,y+6,half,40,undefined,'FAST');}
   catch(e){
-    doc.setFillColor(247,246,242);doc.roundedRect(sigX,y+8,half,20,2,2,'F');
-    doc.setTextColor(...green);doc.setFontSize(18);doc.setFont('helvetica','bold');
-    doc.text('GM',sigX+half/2,y+21,{align:'center'});
+    doc.setFillColor(247,246,242);doc.roundedRect(sigX,y+6,half,40,2,2,'F');
+    doc.setTextColor(...green);doc.setFontSize(22);doc.setFont('helvetica','bold');
+    doc.text('GM',sigX+half/2,y+28,{align:'center'});
   }
-  doc.setTextColor(...black);doc.setFontSize(8);doc.setFont('helvetica','bold');
-  doc.text('Dr. Giuseppe Maddalena',ml,y+38);
-  doc.setFont('helvetica','normal');doc.setTextColor(...gray);
-  doc.text('Applied Entomology & Environmental Risk',ml,y+43);
-  doc.text(MY_PHONE,ml,y+48);
 
   // FOOTER TUTTE LE PAGINE
   const pages=doc.internal.getNumberOfPages();
@@ -1295,9 +1290,9 @@ function sendViaMail(){
   const subject=encodeURIComponent(`MadLeaf – Arbeitsbericht ${_lastDatumFmt}`);
   const nc=_lastNextFmt?`\n\nNächste Kontrolle: ${_lastNextFmt}`:'';
   const body=encodeURIComponent(
-    `Sehr geehrte Damen und Herren,\n\nanbei erhalten Sie den Arbeitsbericht der Begehung vom ${_lastDatumFmt}.\nBitte fügen Sie die Datei "${_lastFilename}" aus Ihrem Download-Ordner bei.${nc}\n\nMit freundlichen Grüßen\n\nDr. Giuseppe Maddalena\nMadLeaf – Applied Entomology & Environmental Risk\n${MY_PHONE}\ngiuseppe.maddalena@madleaf.de\nwww.madleaf.de`
+    `Sehr geehrte Damen und Herren,\n\nanbei erhalten Sie den Arbeitsbericht der Begehung vom ${_lastDatumFmt}.\n\n⚠ Bitte die Datei "${_lastFilename}" aus dem Download-Ordner anhängen!${nc}\n\nMit freundlichen Grüßen\n\nDr. Giuseppe Maddalena\nMadLeaf – Applied Entomology & Environmental Risk\n${MY_PHONE}\ngiuseppe.maddalena@madleaf.de\nwww.madleaf.de`
   );
-  window.location.href=`mailto:${to}?subject=${subject}&body=${body}`;
+  window.location.href=`mailto:${to}?cc=${encodeURIComponent(MY_EMAIL)}&subject=${subject}&body=${body}`;
   setTimeout(()=>{
     closeModal('m-send');
     setTimeout(()=>{if(confirm('Neuen Bericht erstellen? Alle Daten werden zurückgesetzt.')) resetAll();},400);
@@ -1318,29 +1313,6 @@ function sendViaWhatsApp(){
     closeModal('m-send');
     setTimeout(()=>{if(confirm('Neuen Bericht erstellen? Alle Daten werden zurückgesetzt.')) resetAll();},400);
   },500);
-}
-
-// Controlla promemoria all'avvio se online
-window.addEventListener('load',()=>{
-  if(navigator.onLine) checkReminders();
-});
-
-async function checkReminders(){
-  const today=new Date().toISOString().split('T')[0];
-  const reminders=JSON.parse(localStorage.getItem('ml_reminders')||'[]');
-  let changed=false;
-  for(const r of reminders){
-    if(!r.sent&&r.reminderDate<=today&&r.pwd){
-      try{
-        await fetch(`${MAIL_SERVER}/send-reminder`,{
-          method:'POST',headers:{'Content-Type':'application/json'},
-          body:JSON.stringify({password:r.pwd,kunde:r.kunde,datum:r.datum})
-        });
-        r.sent=true;changed=true;
-      }catch(e){}
-    }
-  }
-  if(changed) localStorage.setItem('ml_reminders',JSON.stringify(reminders));
 }
 
 // ═══════════════════════════════════
