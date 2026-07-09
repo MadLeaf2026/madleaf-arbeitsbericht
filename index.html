@@ -1,0 +1,1138 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="MadLeaf">
+<title>MadLeaf Arbeitsbericht</title>
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="logo.png">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f0f4f0;min-height:100vh;padding-bottom:80px}
+
+/* TOPBAR */
+.topbar{background:#1a5c3a;padding:12px 16px 10px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.topbar-left .sub{color:#9FE1CB;font-size:10px;letter-spacing:.1em;text-transform:uppercase}
+.topbar-left .title{color:#fff;font-size:17px;font-weight:600}
+.topbar-right{display:flex;gap:8px}
+.icon-btn{background:rgba(255,255,255,.15);border:none;border-radius:8px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#fff;font-size:18px}
+
+/* TIMER */
+.timer-bar{background:#0f3d27;padding:8px 16px;display:flex;align-items:center;gap:10px;position:sticky;top:62px;z-index:99}
+.timer-dot{width:9px;height:9px;border-radius:50%;background:#6b7280;flex-shrink:0;transition:background .3s}
+.timer-dot.running{background:#22c55e;animation:pulse 1.2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.timer-val{color:#fff;font-size:15px;font-weight:600;flex:1;font-variant-numeric:tabular-nums;letter-spacing:.02em}
+.timer-btn{background:transparent;border:1.5px solid #5DCAA5;color:#9FE1CB;font-size:12px;font-weight:600;padding:5px 14px;border-radius:6px;cursor:pointer;letter-spacing:.04em}
+.timer-btn.running{border-color:#f87171;color:#f87171}
+
+/* SECTIONS */
+.section{background:#fff;margin:10px 12px;border-radius:12px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.section-head{padding:12px 14px 0;display:flex;align-items:center;justify-content:space-between}
+.section-label{font-size:10px;color:#6b7280;text-transform:uppercase;letter-spacing:.09em;font-weight:600}
+.section-body{padding:10px 14px 14px}
+
+/* KUNDE */
+.kunde-row{display:flex;align-items:center;gap:10px}
+.avatar{width:38px;height:38px;border-radius:50%;background:#EAF3DE;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#3B6D11;flex-shrink:0}
+.kunde-name{font-size:15px;font-weight:600;color:#111}
+.kunde-sub{font-size:12px;color:#6b7280;margin-top:2px}
+.wbtn{margin-left:auto;font-size:12px;color:#3B6D11;border:1px solid #C0DD97;border-radius:6px;padding:4px 10px;cursor:pointer;background:#EAF3DE;white-space:nowrap;flex-shrink:0}
+
+/* DATUM */
+.datum-row{display:flex;align-items:center;gap:10px}
+.datum-row input[type=date]{border:1px solid #e5e7eb;border-radius:8px;padding:7px 10px;font-size:14px;color:#111;background:#f9fafb;flex:1}
+.gps-badge{font-size:11px;color:#3B6D11;background:#EAF3DE;border-radius:6px;padding:4px 8px;display:flex;align-items:center;gap:4px;white-space:nowrap}
+
+/* AZIONI */
+.aktion-block{border:1px solid #e5e7eb;border-radius:10px;margin-bottom:8px;overflow:hidden}
+.aktion-block.on{border-color:#639922}
+.aktion-head{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;cursor:pointer;background:#fff;transition:background .15s}
+.aktion-block.on .aktion-head{background:#EAF3DE}
+.achk{width:20px;height:20px;border-radius:5px;border:2px solid #d1d5db;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;background:#fff;transition:all .15s}
+.aktion-block.on .achk{background:#1a5c3a;border-color:#1a5c3a}
+.achk svg{display:none}
+.aktion-block.on .achk svg{display:block}
+.alabel{font-size:13px;color:#374151;flex:1;line-height:1.45}
+.aktion-block.on .alabel{color:#1a5c3a;font-weight:600}
+.aktion-body{padding:10px 12px 12px;border-top:1px solid #C0DD97;background:#f9fdf6}
+.aktion-body .hint{font-size:10px;color:#6b7280;margin-bottom:5px;text-transform:uppercase;letter-spacing:.06em}
+.aktion-body textarea{width:100%;font-size:13px;padding:8px 10px;border:1px solid #e5e7eb;border-radius:7px;background:#fff;color:#111;resize:none;min-height:72px;line-height:1.55;font-family:inherit}
+.aktion-body textarea:focus{outline:none;border-color:#639922}
+.blank-label{font-size:13px;color:#9ca3af;font-style:italic;flex:1;line-height:1.45}
+
+/* PRODOTTI */
+.prod-card{border:1px solid #e5e7eb;border-radius:8px;padding:10px 12px;margin-bottom:8px;position:relative}
+.prod-name{font-size:14px;font-weight:600;color:#111}
+.prod-detail{font-size:12px;color:#6b7280;margin-top:3px;line-height:1.5}
+.prod-badge{display:inline-block;font-size:10px;padding:2px 7px;background:#EAF3DE;color:#3B6D11;border-radius:4px;margin-top:4px;font-weight:600}
+.prod-del{position:absolute;top:8px;right:10px;font-size:18px;color:#d1d5db;cursor:pointer;background:none;border:none;line-height:1}
+.add-row{border:1.5px dashed #d1d5db;border-radius:8px;padding:10px;text-align:center;font-size:13px;color:#6b7280;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px}
+.add-row:active{background:#f9fafb}
+
+/* FOTO */
+.foto-strip{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px}
+.fthumb{width:72px;height:72px;border-radius:8px;background:#f3f4f6;border:1px solid #e5e7eb;display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;position:relative;overflow:hidden;cursor:pointer}
+.fthumb img{width:100%;height:100%;object-fit:cover}
+.fthumb .geo{position:absolute;bottom:2px;left:2px;font-size:9px;color:#3B6D11;background:#EAF3DEee;padding:1px 5px;border-radius:3px}
+.fthumb .del-foto{position:absolute;top:2px;right:2px;background:rgba(0,0,0,.5);color:#fff;border:none;border-radius:50%;width:18px;height:18px;font-size:12px;line-height:18px;text-align:center;cursor:pointer;padding:0}
+.fadd{width:72px;height:72px;border-radius:8px;border:1.5px dashed #d1d5db;display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer;color:#9ca3af;font-size:11px;gap:4px}
+.fadd svg{width:24px;height:24px}
+
+/* FIRME */
+.firma-wrap{margin-bottom:10px}
+.firma-label-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+.firma-sublabel{font-size:12px;color:#6b7280;font-weight:500}
+.firma-clear{font-size:12px;color:#3B6D11;cursor:pointer;background:none;border:none}
+.firma-canvas{border:1.5px solid #e5e7eb;border-radius:8px;background:#fff;width:100%;height:90px;touch-action:none;display:block}
+.nofirma-row{display:flex;align-items:center;gap:8px;margin-top:8px}
+.nofirma-row label{font-size:12px;color:#6b7280}
+.nofirma-textarea{width:100%;margin-top:6px;font-size:12px;padding:7px 10px;border:1px solid #e5e7eb;border-radius:7px;resize:none;min-height:52px;font-family:inherit;display:none}
+.mia-firma-box{border:1px solid #C0DD97;border-radius:10px;background:#EAF3DE;padding:12px 14px;display:flex;align-items:center;justify-content:space-between;margin-top:4px}
+.mia-firma-sig{font-family:Georgia,serif;font-size:28px;color:#1a5c3a;font-style:italic}
+.mia-firma-info{text-align:right}
+.mia-firma-name{font-size:12px;font-weight:700;color:#27500A}
+.mia-firma-title{font-size:10px;color:#3B6D11;margin-top:2px}
+
+/* BOTTOM */
+.bottom-bar{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid #e5e7eb;padding:10px 14px;display:flex;gap:8px;z-index:200}
+.btn-main{flex:1;background:#1a5c3a;color:#fff;border:none;border-radius:10px;padding:13px;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px}
+.btn-main:active{background:#0f3d27}
+.btn-save{background:#f3f4f6;border:1px solid #e5e7eb;color:#6b7280;border-radius:10px;padding:13px 15px;cursor:pointer;font-size:20px}
+
+/* MODALI */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:300;align-items:flex-end;justify-content:center}
+.modal-overlay.open{display:flex}
+.modal{background:#fff;border-radius:16px 16px 0 0;width:100%;max-width:480px;padding:20px 16px 30px;max-height:85vh;overflow-y:auto}
+.modal h3{font-size:16px;font-weight:700;color:#111;margin-bottom:14px}
+.modal input,.modal select,.modal textarea{width:100%;padding:10px 12px;border:1px solid #e5e7eb;border-radius:8px;font-size:14px;font-family:inherit;margin-bottom:10px;color:#111;background:#f9fafb}
+.modal textarea{resize:none;min-height:60px}
+.modal input:focus,.modal select:focus,.modal textarea:focus{outline:none;border-color:#639922}
+.modal-btn-row{display:flex;gap:8px;margin-top:4px}
+.modal-btn{flex:1;padding:11px;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;border:none}
+.modal-btn.primary{background:#1a5c3a;color:#fff}
+.modal-btn.secondary{background:#f3f4f6;color:#374151}
+.modal-close{float:right;font-size:22px;color:#9ca3af;cursor:pointer;background:none;border:none;line-height:1}
+
+/* CLIENTI LIST */
+.cliente-item{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #f3f4f6;cursor:pointer}
+.cliente-item:last-child{border-bottom:none}
+.cliente-item:active{background:#f9fafb;border-radius:8px}
+.cliente-item-info .name{font-size:14px;font-weight:600;color:#111}
+.cliente-item-info .sub{font-size:12px;color:#6b7280}
+
+/* PRODOTTI MODAL */
+.prod-select-item{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #f3f4f6;cursor:pointer}
+.prod-select-item:last-child{border-bottom:none}
+.prod-select-item .pname{font-size:13px;font-weight:600;color:#111}
+.prod-select-item .pdetail{font-size:11px;color:#6b7280;margin-top:1px}
+
+/* ONLINE BANNER */
+.online-banner{display:none;background:#EAF3DE;color:#27500A;font-size:12px;padding:6px 16px;text-align:center;font-weight:600}
+.online-banner.show{display:block}
+
+/* TOAST */
+.toast{position:fixed;top:80px;left:50%;transform:translateX(-50%);background:#1a5c3a;color:#fff;padding:10px 20px;border-radius:8px;font-size:13px;font-weight:600;z-index:400;opacity:0;transition:opacity .3s;pointer-events:none;white-space:nowrap}
+.toast.show{opacity:1}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-left">
+    <div class="sub">MadLeaf</div>
+    <div class="title">Arbeitsbericht</div>
+  </div>
+  <div class="topbar-right">
+    <button class="icon-btn" onclick="openModal('modal-berichte')" title="Gespeicherte Berichte">
+      <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+    </button>
+  </div>
+</div>
+
+<div id="online-banner" class="online-banner">✓ Online — E-Mail-Warteschlange wird verarbeitet...</div>
+
+<div class="timer-bar">
+  <div class="timer-dot" id="timer-dot"></div>
+  <span class="timer-val" id="timer-val">00h 00m 00s</span>
+  <button class="timer-btn" id="timer-btn" onclick="toggleTimer()">START</button>
+</div>
+
+<!-- KUNDE -->
+<div class="section">
+  <div class="section-head"><div class="section-label">Kunde</div></div>
+  <div class="section-body">
+    <div class="kunde-row" id="kunde-row">
+      <div class="avatar" id="kunde-avatar">–</div>
+      <div>
+        <div class="kunde-name" id="kunde-name">Kunde auswählen</div>
+        <div class="kunde-sub" id="kunde-sub">Tippen um Kunde zu wählen oder neu anlegen</div>
+      </div>
+      <button class="wbtn" onclick="openModal('modal-kunden')">Wählen</button>
+    </div>
+  </div>
+</div>
+
+<!-- DATUM -->
+<div class="section">
+  <div class="section-head"><div class="section-label">Datum &amp; Standort</div></div>
+  <div class="section-body">
+    <div class="datum-row">
+      <input type="date" id="datum-input">
+      <div class="gps-badge" id="gps-badge">
+        <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>
+        GPS...
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- AZIONI -->
+<div class="section">
+  <div class="section-head"><div class="section-label">Durchgeführte Maßnahmen</div></div>
+  <div class="section-body" id="azioni-container">
+
+    <div class="aktion-block" data-id="a1">
+      <div class="aktion-head" onclick="toggleAktion('a1')">
+        <div class="achk"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="alabel">Geländebegehung zur Erfassung und Bewertung biologischer Risikofaktoren</div>
+      </div>
+      <div class="aktion-body" style="display:none">
+        <div class="hint">Text bearbeiten:</div>
+        <textarea>Geländebegehung zur Erfassung und Bewertung biologischer Risikofaktoren. Zielorganismus: [bitte ergänzen]. Befund und Empfehlungen werden im Detailbericht übermittelt.</textarea>
+      </div>
+    </div>
+
+    <div class="aktion-block" data-id="a2">
+      <div class="aktion-head" onclick="toggleAktion('a2')">
+        <div class="achk"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="alabel">Monitoring-Kontrolle — Auswertung und Bericht folgen separat</div>
+      </div>
+      <div class="aktion-body" style="display:none">
+        <div class="hint">Text bearbeiten:</div>
+        <textarea>Monitoring-Kontrolle durchgeführt. [Anzahl] Fallen kontrolliert, [Anzahl] ersetzt. Die Ergebnisse werden nach Auswertung in den nächsten Tagen als separater Bericht übermittelt. Nächste Kontrolle: [Datum/KW].</textarea>
+      </div>
+    </div>
+
+    <div class="aktion-block" data-id="a3">
+      <div class="aktion-head" onclick="toggleAktion('a3')">
+        <div class="achk"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="alabel">Behandlung mit Pflanzenschutz- / Biozidmittel durchgeführt</div>
+      </div>
+      <div class="aktion-body" style="display:none">
+        <div class="hint">Text bearbeiten:</div>
+        <textarea>Behandlung durchgeführt mit [Mittelname] gegen [Zielorganismus]. Wirkstoff: [Wirkstoff], Dosierung: [Menge/Fläche]. Behandelte Fläche: [m²]. Nächste Kontrolle: [Datum].</textarea>
+      </div>
+    </div>
+
+    <div class="aktion-block" data-id="a4">
+      <div class="aktion-head" onclick="toggleAktion('a4')">
+        <div class="achk"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="alabel">Larvenbekämpfung an Gewässern / Wasseransammlungen</div>
+      </div>
+      <div class="aktion-body" style="display:none">
+        <div class="hint">Text bearbeiten:</div>
+        <textarea>Larvenbekämpfung durchgeführt an [Anzahl] Gewässern / Wasseransammlungen. Eingesetztes Mittel: [Mittelname]. Nächste Kontrolle: [Datum].</textarea>
+      </div>
+    </div>
+
+    <div class="aktion-block" data-id="a5">
+      <div class="aktion-head" onclick="toggleAktion('a5')">
+        <div class="achk"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="alabel">Risikoeinschätzung vor Ort — Detailbericht folgt</div>
+      </div>
+      <div class="aktion-body" style="display:none">
+        <div class="hint">Text bearbeiten:</div>
+        <textarea>Risikoeinschätzung vor Ort durchgeführt bezüglich [Thema / Zielorganismus]. Ein ausführlicher Detailbericht wird in Kürze nachgereicht.</textarea>
+      </div>
+    </div>
+
+    <div class="aktion-block" data-id="a6">
+      <div class="aktion-head" onclick="toggleAktion('a6')">
+        <div class="achk"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="alabel">Beratungsgespräch — schriftliche Empfehlungen folgen</div>
+      </div>
+      <div class="aktion-body" style="display:none">
+        <div class="hint">Text bearbeiten:</div>
+        <textarea>Beratungsgespräch geführt zum Thema [Thema]. Schriftliche Empfehlungen und Maßnahmenplan werden separat übermittelt.</textarea>
+      </div>
+    </div>
+
+    <div class="aktion-block" data-id="a7">
+      <div class="aktion-head" onclick="toggleAktion('a7')">
+        <div class="achk"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="blank-label">Freie Eingabe — eigene Maßnahme beschreiben</div>
+      </div>
+      <div class="aktion-body" style="display:none">
+        <div class="hint">Beschreibung:</div>
+        <textarea placeholder="Hier frei beschreiben was durchgeführt wurde..."></textarea>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- PRODOTTI -->
+<div class="section">
+  <div class="section-head"><div class="section-label">Eingesetzte Mittel</div></div>
+  <div class="section-body">
+    <div id="prodotti-list"></div>
+    <div class="add-row" onclick="openModal('modal-prodotti-sel')">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      Mittel hinzufügen
+    </div>
+  </div>
+</div>
+
+<!-- FOTO -->
+<div class="section">
+  <div class="section-head">
+    <div class="section-label">Fotodokumentation</div>
+    <span style="font-size:11px;color:#9ca3af">antippen für Beschriftung</span>
+  </div>
+  <div class="section-body">
+    <div class="foto-strip" id="foto-strip">
+      <div class="fadd" onclick="document.getElementById('foto-input').click()">
+        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+        Foto
+      </div>
+    </div>
+    <input type="file" id="foto-input" accept="image/*" multiple style="display:none" onchange="addFotos(this)">
+  </div>
+</div>
+
+<!-- FIRME -->
+<div class="section">
+  <div class="section-head"><div class="section-label">Unterschriften</div></div>
+  <div class="section-body">
+
+    <div class="firma-wrap">
+      <div class="firma-label-row">
+        <div class="firma-sublabel">Unterschrift Kunde</div>
+        <button class="firma-clear" onclick="clearCanvas('sig-kunde')">Löschen</button>
+      </div>
+      <canvas class="firma-canvas" id="sig-kunde" width="400" height="90"></canvas>
+      <div class="nofirma-row">
+        <input type="checkbox" id="nofirma-check" onchange="toggleNofirma()">
+        <label for="nofirma-check">Unterschrift nicht möglich — Begründung angeben</label>
+      </div>
+      <textarea class="nofirma-textarea" id="nofirma-reason" placeholder="Begründung..."></textarea>
+    </div>
+
+    <div class="firma-wrap" style="margin-bottom:0">
+      <div class="firma-sublabel" style="margin-bottom:8px">Unterschrift MadLeaf</div>
+      <div class="mia-firma-box">
+        <div class="mia-firma-sig">GM</div>
+        <div class="mia-firma-info">
+          <div class="mia-firma-name">Dr. Giuseppe Maddalena</div>
+          <div class="mia-firma-title">Applied Entomology &amp; Environmental Risk</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- BOTTOM BAR -->
+<div class="bottom-bar">
+  <button class="btn-save" onclick="saveDraft()" title="Entwurf speichern">
+    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+  </button>
+  <button class="btn-main" onclick="generateAndSend()">
+    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M22 2L11 13"/><path d="M22 2L15 22 11 13 2 9l20-7z"/></svg>
+    PDF erstellen &amp; senden
+  </button>
+</div>
+
+<!-- MODAL KUNDEN -->
+<div class="modal-overlay" id="modal-kunden">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('modal-kunden')">×</button>
+    <h3>Kunde auswählen</h3>
+    <div id="kunden-list"></div>
+    <hr style="margin:14px 0;border-color:#f3f4f6">
+    <div style="font-size:13px;font-weight:700;color:#374151;margin-bottom:10px">Neuen Kunden anlegen</div>
+    <input type="text" id="new-k-name" placeholder="Name *">
+    <input type="text" id="new-k-address" placeholder="Adresse">
+    <input type="text" id="new-k-city" placeholder="Ort">
+    <input type="email" id="new-k-email" placeholder="E-Mail *">
+    <input type="tel" id="new-k-phone" placeholder="Telefon">
+    <div class="modal-btn-row">
+      <button class="modal-btn secondary" onclick="closeModal('modal-kunden')">Abbrechen</button>
+      <button class="modal-btn primary" onclick="saveNewKunde()">Speichern</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL PRODOTTI SELEZIONE -->
+<div class="modal-overlay" id="modal-prodotti-sel">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('modal-prodotti-sel')">×</button>
+    <h3>Mittel auswählen</h3>
+    <div id="prodotti-sel-list"></div>
+    <hr style="margin:14px 0;border-color:#f3f4f6">
+    <div style="font-size:13px;font-weight:700;color:#374151;margin-bottom:10px">Neues Mittel anlegen</div>
+    <input type="text" id="new-p-name" placeholder="Handelsname *">
+    <input type="text" id="new-p-wirkstoff" placeholder="Wirkstoff (z.B. Deltamethrin 2%)">
+    <input type="text" id="new-p-dosierung" placeholder="Dosierung (z.B. 0,75 g/100 m²)">
+    <input type="text" id="new-p-klasse" placeholder="Wirkstoffklasse (z.B. Pyrethroid)">
+    <div class="modal-btn-row">
+      <button class="modal-btn secondary" onclick="closeModal('modal-prodotti-sel')">Abbrechen</button>
+      <button class="modal-btn primary" onclick="saveNewProdotto()">Speichern &amp; hinzufügen</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL FOTO DESCRIZIONE -->
+<div class="modal-overlay" id="modal-foto-desc">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('modal-foto-desc')">×</button>
+    <h3>Fotobeschriftung</h3>
+    <textarea id="foto-desc-input" placeholder="Beschreibung dieser Aufnahme..." style="width:100%;padding:10px;border:1px solid #e5e7eb;border-radius:8px;font-size:14px;font-family:inherit;resize:none;min-height:80px"></textarea>
+    <div class="modal-btn-row" style="margin-top:10px">
+      <button class="modal-btn secondary" onclick="closeModal('modal-foto-desc')">Abbrechen</button>
+      <button class="modal-btn primary" onclick="saveFotoDesc()">Speichern</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL BERICHTE -->
+<div class="modal-overlay" id="modal-berichte">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('modal-berichte')">×</button>
+    <h3>Gespeicherte Berichte</h3>
+    <div id="berichte-list"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ══════════════════════════════════════════════
+// EMAILJS CONFIG — inserisci i tuoi dati qui
+// ══════════════════════════════════════════════
+const EMAILJS_PUBLIC_KEY  = 'TUO_PUBLIC_KEY';
+const EMAILJS_SERVICE_ID  = 'TUO_SERVICE_ID';
+const EMAILJS_TEMPLATE_ID = 'TUO_TEMPLATE_ID';
+const MY_EMAIL = 'giuseppe.maddalena@madleaf.de';
+
+// ══════════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════════
+let state = {
+  kunde: null,
+  prodotti: [],
+  fotos: [],
+  gps: null,
+  currentFotoIdx: null
+};
+
+// ══════════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════════
+document.addEventListener('DOMContentLoaded', () => {
+  setTodayDate();
+  initGPS();
+  initSignatures();
+  restoreTimer();
+  renderKundenList();
+  renderProdottiSelList();
+  checkOnlineQueue();
+});
+
+window.addEventListener('online', () => {
+  showBanner();
+  checkOnlineQueue();
+});
+
+// ══════════════════════════════════════════════
+// DATA HELPERS
+// ══════════════════════════════════════════════
+function getKunden() {
+  try { return JSON.parse(localStorage.getItem('ml_kunden') || '[]'); } catch(e){ return []; }
+}
+function saveKunden(k) { localStorage.setItem('ml_kunden', JSON.stringify(k)); }
+
+function getProdottiDB() {
+  const def = [
+    {name:'Aqua-K-Othrin 2 WG', wirkstoff:'Deltamethrin 2%', dosierung:'0,75 g/100 m²', klasse:'Pyrethroid'},
+    {name:'VectoBac WG', wirkstoff:'Bacillus thuringiensis israelensis', dosierung:'0,5–5 g/m²', klasse:'Biologisch'},
+    {name:'Ficam W', wirkstoff:'Bendiocarb 80%', dosierung:'nach Anweisung', klasse:'Carbamat'},
+  ];
+  try { return JSON.parse(localStorage.getItem('ml_prodotti_db') || JSON.stringify(def)); } catch(e){ return def; }
+}
+function saveProdottiDB(p) { localStorage.setItem('ml_prodotti_db', JSON.stringify(p)); }
+
+function getDrafts() {
+  try { return JSON.parse(localStorage.getItem('ml_drafts') || '[]'); } catch(e){ return []; }
+}
+function saveDrafts(d) { localStorage.setItem('ml_drafts', JSON.stringify(d)); }
+
+function getQueue() {
+  try { return JSON.parse(localStorage.getItem('ml_email_queue') || '[]'); } catch(e){ return []; }
+}
+function saveQueue(q) { localStorage.setItem('ml_email_queue', JSON.stringify(q)); }
+
+// ══════════════════════════════════════════════
+// DATE & GPS
+// ══════════════════════════════════════════════
+function setTodayDate() {
+  const today = new Date();
+  today.setMinutes(today.getMinutes() - today.getTimezoneOffset());
+  document.getElementById('datum-input').value = today.toISOString().split('T')[0];
+}
+
+function initGPS() {
+  const badge = document.getElementById('gps-badge');
+  if (!navigator.geolocation) { badge.textContent = 'Kein GPS'; return; }
+  navigator.geolocation.getCurrentPosition(pos => {
+    state.gps = { lat: pos.coords.latitude.toFixed(5), lon: pos.coords.longitude.toFixed(5) };
+    badge.innerHTML = `<svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg> ${state.gps.lat}, ${state.gps.lon}`;
+    badge.style.background = '#EAF3DE';
+    badge.style.color = '#27500A';
+  }, () => { badge.textContent = 'GPS nicht verfügbar'; });
+}
+
+// ══════════════════════════════════════════════
+// TIMER
+// ══════════════════════════════════════════════
+let timerInterval, timerRunning = false;
+
+function toggleTimer() {
+  timerRunning ? stopTimer() : startTimer();
+}
+
+function startTimer() {
+  if (!localStorage.getItem('ml_timer_start'))
+    localStorage.setItem('ml_timer_start', new Date().toISOString());
+  timerRunning = true;
+  document.getElementById('timer-dot').classList.add('running');
+  document.getElementById('timer-btn').textContent = 'STOP';
+  document.getElementById('timer-btn').classList.add('running');
+  runTimer();
+}
+
+function stopTimer() {
+  clearInterval(timerInterval);
+  timerRunning = false;
+  document.getElementById('timer-dot').classList.remove('running');
+  document.getElementById('timer-btn').textContent = 'START';
+  document.getElementById('timer-btn').classList.remove('running');
+}
+
+function runTimer() {
+  timerInterval = setInterval(() => {
+    const start = new Date(localStorage.getItem('ml_timer_start'));
+    const secs = Math.floor((new Date() - start) / 1000);
+    const h = Math.floor(secs/3600), m = Math.floor((secs%3600)/60), s = secs%60;
+    document.getElementById('timer-val').textContent =
+      `${String(h).padStart(2,'0')}h ${String(m).padStart(2,'0')}m ${String(s).padStart(2,'0')}s`;
+  }, 1000);
+}
+
+function restoreTimer() {
+  if (localStorage.getItem('ml_timer_start')) startTimer();
+}
+
+function getTimerString() {
+  return document.getElementById('timer-val').textContent;
+}
+
+// ══════════════════════════════════════════════
+// KUNDEN
+// ══════════════════════════════════════════════
+function renderKundenList() {
+  const kunden = getKunden();
+  const container = document.getElementById('kunden-list');
+  if (!kunden.length) { container.innerHTML = '<p style="font-size:13px;color:#9ca3af;margin-bottom:10px">Noch keine Kunden gespeichert.</p>'; return; }
+  container.innerHTML = kunden.map((k,i) => `
+    <div class="cliente-item" onclick="selectKunde(${i})">
+      <div class="avatar">${k.name.substring(0,2).toUpperCase()}</div>
+      <div class="cliente-item-info">
+        <div class="name">${k.name}</div>
+        <div class="sub">${k.city || ''} · ${k.email || ''}</div>
+      </div>
+    </div>`).join('');
+}
+
+function selectKunde(i) {
+  const k = getKunden()[i];
+  state.kunde = k;
+  document.getElementById('kunde-avatar').textContent = k.name.substring(0,2).toUpperCase();
+  document.getElementById('kunde-name').textContent = k.name;
+  document.getElementById('kunde-sub').textContent = `${k.city||''} · ${k.email||''}`;
+  closeModal('modal-kunden');
+}
+
+function saveNewKunde() {
+  const name = document.getElementById('new-k-name').value.trim();
+  const email = document.getElementById('new-k-email').value.trim();
+  if (!name) { showToast('Name ist erforderlich'); return; }
+  const k = {
+    name, email,
+    address: document.getElementById('new-k-address').value.trim(),
+    city: document.getElementById('new-k-city').value.trim(),
+    phone: document.getElementById('new-k-phone').value.trim()
+  };
+  const kunden = getKunden();
+  kunden.push(k);
+  saveKunden(kunden);
+  ['new-k-name','new-k-address','new-k-city','new-k-email','new-k-phone'].forEach(id => document.getElementById(id).value='');
+  state.kunde = k;
+  document.getElementById('kunde-avatar').textContent = k.name.substring(0,2).toUpperCase();
+  document.getElementById('kunde-name').textContent = k.name;
+  document.getElementById('kunde-sub').textContent = `${k.city||''} · ${k.email||''}`;
+  renderKundenList();
+  closeModal('modal-kunden');
+  showToast('Kunde gespeichert ✓');
+}
+
+// ══════════════════════════════════════════════
+// AZIONI
+// ══════════════════════════════════════════════
+function toggleAktion(id) {
+  const block = document.querySelector(`[data-id="${id}"]`);
+  const body = block.querySelector('.aktion-body');
+  const on = block.classList.contains('on');
+  if (on) {
+    block.classList.remove('on');
+    body.style.display = 'none';
+  } else {
+    block.classList.add('on');
+    body.style.display = 'block';
+  }
+}
+
+function getAzioniSelezionate() {
+  const result = [];
+  document.querySelectorAll('.aktion-block.on').forEach(block => {
+    const ta = block.querySelector('textarea');
+    if (ta && ta.value.trim()) result.push(ta.value.trim());
+  });
+  return result;
+}
+
+// ══════════════════════════════════════════════
+// PRODOTTI
+// ══════════════════════════════════════════════
+function renderProdottiSelList() {
+  const db = getProdottiDB();
+  const container = document.getElementById('prodotti-sel-list');
+  container.innerHTML = db.map((p,i) => `
+    <div class="prod-select-item" onclick="addProdotto(${i})">
+      <div>
+        <div class="pname">${p.name}</div>
+        <div class="pdetail">${p.wirkstoff} · ${p.dosierung}</div>
+      </div>
+    </div>`).join('');
+}
+
+function addProdotto(i) {
+  const p = getProdottiDB()[i];
+  state.prodotti.push({...p});
+  renderProdottiInForm();
+  closeModal('modal-prodotti-sel');
+}
+
+function saveNewProdotto() {
+  const name = document.getElementById('new-p-name').value.trim();
+  if (!name) { showToast('Handelsname erforderlich'); return; }
+  const p = {
+    name,
+    wirkstoff: document.getElementById('new-p-wirkstoff').value.trim(),
+    dosierung: document.getElementById('new-p-dosierung').value.trim(),
+    klasse: document.getElementById('new-p-klasse').value.trim()
+  };
+  const db = getProdottiDB();
+  db.push(p);
+  saveProdottiDB(db);
+  state.prodotti.push({...p});
+  renderProdottiInForm();
+  renderProdottiSelList();
+  ['new-p-name','new-p-wirkstoff','new-p-dosierung','new-p-klasse'].forEach(id => document.getElementById(id).value='');
+  closeModal('modal-prodotti-sel');
+  showToast('Mittel gespeichert ✓');
+}
+
+function renderProdottiInForm() {
+  const container = document.getElementById('prodotti-list');
+  container.innerHTML = state.prodotti.map((p,i) => `
+    <div class="prod-card">
+      <div class="prod-name">${p.name}</div>
+      <div class="prod-detail">Wirkstoff: ${p.wirkstoff} · Dosierung: ${p.dosierung}</div>
+      ${p.klasse ? `<span class="prod-badge">${p.klasse}</span>` : ''}
+      <button class="prod-del" onclick="removeProdotto(${i})">×</button>
+    </div>`).join('');
+}
+
+function removeProdotto(i) {
+  state.prodotti.splice(i,1);
+  renderProdottiInForm();
+}
+
+// ══════════════════════════════════════════════
+// FOTO
+// ══════════════════════════════════════════════
+function addFotos(input) {
+  Array.from(input.files).forEach(file => {
+    const reader = new FileReader();
+    reader.onload = e => {
+      state.fotos.push({ dataUrl: e.target.result, desc: '', gps: state.gps ? `${state.gps.lat}, ${state.gps.lon}` : '' });
+      renderFotoStrip();
+    };
+    reader.readAsDataURL(file);
+  });
+  input.value = '';
+}
+
+function renderFotoStrip() {
+  const strip = document.getElementById('foto-strip');
+  const addBtn = strip.querySelector('.fadd');
+  strip.querySelectorAll('.fthumb').forEach(el => el.remove());
+  state.fotos.forEach((f,i) => {
+    const div = document.createElement('div');
+    div.className = 'fthumb';
+    div.innerHTML = `<img src="${f.dataUrl}" onclick="openFotoDesc(${i})">
+      ${f.gps ? `<div class="geo">GPS</div>` : ''}
+      <button class="del-foto" onclick="removeFoto(event,${i})">×</button>`;
+    strip.insertBefore(div, addBtn);
+  });
+}
+
+function openFotoDesc(i) {
+  state.currentFotoIdx = i;
+  document.getElementById('foto-desc-input').value = state.fotos[i].desc || '';
+  openModal('modal-foto-desc');
+}
+
+function saveFotoDesc() {
+  if (state.currentFotoIdx !== null)
+    state.fotos[state.currentFotoIdx].desc = document.getElementById('foto-desc-input').value.trim();
+  closeModal('modal-foto-desc');
+}
+
+function removeFoto(e, i) {
+  e.stopPropagation();
+  state.fotos.splice(i,1);
+  renderFotoStrip();
+}
+
+// ══════════════════════════════════════════════
+// FIRME
+// ══════════════════════════════════════════════
+function initSignatures() {
+  setupCanvas('sig-kunde');
+}
+
+function setupCanvas(id) {
+  const canvas = document.getElementById(id);
+  const ctx = canvas.getContext('2d');
+  let drawing = false;
+
+  const getPos = (e) => {
+    const rect = canvas.getBoundingClientRect();
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
+    const src = e.touches ? e.touches[0] : e;
+    return { x: (src.clientX - rect.left) * scaleX, y: (src.clientY - rect.top) * scaleY };
+  };
+
+  canvas.addEventListener('mousedown', e => { drawing=true; ctx.beginPath(); const p=getPos(e); ctx.moveTo(p.x,p.y); });
+  canvas.addEventListener('mousemove', e => { if(!drawing)return; const p=getPos(e); ctx.lineTo(p.x,p.y); ctx.strokeStyle='#111'; ctx.lineWidth=2; ctx.lineCap='round'; ctx.stroke(); });
+  canvas.addEventListener('mouseup', () => drawing=false);
+  canvas.addEventListener('mouseleave', () => drawing=false);
+  canvas.addEventListener('touchstart', e => { e.preventDefault(); drawing=true; ctx.beginPath(); const p=getPos(e); ctx.moveTo(p.x,p.y); }, {passive:false});
+  canvas.addEventListener('touchmove', e => { e.preventDefault(); if(!drawing)return; const p=getPos(e); ctx.lineTo(p.x,p.y); ctx.strokeStyle='#111'; ctx.lineWidth=2; ctx.lineCap='round'; ctx.stroke(); }, {passive:false});
+  canvas.addEventListener('touchend', () => drawing=false);
+}
+
+function clearCanvas(id) {
+  const c = document.getElementById(id);
+  c.getContext('2d').clearRect(0,0,c.width,c.height);
+}
+
+function toggleNofirma() {
+  const checked = document.getElementById('nofirma-check').checked;
+  document.getElementById('nofirma-reason').style.display = checked ? 'block' : 'none';
+  if (checked) clearCanvas('sig-kunde');
+}
+
+// ══════════════════════════════════════════════
+// PDF GENERATION
+// ══════════════════════════════════════════════
+async function buildPDF() {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ orientation:'portrait', unit:'mm', format:'a4' });
+  const W = 210, H = 297;
+  const ml = 18, mr = 18, mt = 18;
+  let y = mt;
+  const green = [26, 92, 58];
+  const lightGreen = [234, 243, 222];
+  const gray = [107, 114, 128];
+  const black = [17, 17, 17];
+
+  const datum = document.getElementById('datum-input').value;
+  const datumFormatted = datum ? new Date(datum+'T12:00:00').toLocaleDateString('de-DE',{day:'2-digit',month:'long',year:'numeric'}) : '—';
+  const azioni = getAzioniSelezionate();
+  const arbeitszeit = document.getElementById('timer-val').textContent;
+
+  // Helper
+  const setColor = (r,g,b) => { doc.setTextColor(r,g,b); };
+  const setFill = (r,g,b) => { doc.setFillColor(r,g,b); };
+  const setDraw = (r,g,b) => { doc.setDrawColor(r,g,b); };
+
+  // ── HEADER ──
+  setFill(...green);
+  doc.rect(0, 0, W, 30, 'F');
+
+  try {
+    doc.addImage('logo.png', 'PNG', ml, 6, 40, 12);
+  } catch(e){}
+
+  setColor(255,255,255);
+  doc.setFontSize(9); doc.setFont('helvetica','normal');
+  doc.text('APPLIED ENTOMOLOGY & ENVIRONMENTAL RISK', ml+44, 11);
+  doc.setFontSize(14); doc.setFont('helvetica','bold');
+  doc.text('Arbeitsbericht', ml+44, 18);
+  doc.setFontSize(9); doc.setFont('helvetica','normal');
+  doc.text(datumFormatted, ml+44, 24);
+
+  y = 36;
+
+  // ── MITTELTEIL: ABSENDER | EMPFÄNGER ──
+  setColor(...black);
+  doc.setFontSize(8); doc.setFont('helvetica','bold');
+  doc.text('Dr. Giuseppe Maddalena', ml, y);
+  doc.setFont('helvetica','normal');
+  doc.text('Applied Entomology & Environmental Risk', ml, y+4);
+  doc.text('Schillerstraße 8, 79369 Wyhl am Kaiserstuhl', ml, y+8);
+  doc.text('+49 163 3661630  |  giuseppe.maddalena@madleaf.de', ml, y+12);
+
+  if (state.kunde) {
+    doc.setFont('helvetica','bold');
+    doc.text(state.kunde.name, W/2+10, y);
+    doc.setFont('helvetica','normal');
+    if (state.kunde.address) doc.text(state.kunde.address, W/2+10, y+4);
+    if (state.kunde.city) doc.text(state.kunde.city, W/2+10, y+8);
+    if (state.kunde.email) doc.text(state.kunde.email, W/2+10, y+12);
+    if (state.kunde.phone) doc.text(state.kunde.phone, W/2+10, y+16);
+  }
+
+  y += 22;
+  setDraw(200,200,200); doc.setLineWidth(0.3);
+  doc.line(ml, y, W-mr, y);
+  y += 6;
+
+  // ── INFO BOX ──
+  setFill(...lightGreen);
+  doc.roundedRect(ml, y, W-ml-mr, 18, 2, 2, 'F');
+  setColor(...green);
+  doc.setFontSize(8); doc.setFont('helvetica','bold');
+  doc.text('DATUM', ml+5, y+5);
+  doc.text('ARBEITSZEIT', ml+55, y+5);
+  if (state.gps) doc.text('GPS', ml+105, y+5);
+  setColor(...black);
+  doc.setFontSize(10); doc.setFont('helvetica','bold');
+  doc.text(datumFormatted, ml+5, y+13);
+  doc.text(arbeitszeit, ml+55, y+13);
+  if (state.gps) doc.setFontSize(8) && doc.text(`${state.gps.lat}, ${state.gps.lon}`, ml+105, y+13);
+
+  y += 24;
+
+  // ── AZIONI ──
+  if (azioni.length) {
+    setColor(...green);
+    doc.setFontSize(10); doc.setFont('helvetica','bold');
+    doc.text('DURCHGEFÜHRTE MASSNAHMEN', ml, y);
+    y += 5;
+    setDraw(...green); doc.setLineWidth(0.5);
+    doc.line(ml, y, W-mr, y);
+    y += 5;
+
+    azioni.forEach((az, idx) => {
+      setFill(...lightGreen);
+      const lines = doc.splitTextToSize(az, W-ml-mr-10);
+      const boxH = lines.length * 4.5 + 7;
+      if (y + boxH > H - 40) { doc.addPage(); y = mt; }
+      doc.roundedRect(ml, y, W-ml-mr, boxH, 2, 2, 'F');
+      setFill(...green);
+      doc.rect(ml, y, 2, boxH, 'F');
+      setColor(...black);
+      doc.setFontSize(9); doc.setFont('helvetica','normal');
+      lines.forEach((line, li) => doc.text(line, ml+6, y+5+li*4.5));
+      y += boxH + 4;
+    });
+    y += 4;
+  }
+
+  // ── PRODOTTI ──
+  if (state.prodotti.length) {
+    if (y + 30 > H - 40) { doc.addPage(); y = mt; }
+    setColor(...green);
+    doc.setFontSize(10); doc.setFont('helvetica','bold');
+    doc.text('EINGESETZTE MITTEL', ml, y);
+    y += 5;
+    setDraw(...green); doc.setLineWidth(0.5);
+    doc.line(ml, y, W-mr, y);
+    y += 5;
+
+    state.prodotti.forEach(p => {
+      if (y + 16 > H - 40) { doc.addPage(); y = mt; }
+      setFill(249,253,246);
+      doc.roundedRect(ml, y, W-ml-mr, 16, 2, 2, 'F');
+      setDraw(192,221,151); doc.setLineWidth(0.3);
+      doc.roundedRect(ml, y, W-ml-mr, 16, 2, 2, 'S');
+      setColor(...black);
+      doc.setFontSize(10); doc.setFont('helvetica','bold');
+      doc.text(p.name, ml+4, y+6);
+      doc.setFontSize(8); doc.setFont('helvetica','normal'); setColor(...gray);
+      doc.text(`Wirkstoff: ${p.wirkstoff}  ·  Dosierung: ${p.dosierung}`, ml+4, y+11);
+      if (p.klasse) {
+        setFill(...lightGreen); doc.roundedRect(W-mr-22, y+3, 18, 5, 1, 1, 'F');
+        setColor(...green); doc.setFontSize(7); doc.text(p.klasse, W-mr-13, y+6.5, {align:'center'});
+      }
+      y += 20;
+    });
+    y += 4;
+  }
+
+  // ── FOTO PAGINA 2+ ──
+  if (state.fotos.length) {
+    doc.addPage(); y = mt;
+    setColor(...green);
+    doc.setFontSize(10); doc.setFont('helvetica','bold');
+    doc.text('FOTODOKUMENTATION', ml, y);
+    y += 5;
+    setDraw(...green); doc.setLineWidth(0.5);
+    doc.line(ml, y, W-mr, y);
+    y += 8;
+
+    for (const foto of state.fotos) {
+      try {
+        const maxW = W-ml-mr, maxH = 80;
+        const img = new Image();
+        img.src = foto.dataUrl;
+        await new Promise(r => { img.onload = r; });
+        const ratio = Math.min(maxW/img.width, maxH/img.height);
+        const fw = img.width*ratio, fh = img.height*ratio;
+        if (y + fh + 15 > H - 30) { doc.addPage(); y = mt; }
+        doc.addImage(foto.dataUrl, 'JPEG', ml, y, fw, fh, undefined, 'MEDIUM');
+        if (foto.gps) {
+          setFill(...lightGreen);
+          doc.roundedRect(ml, y+fh-6, 40, 5.5, 1, 1, 'F');
+          setColor(...green); doc.setFontSize(7);
+          doc.text(`GPS: ${foto.gps}`, ml+2, y+fh-2.5);
+        }
+        if (foto.desc) {
+          y += fh + 3;
+          setColor(...gray); doc.setFontSize(8); doc.setFont('helvetica','italic');
+          const descLines = doc.splitTextToSize(foto.desc, W-ml-mr);
+          doc.text(descLines, ml, y);
+          y += descLines.length * 4 + 6;
+        } else {
+          y += fh + 8;
+        }
+      } catch(e) { y += 8; }
+    }
+  }
+
+  // ── FIRME ──
+  if (y + 60 > H - 15) { doc.addPage(); y = mt; }
+  else { y += 6; }
+
+  setDraw(220,220,220); doc.setLineWidth(0.3);
+  doc.line(ml, y, W-mr, y);
+  y += 8;
+
+  const sigKunde = document.getElementById('sig-kunde');
+  const nofirma = document.getElementById('nofirma-check').checked;
+  const halfW = (W-ml-mr)/2 - 5;
+
+  // Firma cliente
+  setColor(...gray); doc.setFontSize(8); doc.setFont('helvetica','normal');
+  doc.text('Unterschrift Kunde', ml, y);
+  if (nofirma) {
+    const reason = document.getElementById('nofirma-reason').value;
+    setColor(...black); doc.setFontSize(8);
+    doc.text('Unterschrift nicht möglich.', ml, y+8);
+    if (reason) { const rl = doc.splitTextToSize(reason, halfW); doc.text(rl, ml, y+13); }
+  } else {
+    setDraw(220,220,220); doc.setLineWidth(0.3);
+    doc.rect(ml, y+3, halfW, 22, 'S');
+    try {
+      const sigData = sigKunde.toDataURL('image/png');
+      doc.addImage(sigData, 'PNG', ml+1, y+4, halfW-2, 20);
+    } catch(e){}
+  }
+
+  // Firma mia
+  const sigX = ml + halfW + 10;
+  setColor(...gray); doc.setFontSize(8); doc.setFont('helvetica','normal');
+  doc.text('Unterschrift MadLeaf', sigX, y);
+  try {
+    doc.addImage('Signature_giuseppe.png', 'PNG', sigX, y+3, halfW, 18, undefined, 'FAST');
+  } catch(e){
+    setFill(...lightGreen);
+    doc.roundedRect(sigX, y+3, halfW, 18, 2, 2, 'F');
+    setColor(...green); doc.setFontSize(18); doc.setFont('helvetica','bold');
+    doc.text('GM', sigX + halfW/2, y+15, {align:'center'});
+  }
+
+  setColor(...black);
+  doc.setFontSize(8); doc.setFont('helvetica','bold');
+  doc.text('Dr. Giuseppe Maddalena', ml, y+28);
+  doc.setFont('helvetica','normal'); setColor(...gray);
+  doc.text('Applied Entomology & Environmental Risk', ml, y+32);
+
+  // ── FOOTER SU OGNI PAGINA ──
+  const pageCount = doc.internal.getNumberOfPages();
+  for (let i=1; i<=pageCount; i++) {
+    doc.setPage(i);
+    setFill(...green);
+    doc.rect(0, H-10, W, 10, 'F');
+    setColor(255,255,255); doc.setFontSize(7); doc.setFont('helvetica','normal');
+    doc.text('MadLeaf · Dr. Giuseppe Maddalena · Schillerstraße 8 · 79369 Wyhl am Kaiserstuhl · giuseppe.maddalena@madleaf.de', ml, H-4.5);
+    doc.text(`Seite ${i} / ${pageCount}`, W-mr, H-4.5, {align:'right'});
+  }
+
+  return doc;
+}
+
+// ══════════════════════════════════════════════
+// GENERATE & SEND
+// ══════════════════════════════════════════════
+async function generateAndSend() {
+  if (!state.kunde) { showToast('Bitte zuerst einen Kunden auswählen'); return; }
+  if (timerRunning) stopTimer();
+  showToast('PDF wird erstellt...');
+  try {
+    const doc = await buildPDF();
+    const pdfBase64 = doc.output('datauristring');
+    const datum = document.getElementById('datum-input').value;
+    const filename = `MadLeaf_Bericht_${datum}_${state.kunde.name.replace(/\s/g,'_')}.pdf`;
+    doc.save(filename);
+    const mailData = {
+      to: state.kunde.email || '',
+      kunde: state.kunde.name,
+      datum,
+      filename,
+      pdf: pdfBase64
+    };
+    if (navigator.onLine) {
+      await sendEmail(mailData);
+    } else {
+      const queue = getQueue();
+      queue.push(mailData);
+      saveQueue(queue);
+      showToast('Offline gespeichert — wird gesendet wenn online ✓');
+    }
+    saveDraftData(filename, datum);
+  } catch(e) {
+    console.error(e);
+    showToast('Fehler beim Erstellen — bitte erneut versuchen');
+  }
+}
+
+async function sendEmail(data) {
+  if (EMAILJS_PUBLIC_KEY === 'TUO_PUBLIC_KEY') {
+    showToast('EmailJS noch nicht konfiguriert — PDF gespeichert ✓');
+    return;
+  }
+  try {
+    await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+      to_email: data.to,
+      cc_email: MY_EMAIL,
+      kunde_name: data.kunde,
+      datum: data.datum,
+      message: 'Anbei der Arbeitsbericht der heutigen Begehung.',
+    }, EMAILJS_PUBLIC_KEY);
+    showToast('E-Mail gesendet ✓');
+  } catch(e) {
+    showToast('E-Mail-Fehler — PDF lokal gespeichert');
+    const queue = getQueue();
+    queue.push(data);
+    saveQueue(queue);
+  }
+}
+
+async function checkOnlineQueue() {
+  const queue = getQueue();
+  if (!queue.length || !navigator.onLine) return;
+  const remaining = [];
+  for (const item of queue) {
+    try { await sendEmail(item); }
+    catch(e) { remaining.push(item); }
+  }
+  saveQueue(remaining);
+}
+
+function showBanner() {
+  const b = document.getElementById('online-banner');
+  b.classList.add('show');
+  setTimeout(() => b.classList.remove('show'), 4000);
+}
+
+// ══════════════════════════════════════════════
+// DRAFT / SAVE
+// ══════════════════════════════════════════════
+function saveDraft() {
+  const datum = document.getElementById('datum-input').value;
+  const filename = `Entwurf_${datum}_${state.kunde ? state.kunde.name : 'kein_Kunde'}`;
+  saveDraftData(filename, datum);
+  showToast('Entwurf gespeichert ✓');
+}
+
+function saveDraftData(name, datum) {
+  const drafts = getDrafts();
+  drafts.unshift({ name, datum, ts: new Date().toISOString() });
+  if (drafts.length > 20) drafts.pop();
+  saveDrafts(drafts);
+}
+
+function openModal(id) {
+  if (id === 'modal-berichte') renderBerichte();
+  document.getElementById(id).classList.add('open');
+}
+function closeModal(id) {
+  document.getElementById(id).classList.remove('open');
+}
+
+function renderBerichte() {
+  const drafts = getDrafts();
+  const container = document.getElementById('berichte-list');
+  if (!drafts.length) { container.innerHTML = '<p style="font-size:13px;color:#9ca3af">Keine gespeicherten Berichte.</p>'; return; }
+  container.innerHTML = drafts.map(d => `
+    <div style="padding:10px 0;border-bottom:1px solid #f3f4f6">
+      <div style="font-size:13px;font-weight:600;color:#111">${d.name}</div>
+      <div style="font-size:11px;color:#9ca3af;margin-top:2px">${new Date(d.ts).toLocaleString('de-DE')}</div>
+    </div>`).join('');
+}
+
+// ══════════════════════════════════════════════
+// TOAST
+// ══════════════════════════════════════════════
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+// ══════════════════════════════════════════════
+// SERVICE WORKER
+// ══════════════════════════════════════════════
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js').catch(e => console.log('SW:', e));
+}
+
+// Chiudi modal cliccando fuori
+document.querySelectorAll('.modal-overlay').forEach(overlay => {
+  overlay.addEventListener('click', e => { if(e.target === overlay) overlay.classList.remove('open'); });
+});
+</script>
+</body>
+</html>
