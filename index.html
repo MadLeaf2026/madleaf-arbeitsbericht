@@ -6,185 +6,233 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="MadLeaf">
+<meta name="theme-color" content="#17382d">
 <title>MadLeaf Arbeitsbericht</title>
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="logo.png">
+<link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 <style>
+:root {
+  --green: #17382d;
+  --green2: #1f4c3b;
+  --gold: #d9a64f;
+  --bg: #f7f6f2;
+  --surface: #fcfbf8;
+  --surface2: #f1eee8;
+  --text: #28251d;
+  --muted: #6f6c64;
+  --border: rgba(23,56,45,0.12);
+  --shadow: 0 4px 16px rgba(23,56,45,0.10);
+  --radius: 12px;
+}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f0f4f0;min-height:100vh;padding-bottom:80px}
+body{font-family:'Satoshi',Arial,sans-serif;background:var(--bg);min-height:100vh;padding-bottom:88px;color:var(--text)}
 
 /* TOPBAR */
-.topbar{background:#1a5c3a;padding:12px 16px 10px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
-.topbar-left .sub{color:#9FE1CB;font-size:10px;letter-spacing:.1em;text-transform:uppercase}
-.topbar-left .title{color:#fff;font-size:17px;font-weight:600}
-.topbar-right{display:flex;gap:8px}
-.icon-btn{background:rgba(255,255,255,.15);border:none;border-radius:8px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#fff;font-size:18px}
+.topbar{background:var(--green);padding:10px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(23,56,45,0.3)}
+.topbar-brand .sub{color:var(--gold);font-size:10px;letter-spacing:.12em;text-transform:uppercase;font-weight:700}
+.topbar-brand .title{color:#fff;font-size:17px;font-weight:700}
+.topbar-icons{display:flex;gap:8px}
+.icon-btn{background:rgba(255,255,255,.12);border:none;border-radius:8px;width:38px;height:38px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#fff;font-size:18px}
 
 /* TIMER */
-.timer-bar{background:#0f3d27;padding:8px 16px;display:flex;align-items:center;gap:10px;position:sticky;top:62px;z-index:99}
-.timer-dot{width:9px;height:9px;border-radius:50%;background:#6b7280;flex-shrink:0;transition:background .3s}
-.timer-dot.running{background:#22c55e;animation:pulse 1.2s infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
-.timer-val{color:#fff;font-size:15px;font-weight:600;flex:1;font-variant-numeric:tabular-nums;letter-spacing:.02em}
-.timer-btn{background:transparent;border:1.5px solid #5DCAA5;color:#9FE1CB;font-size:12px;font-weight:600;padding:5px 14px;border-radius:6px;cursor:pointer;letter-spacing:.04em}
-.timer-btn.running{border-color:#f87171;color:#f87171}
-
-/* SECTIONS */
-.section{background:#fff;margin:10px 12px;border-radius:12px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.06)}
-.section-head{padding:12px 14px 0;display:flex;align-items:center;justify-content:space-between}
-.section-label{font-size:10px;color:#6b7280;text-transform:uppercase;letter-spacing:.09em;font-weight:600}
-.section-body{padding:10px 14px 14px}
-
-/* KUNDE */
-.kunde-row{display:flex;align-items:center;gap:10px}
-.avatar{width:38px;height:38px;border-radius:50%;background:#EAF3DE;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#3B6D11;flex-shrink:0}
-.kunde-name{font-size:15px;font-weight:600;color:#111}
-.kunde-sub{font-size:12px;color:#6b7280;margin-top:2px}
-.wbtn{margin-left:auto;font-size:12px;color:#3B6D11;border:1px solid #C0DD97;border-radius:6px;padding:4px 10px;cursor:pointer;background:#EAF3DE;white-space:nowrap;flex-shrink:0}
-
-/* DATUM */
-.datum-row{display:flex;align-items:center;gap:10px}
-.datum-row input[type=date]{border:1px solid #e5e7eb;border-radius:8px;padding:7px 10px;font-size:14px;color:#111;background:#f9fafb;flex:1}
-.gps-badge{font-size:11px;color:#3B6D11;background:#EAF3DE;border-radius:6px;padding:4px 8px;display:flex;align-items:center;gap:4px;white-space:nowrap}
-
-/* AZIONI */
-.aktion-block{border:1px solid #e5e7eb;border-radius:10px;margin-bottom:8px;overflow:hidden}
-.aktion-block.on{border-color:#639922}
-.aktion-head{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;cursor:pointer;background:#fff;transition:background .15s}
-.aktion-block.on .aktion-head{background:#EAF3DE}
-.achk{width:20px;height:20px;border-radius:5px;border:2px solid #d1d5db;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;background:#fff;transition:all .15s}
-.aktion-block.on .achk{background:#1a5c3a;border-color:#1a5c3a}
-.achk svg{display:none}
-.aktion-block.on .achk svg{display:block}
-.alabel{font-size:13px;color:#374151;flex:1;line-height:1.45}
-.aktion-block.on .alabel{color:#1a5c3a;font-weight:600}
-.aktion-body{padding:10px 12px 12px;border-top:1px solid #C0DD97;background:#f9fdf6}
-.aktion-body .hint{font-size:10px;color:#6b7280;margin-bottom:5px;text-transform:uppercase;letter-spacing:.06em}
-.aktion-body textarea{width:100%;font-size:13px;padding:8px 10px;border:1px solid #e5e7eb;border-radius:7px;background:#fff;color:#111;resize:none;min-height:72px;line-height:1.55;font-family:inherit}
-.aktion-body textarea:focus{outline:none;border-color:#639922}
-.blank-label{font-size:13px;color:#9ca3af;font-style:italic;flex:1;line-height:1.45}
-
-/* PRODOTTI */
-.prod-card{border:1px solid #e5e7eb;border-radius:8px;padding:10px 12px;margin-bottom:8px;position:relative}
-.prod-name{font-size:14px;font-weight:600;color:#111}
-.prod-detail{font-size:12px;color:#6b7280;margin-top:3px;line-height:1.5}
-.prod-badge{display:inline-block;font-size:10px;padding:2px 7px;background:#EAF3DE;color:#3B6D11;border-radius:4px;margin-top:4px;font-weight:600}
-.prod-del{position:absolute;top:8px;right:10px;font-size:18px;color:#d1d5db;cursor:pointer;background:none;border:none;line-height:1}
-.add-row{border:1.5px dashed #d1d5db;border-radius:8px;padding:10px;text-align:center;font-size:13px;color:#6b7280;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px}
-.add-row:active{background:#f9fafb}
-
-/* FOTO */
-.foto-strip{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px}
-.fthumb{width:72px;height:72px;border-radius:8px;background:#f3f4f6;border:1px solid #e5e7eb;display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;position:relative;overflow:hidden;cursor:pointer}
-.fthumb img{width:100%;height:100%;object-fit:cover}
-.fthumb .geo{position:absolute;bottom:2px;left:2px;font-size:9px;color:#3B6D11;background:#EAF3DEee;padding:1px 5px;border-radius:3px}
-.fthumb .del-foto{position:absolute;top:2px;right:2px;background:rgba(0,0,0,.5);color:#fff;border:none;border-radius:50%;width:18px;height:18px;font-size:12px;line-height:18px;text-align:center;cursor:pointer;padding:0}
-.fadd{width:72px;height:72px;border-radius:8px;border:1.5px dashed #d1d5db;display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer;color:#9ca3af;font-size:11px;gap:4px}
-.fadd svg{width:24px;height:24px}
-
-/* FIRME */
-.firma-wrap{margin-bottom:10px}
-.firma-label-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
-.firma-sublabel{font-size:12px;color:#6b7280;font-weight:500}
-.firma-clear{font-size:12px;color:#3B6D11;cursor:pointer;background:none;border:none}
-.firma-canvas{border:1.5px solid #e5e7eb;border-radius:8px;background:#fff;width:100%;height:90px;touch-action:none;display:block}
-.nofirma-row{display:flex;align-items:center;gap:8px;margin-top:8px}
-.nofirma-row label{font-size:12px;color:#6b7280}
-.nofirma-textarea{width:100%;margin-top:6px;font-size:12px;padding:7px 10px;border:1px solid #e5e7eb;border-radius:7px;resize:none;min-height:52px;font-family:inherit;display:none}
-.mia-firma-box{border:1px solid #C0DD97;border-radius:10px;background:#EAF3DE;padding:12px 14px;display:flex;align-items:center;justify-content:space-between;margin-top:4px}
-.mia-firma-sig{font-family:Georgia,serif;font-size:28px;color:#1a5c3a;font-style:italic}
-.mia-firma-info{text-align:right}
-.mia-firma-name{font-size:12px;font-weight:700;color:#27500A}
-.mia-firma-title{font-size:10px;color:#3B6D11;margin-top:2px}
-
-/* BOTTOM */
-.bottom-bar{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid #e5e7eb;padding:10px 14px;display:flex;gap:8px;z-index:200}
-.btn-main{flex:1;background:#1a5c3a;color:#fff;border:none;border-radius:10px;padding:13px;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px}
-.btn-main:active{background:#0f3d27}
-.btn-save{background:#f3f4f6;border:1px solid #e5e7eb;color:#6b7280;border-radius:10px;padding:13px 15px;cursor:pointer;font-size:20px}
-
-/* MODALI */
-.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:300;align-items:flex-end;justify-content:center}
-.modal-overlay.open{display:flex}
-.modal{background:#fff;border-radius:16px 16px 0 0;width:100%;max-width:480px;padding:20px 16px 30px;max-height:85vh;overflow-y:auto}
-.modal h3{font-size:16px;font-weight:700;color:#111;margin-bottom:14px}
-.modal input,.modal select,.modal textarea{width:100%;padding:10px 12px;border:1px solid #e5e7eb;border-radius:8px;font-size:14px;font-family:inherit;margin-bottom:10px;color:#111;background:#f9fafb}
-.modal textarea{resize:none;min-height:60px}
-.modal input:focus,.modal select:focus,.modal textarea:focus{outline:none;border-color:#639922}
-.modal-btn-row{display:flex;gap:8px;margin-top:4px}
-.modal-btn{flex:1;padding:11px;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;border:none}
-.modal-btn.primary{background:#1a5c3a;color:#fff}
-.modal-btn.secondary{background:#f3f4f6;color:#374151}
-.modal-close{float:right;font-size:22px;color:#9ca3af;cursor:pointer;background:none;border:none;line-height:1}
-
-/* CLIENTI LIST */
-.cliente-item{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #f3f4f6;cursor:pointer}
-.cliente-item:last-child{border-bottom:none}
-.cliente-item:active{background:#f9fafb;border-radius:8px}
-.cliente-item-info .name{font-size:14px;font-weight:600;color:#111}
-.cliente-item-info .sub{font-size:12px;color:#6b7280}
-
-/* PRODOTTI MODAL */
-.prod-select-item{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #f3f4f6;cursor:pointer}
-.prod-select-item:last-child{border-bottom:none}
-.prod-select-item .pname{font-size:13px;font-weight:600;color:#111}
-.prod-select-item .pdetail{font-size:11px;color:#6b7280;margin-top:1px}
+.timer-bar{background:#0f2d24;padding:8px 16px;display:flex;align-items:center;gap:10px;position:sticky;top:58px;z-index:99}
+.tdot{width:9px;height:9px;border-radius:50%;background:#4b5563;flex-shrink:0;transition:all .3s}
+.tdot.on{background:#22c55e;animation:blink 1.2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.4}}
+.tval{color:#fff;font-size:15px;font-weight:700;flex:1;font-variant-numeric:tabular-nums}
+.tbtn{background:transparent;border:1.5px solid rgba(217,166,79,.6);color:var(--gold);font-size:12px;font-weight:700;padding:5px 14px;border-radius:6px;cursor:pointer}
+.tbtn.on{border-color:#f87171;color:#f87171}
 
 /* ONLINE BANNER */
-.online-banner{display:none;background:#EAF3DE;color:#27500A;font-size:12px;padding:6px 16px;text-align:center;font-weight:600}
-.online-banner.show{display:block}
+.obanner{display:none;background:#EAF3DE;color:#27500A;font-size:12px;padding:6px 16px;text-align:center;font-weight:700}
+.obanner.show{display:block}
+
+/* SECTIONS */
+.section{background:var(--surface);margin:10px 12px;border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);border:1px solid var(--border)}
+.shead{padding:12px 14px 0;display:flex;align-items:center;justify-content:space-between}
+.slbl{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.09em;font-weight:700}
+.sbody{padding:10px 14px 14px}
+
+/* KUNDE */
+.krow{display:flex;align-items:center;gap:10px}
+.avatar{width:38px;height:38px;border-radius:50%;background:rgba(217,166,79,.15);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:var(--gold);flex-shrink:0;border:1.5px solid rgba(217,166,79,.3)}
+.kname{font-size:15px;font-weight:700;color:var(--text)}
+.ksub{font-size:11px;color:var(--muted);margin-top:2px}
+.wbtn{margin-left:auto;font-size:12px;color:var(--green);border:1px solid var(--border);border-radius:6px;padding:4px 10px;cursor:pointer;background:var(--surface2);flex-shrink:0}
+
+/* DATUM */
+.drow{display:flex;align-items:center;gap:10px}
+.drow input[type=date]{border:1px solid var(--border);border-radius:8px;padding:8px 10px;font-size:14px;color:var(--text);background:var(--bg);flex:1;font-family:'Satoshi',Arial,sans-serif}
+.gpsbadge{font-size:11px;color:var(--green);background:rgba(23,56,45,.08);border-radius:6px;padding:5px 8px;display:flex;align-items:center;gap:4px;white-space:nowrap;border:1px solid var(--border)}
+
+/* AZIONI */
+.ablock{border:1px solid var(--border);border-radius:10px;margin-bottom:7px;overflow:hidden;background:var(--surface)}
+.ablock.on{border-color:var(--gold)}
+.ahead{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;cursor:pointer;background:var(--surface)}
+.ablock.on .ahead{background:rgba(217,166,79,.08)}
+.achk{width:20px;height:20px;border-radius:5px;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;background:var(--surface)}
+.ablock.on .achk{background:var(--green);border-color:var(--green)}
+.achk svg{display:none}
+.ablock.on .achk svg{display:block}
+.alabel{font-size:13px;color:var(--text);flex:1;line-height:1.45}
+.ablock.on .alabel{color:var(--green);font-weight:600}
+.abody{padding:10px 12px 12px;border-top:1px solid rgba(217,166,79,.25);background:#fdfcf8}
+.abody .hint{font-size:10px;color:var(--muted);margin-bottom:5px;text-transform:uppercase;letter-spacing:.06em}
+.abody textarea{width:100%;font-size:13px;padding:8px 10px;border:1px solid var(--border);border-radius:7px;background:var(--surface);color:var(--text);resize:none;min-height:72px;line-height:1.55;font-family:'Satoshi',Arial,sans-serif}
+.abody textarea:focus{outline:none;border-color:var(--gold)}
+.ablank{font-size:13px;color:var(--muted);font-style:italic;flex:1;line-height:1.45}
+
+/* PRODOTTI */
+.pcard{border:1px solid var(--border);border-radius:10px;padding:10px 12px;margin-bottom:8px;background:var(--surface);position:relative}
+.pcard::before{content:"";position:absolute;left:0;top:12px;bottom:12px;width:3px;background:var(--gold);border-radius:0 2px 2px 0}
+.pname{font-size:13px;font-weight:700;color:var(--green);padding-left:8px}
+.pdetail{font-size:11px;color:var(--muted);margin-top:2px;line-height:1.5;padding-left:8px}
+.pbadge{display:inline-block;font-size:10px;padding:2px 7px;background:rgba(23,56,45,.08);color:var(--green);border-radius:4px;margin-top:3px;font-weight:700;margin-left:8px}
+.pqty{margin-top:6px;padding-left:8px}
+.pqty input{font-size:12px;padding:4px 8px;border:1px solid var(--border);border-radius:6px;width:100%;background:var(--bg);color:var(--text);font-family:'Satoshi',Arial,sans-serif}
+.pdel{position:absolute;top:8px;right:10px;font-size:18px;color:var(--muted);cursor:pointer;background:none;border:none;line-height:1}
+.addrow{border:1.5px dashed var(--border);border-radius:10px;padding:10px;text-align:center;font-size:13px;color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px}
+
+/* NEXT CHECK */
+.ncheck-row{display:flex;align-items:center;gap:10px;margin-top:8px;padding:10px;background:rgba(217,166,79,.08);border-radius:8px;border:1px solid rgba(217,166,79,.25)}
+.ncheck-row label{font-size:12px;color:var(--green);font-weight:600;white-space:nowrap}
+.ncheck-row input{flex:1;font-size:13px;padding:6px 10px;border:1px solid var(--border);border-radius:6px;background:var(--surface);color:var(--text);font-family:'Satoshi',Arial,sans-serif}
+
+/* FOTO */
+.fstrip{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px}
+.fthumb{width:72px;height:72px;border-radius:8px;background:var(--surface2);border:1px solid var(--border);display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;position:relative;overflow:hidden;cursor:pointer}
+.fthumb img{width:100%;height:100%;object-fit:cover}
+.fgeo{position:absolute;bottom:2px;left:2px;font-size:9px;color:var(--green);background:rgba(247,246,242,.9);padding:1px 5px;border-radius:3px;font-weight:700}
+.fdel{position:absolute;top:2px;right:2px;background:rgba(23,56,45,.7);color:#fff;border:none;border-radius:50%;width:18px;height:18px;font-size:12px;line-height:18px;text-align:center;cursor:pointer;padding:0}
+.fadd{width:72px;height:72px;border-radius:8px;border:1.5px dashed var(--border);display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer;color:var(--muted);font-size:11px;gap:4px;background:var(--surface)}
+
+/* FIRME */
+.firma-sublbl{font-size:12px;color:var(--muted);font-weight:600;margin-bottom:6px}
+.firma-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+.firma-clear{font-size:12px;color:var(--green);cursor:pointer;background:none;border:none;font-family:'Satoshi',Arial,sans-serif}
+.firma-canvas{border:1.5px solid var(--border);border-radius:8px;background:#fff;width:100%;height:90px;touch-action:none;display:block}
+.firma-name-input{width:100%;margin-top:6px;font-size:13px;padding:7px 10px;border:1px solid var(--border);border-radius:7px;background:var(--bg);color:var(--text);font-family:'Satoshi',Arial,sans-serif}
+.nofirma-row{display:flex;align-items:center;gap:8px;margin-top:8px}
+.nofirma-row label{font-size:12px;color:var(--muted)}
+.nofirma-ta{width:100%;margin-top:6px;font-size:12px;padding:7px 10px;border:1px solid var(--border);border-radius:7px;resize:none;min-height:52px;font-family:'Satoshi',Arial,sans-serif;display:none}
+.mia-firma{border:1px solid rgba(217,166,79,.4);border-radius:10px;background:rgba(217,166,79,.08);padding:12px 14px;display:flex;align-items:center;justify-content:space-between;margin-top:4px}
+.mia-sig{font-family:Georgia,serif;font-size:28px;color:var(--green);font-style:italic}
+.mia-info{text-align:right}
+.mia-name{font-size:12px;font-weight:700;color:var(--green)}
+.mia-title{font-size:10px;color:var(--muted);margin-top:2px}
+
+/* BOTTOM */
+.bottombar{position:fixed;bottom:0;left:0;right:0;background:var(--surface);border-top:1px solid var(--border);padding:10px 14px;display:flex;gap:8px;z-index:200}
+.btnmain{flex:1;background:var(--green);color:#fff;border:none;border-radius:10px;padding:13px;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;font-family:'Satoshi',Arial,sans-serif}
+.btnmain:active{background:var(--green2)}
+.btnsave{background:var(--surface2);border:1px solid var(--border);color:var(--muted);border-radius:10px;padding:13px 15px;cursor:pointer;font-size:20px}
+
+/* MODAL */
+.moverlay{display:none;position:fixed;inset:0;background:rgba(23,56,45,.5);z-index:300;align-items:flex-end;justify-content:center}
+.moverlay.open{display:flex}
+.modal{background:var(--surface);border-radius:20px 20px 0 0;width:100%;max-width:480px;padding:20px 16px 32px;max-height:88vh;overflow-y:auto}
+.modal h3{font-size:16px;font-weight:700;color:var(--text);margin-bottom:14px}
+.mclose{float:right;font-size:24px;color:var(--muted);cursor:pointer;background:none;border:none;line-height:1}
+.modal input,.modal select,.modal textarea{width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:8px;font-size:14px;font-family:'Satoshi',Arial,sans-serif;margin-bottom:10px;color:var(--text);background:var(--bg)}
+.modal textarea{resize:none;min-height:60px}
+.modal input:focus,.modal select:focus,.modal textarea:focus{outline:none;border-color:var(--gold)}
+.mbtnrow{display:flex;gap:8px;margin-top:4px}
+.mbtn{flex:1;padding:11px;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;border:none;font-family:'Satoshi',Arial,sans-serif}
+.mbtn.p{background:var(--green);color:#fff}
+.mbtn.s{background:var(--surface2);color:var(--text)}
+.modal hr{border:none;border-top:1px solid var(--border);margin:14px 0}
+
+/* KUNDEN LIST */
+.klist-item{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);cursor:pointer}
+.klist-item:last-child{border-bottom:none}
+.klist-name{font-size:14px;font-weight:600;color:var(--text)}
+.klist-sub{font-size:12px;color:var(--muted)}
+.klist-del{margin-left:auto;background:none;border:none;color:var(--muted);font-size:16px;cursor:pointer;padding:4px}
+
+/* PRODOTTI SEL */
+.psel-item{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);cursor:pointer}
+.psel-item:last-child{border-bottom:none}
+.psel-item:active{background:var(--surface2);border-radius:8px}
+.psel-name{font-size:13px;font-weight:700;color:var(--green)}
+.psel-detail{font-size:11px;color:var(--muted);margin-top:2px;line-height:1.5}
+.psel-note{font-size:10px;color:var(--muted);margin-top:2px;font-style:italic}
+.pcat-title{font-size:11px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:.08em;padding:10px 0 4px;border-bottom:1px solid rgba(217,166,79,.2);margin-bottom:4px}
+.psel-del{margin-left:auto;background:none;border:none;color:var(--muted);font-size:16px;cursor:pointer;flex-shrink:0}
+
+/* ARCHIVIO */
+.arch-item{padding:10px 0;border-bottom:1px solid var(--border)}
+.arch-item:last-child{border-bottom:none}
+.arch-name{font-size:13px;font-weight:600;color:var(--text)}
+.arch-date{font-size:11px;color:var(--muted);margin-top:2px}
 
 /* TOAST */
-.toast{position:fixed;top:80px;left:50%;transform:translateX(-50%);background:#1a5c3a;color:#fff;padding:10px 20px;border-radius:8px;font-size:13px;font-weight:600;z-index:400;opacity:0;transition:opacity .3s;pointer-events:none;white-space:nowrap}
+.toast{position:fixed;top:80px;left:50%;transform:translateX(-50%);background:var(--green);color:#fff;padding:10px 20px;border-radius:8px;font-size:13px;font-weight:700;z-index:500;opacity:0;transition:opacity .3s;pointer-events:none;white-space:nowrap;max-width:90vw;text-align:center}
 .toast.show{opacity:1}
+.toast.gold{background:var(--gold);color:var(--green)}
+.toast.red{background:#dc2626}
+
+/* SPINNER */
+.spinner{display:none;position:fixed;inset:0;background:rgba(23,56,45,.6);z-index:400;align-items:center;justify-content:center;flex-direction:column;gap:14px}
+.spinner.show{display:flex}
+.spin{width:44px;height:44px;border:4px solid rgba(255,255,255,.2);border-top-color:#fff;border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.spin-txt{color:#fff;font-size:14px;font-weight:600}
 </style>
 </head>
 <body>
 
+<!-- SPINNER -->
+<div class="spinner" id="spinner">
+  <div class="spin"></div>
+  <div class="spin-txt" id="spin-txt">PDF wird erstellt...</div>
+</div>
+
 <div class="topbar">
-  <div class="topbar-left">
+  <div class="topbar-brand">
     <div class="sub">MadLeaf</div>
     <div class="title">Arbeitsbericht</div>
   </div>
-  <div class="topbar-right">
-    <button class="icon-btn" onclick="openModal('modal-berichte')" title="Gespeicherte Berichte">
-      <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+  <div class="topbar-icons">
+    <button class="icon-btn" onclick="openModal('m-archiv')" title="Archiv">
+      <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
     </button>
   </div>
 </div>
 
-<div id="online-banner" class="online-banner">✓ Online — E-Mail-Warteschlange wird verarbeitet...</div>
+<div id="obanner" class="obanner">✓ Online — E-Mail-Warteschlange wird verarbeitet...</div>
 
 <div class="timer-bar">
-  <div class="timer-dot" id="timer-dot"></div>
-  <span class="timer-val" id="timer-val">00h 00m 00s</span>
-  <button class="timer-btn" id="timer-btn" onclick="toggleTimer()">START</button>
+  <div class="tdot" id="tdot"></div>
+  <span class="tval" id="tval">00h 00m 00s</span>
+  <button class="tbtn" id="tbtn" onclick="toggleTimer()">START</button>
 </div>
 
 <!-- KUNDE -->
 <div class="section">
-  <div class="section-head"><div class="section-label">Kunde</div></div>
-  <div class="section-body">
-    <div class="kunde-row" id="kunde-row">
-      <div class="avatar" id="kunde-avatar">–</div>
+  <div class="shead"><div class="slbl">Kunde</div></div>
+  <div class="sbody">
+    <div class="krow">
+      <div class="avatar" id="k-avatar">–</div>
       <div>
-        <div class="kunde-name" id="kunde-name">Kunde auswählen</div>
-        <div class="kunde-sub" id="kunde-sub">Tippen um Kunde zu wählen oder neu anlegen</div>
+        <div class="kname" id="k-name">Kunde auswählen</div>
+        <div class="ksub" id="k-sub">Antippen um Kunde zu wählen</div>
       </div>
-      <button class="wbtn" onclick="openModal('modal-kunden')">Wählen</button>
+      <button class="wbtn" onclick="openModal('m-kunden')">Wählen</button>
     </div>
   </div>
 </div>
 
-<!-- DATUM -->
+<!-- DATUM & STANDORT -->
 <div class="section">
-  <div class="section-head"><div class="section-label">Datum &amp; Standort</div></div>
-  <div class="section-body">
-    <div class="datum-row">
+  <div class="shead"><div class="slbl">Datum &amp; Standort</div></div>
+  <div class="sbody">
+    <div class="drow">
       <input type="date" id="datum-input">
-      <div class="gps-badge" id="gps-badge">
-        <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>
+      <div class="gpsbadge" id="gps-badge">
+        <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>
         GPS...
       </div>
     </div>
@@ -193,96 +241,171 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 
 <!-- AZIONI -->
 <div class="section">
-  <div class="section-head"><div class="section-label">Durchgeführte Maßnahmen</div></div>
-  <div class="section-body" id="azioni-container">
+  <div class="shead"><div class="slbl">Durchgeführte Maßnahmen</div></div>
+  <div class="sbody" id="azioni-wrap">
 
-    <div class="aktion-block" data-id="a1">
-      <div class="aktion-head" onclick="toggleAktion('a1')">
+    <div class="ablock" data-id="a1">
+      <div class="ahead" onclick="toggleA('a1')">
         <div class="achk"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
         <div class="alabel">Geländebegehung zur Erfassung und Bewertung biologischer Risikofaktoren</div>
       </div>
-      <div class="aktion-body" style="display:none">
+      <div class="abody" style="display:none">
         <div class="hint">Text bearbeiten:</div>
         <textarea>Geländebegehung zur Erfassung und Bewertung biologischer Risikofaktoren. Zielorganismus: [bitte ergänzen]. Befund und Empfehlungen werden im Detailbericht übermittelt.</textarea>
       </div>
     </div>
 
-    <div class="aktion-block" data-id="a2">
-      <div class="aktion-head" onclick="toggleAktion('a2')">
+    <div class="ablock" data-id="a2">
+      <div class="ahead" onclick="toggleA('a2')">
         <div class="achk"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
         <div class="alabel">Monitoring-Kontrolle — Auswertung und Bericht folgen separat</div>
       </div>
-      <div class="aktion-body" style="display:none">
+      <div class="abody" style="display:none">
         <div class="hint">Text bearbeiten:</div>
-        <textarea>Monitoring-Kontrolle durchgeführt. [Anzahl] Fallen kontrolliert, [Anzahl] ersetzt. Die Ergebnisse werden nach Auswertung in den nächsten Tagen als separater Bericht übermittelt. Nächste Kontrolle: [Datum/KW].</textarea>
+        <textarea>Monitoring-Kontrolle durchgeführt. [Anzahl] Fallen kontrolliert, [Anzahl] ersetzt. Ergebnisse werden nach Auswertung separat übermittelt. Nächste Kontrolle: [Datum/KW].</textarea>
       </div>
     </div>
 
-    <div class="aktion-block" data-id="a3">
-      <div class="aktion-head" onclick="toggleAktion('a3')">
+    <div class="ablock" data-id="a3">
+      <div class="ahead" onclick="toggleA('a3')">
         <div class="achk"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
         <div class="alabel">Behandlung mit Pflanzenschutz- / Biozidmittel durchgeführt</div>
       </div>
-      <div class="aktion-body" style="display:none">
+      <div class="abody" style="display:none">
         <div class="hint">Text bearbeiten:</div>
-        <textarea>Behandlung durchgeführt mit [Mittelname] gegen [Zielorganismus]. Wirkstoff: [Wirkstoff], Dosierung: [Menge/Fläche]. Behandelte Fläche: [m²]. Nächste Kontrolle: [Datum].</textarea>
+        <textarea>Behandlung durchgeführt mit [Mittelname] gegen [Zielorganismus]. Wirkstoff: [Wirkstoff], Dosierung: [Menge]. Behandelte Fläche: [m²]. Nächste Kontrolle: [Datum].</textarea>
       </div>
     </div>
 
-    <div class="aktion-block" data-id="a4">
-      <div class="aktion-head" onclick="toggleAktion('a4')">
+    <div class="ablock" data-id="a4">
+      <div class="ahead" onclick="toggleA('a4')">
+        <div class="achk"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="alabel">Thermische Behandlung — Heißdampf 180 °C</div>
+      </div>
+      <div class="abody" style="display:none">
+        <div class="hint">Text bearbeiten:</div>
+        <textarea>Thermische Behandlung mit Heißdampf (180 °C) durchgeführt gegen [Zielorganismus]. Behandelte Bereiche: [Beschreibung]. Keine chemischen Rückstände. Nächste Kontrolle: [Datum].</textarea>
+      </div>
+    </div>
+
+    <div class="ablock" data-id="a5">
+      <div class="ahead" onclick="toggleA('a5')">
+        <div class="achk"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="alabel">Mechanische Absaugung durchgeführt</div>
+      </div>
+      <div class="abody" style="display:none">
+        <div class="hint">Text bearbeiten:</div>
+        <textarea>Mechanische Absaugung durchgeführt — Entfernung von [Zielorganismus / Nestern / Kokons / Rückständen]. Behandelte Bereiche: [Beschreibung]. Abgesaugtes Material fachgerecht entsorgt.</textarea>
+      </div>
+    </div>
+
+    <div class="ablock" data-id="a6">
+      <div class="ahead" onclick="toggleA('a6')">
+        <div class="achk"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="alabel">Fallen / Pheromone positioniert oder kontrolliert</div>
+      </div>
+      <div class="abody" style="display:none">
+        <div class="hint">Text bearbeiten:</div>
+        <textarea>Fallen / Pheromonfallen positioniert / kontrolliert. Typ: [Fallentyp]. Anzahl: [n]. Fangzahl: [n]. Befallsdruck: [gering / mittel / hoch]. Nächste Kontrolle: [Datum/KW].</textarea>
+      </div>
+    </div>
+
+    <div class="ablock" data-id="a7">
+      <div class="ahead" onclick="toggleA('a7')">
+        <div class="achk"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="alabel">Bettwanzen-Monitoring mit zertifizierten Geräten</div>
+      </div>
+      <div class="abody" style="display:none">
+        <div class="hint">Text bearbeiten:</div>
+        <textarea>Bettwanzen-Monitoring durchgeführt mit ClimbUp Interceptor / Blackout Bed Bug Monitor. Anzahl Geräte: [n]. Befund: [positiv / negativ]. Nächste Kontrolle: [Datum].</textarea>
+      </div>
+    </div>
+
+    <div class="ablock" data-id="a8">
+      <div class="ahead" onclick="toggleA('a8')">
         <div class="achk"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
         <div class="alabel">Larvenbekämpfung an Gewässern / Wasseransammlungen</div>
       </div>
-      <div class="aktion-body" style="display:none">
+      <div class="abody" style="display:none">
         <div class="hint">Text bearbeiten:</div>
-        <textarea>Larvenbekämpfung durchgeführt an [Anzahl] Gewässern / Wasseransammlungen. Eingesetztes Mittel: [Mittelname]. Nächste Kontrolle: [Datum].</textarea>
+        <textarea>Larvenbekämpfung durchgeführt an [Anzahl] Gewässern / Wasseransammlungen mit [Mittelname / Bti]. Behandelte Fläche: [m²]. Nächste Kontrolle: [Datum].</textarea>
       </div>
     </div>
 
-    <div class="aktion-block" data-id="a5">
-      <div class="aktion-head" onclick="toggleAktion('a5')">
+    <div class="ablock" data-id="a9">
+      <div class="ahead" onclick="toggleA('a9')">
+        <div class="achk"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="alabel">Nachkontrolle / Follow-up nach vorheriger Behandlung</div>
+      </div>
+      <div class="abody" style="display:none">
+        <div class="hint">Text bearbeiten:</div>
+        <textarea>Nachkontrolle nach Behandlung vom [Datum]. Befund: [Beschreibung]. Wirksamkeit: [sehr gut / gut / ausreichend / unzureichend]. Weiteres Vorgehen: [Beschreibung].</textarea>
+      </div>
+    </div>
+
+    <div class="ablock" data-id="a10">
+      <div class="ahead" onclick="toggleA('a10')">
         <div class="achk"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
         <div class="alabel">Risikoeinschätzung vor Ort — Detailbericht folgt</div>
       </div>
-      <div class="aktion-body" style="display:none">
+      <div class="abody" style="display:none">
         <div class="hint">Text bearbeiten:</div>
         <textarea>Risikoeinschätzung vor Ort durchgeführt bezüglich [Thema / Zielorganismus]. Ein ausführlicher Detailbericht wird in Kürze nachgereicht.</textarea>
       </div>
     </div>
 
-    <div class="aktion-block" data-id="a6">
-      <div class="aktion-head" onclick="toggleAktion('a6')">
+    <div class="ablock" data-id="a11">
+      <div class="ahead" onclick="toggleA('a11')">
         <div class="achk"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
         <div class="alabel">Beratungsgespräch — schriftliche Empfehlungen folgen</div>
       </div>
-      <div class="aktion-body" style="display:none">
+      <div class="abody" style="display:none">
         <div class="hint">Text bearbeiten:</div>
         <textarea>Beratungsgespräch geführt zum Thema [Thema]. Schriftliche Empfehlungen und Maßnahmenplan werden separat übermittelt.</textarea>
       </div>
     </div>
 
-    <div class="aktion-block" data-id="a7">
-      <div class="aktion-head" onclick="toggleAktion('a7')">
+    <div class="ablock" data-id="a12">
+      <div class="ahead" onclick="toggleA('a12')">
         <div class="achk"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-        <div class="blank-label">Freie Eingabe — eigene Maßnahme beschreiben</div>
+        <div class="ablank">Freie Eingabe — eigene Maßnahme beschreiben</div>
       </div>
-      <div class="aktion-body" style="display:none">
+      <div class="abody" style="display:none">
         <div class="hint">Beschreibung:</div>
-        <textarea placeholder="Hier frei beschreiben was durchgeführt wurde..."></textarea>
+        <textarea placeholder="Hier frei beschreiben..."></textarea>
       </div>
     </div>
 
+    <!-- AZIONI CUSTOM -->
+    <div id="custom-azioni"></div>
+
+    <div class="addrow" onclick="openModal('m-new-azione')" style="margin-top:4px">
+      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      Eigene Maßnahme hinzufügen
+    </div>
+  </div>
+</div>
+
+<!-- PROSSIMO CONTROLLO -->
+<div class="section">
+  <div class="shead"><div class="slbl">Nächste Kontrolle</div></div>
+  <div class="sbody">
+    <div class="ncheck-row">
+      <svg width="16" height="16" fill="none" stroke="var(--gold)" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      <label>Datum</label>
+      <input type="date" id="next-check-input" placeholder="Nächste Kontrolle">
+    </div>
+    <p style="font-size:11px;color:var(--muted);margin-top:6px">📧 Du erhältst 3 Tage vorher eine Erinnerungs-E-Mail.</p>
   </div>
 </div>
 
 <!-- PRODOTTI -->
 <div class="section">
-  <div class="section-head"><div class="section-label">Eingesetzte Mittel</div></div>
-  <div class="section-body">
-    <div id="prodotti-list"></div>
-    <div class="add-row" onclick="openModal('modal-prodotti-sel')">
-      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+  <div class="shead"><div class="slbl">Eingesetzte Mittel</div></div>
+  <div class="sbody">
+    <div id="prod-list"></div>
+    <div class="addrow" onclick="openModal('m-prodotti')">
+      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
       Mittel hinzufügen
     </div>
   </div>
@@ -290,14 +413,14 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 
 <!-- FOTO -->
 <div class="section">
-  <div class="section-head">
-    <div class="section-label">Fotodokumentation</div>
-    <span style="font-size:11px;color:#9ca3af">antippen für Beschriftung</span>
+  <div class="shead">
+    <div class="slbl">Fotodokumentation</div>
+    <span style="font-size:11px;color:var(--muted)">antippen für Beschriftung</span>
   </div>
-  <div class="section-body">
-    <div class="foto-strip" id="foto-strip">
+  <div class="sbody">
+    <div class="fstrip" id="fstrip">
       <div class="fadd" onclick="document.getElementById('foto-input').click()">
-        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+        <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
         Foto
       </div>
     </div>
@@ -307,29 +430,30 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 
 <!-- FIRME -->
 <div class="section">
-  <div class="section-head"><div class="section-label">Unterschriften</div></div>
-  <div class="section-body">
+  <div class="shead"><div class="slbl">Unterschriften</div></div>
+  <div class="sbody">
 
-    <div class="firma-wrap">
-      <div class="firma-label-row">
-        <div class="firma-sublabel">Unterschrift Kunde</div>
-        <button class="firma-clear" onclick="clearCanvas('sig-kunde')">Löschen</button>
+    <div style="margin-bottom:16px">
+      <div class="firma-row">
+        <div class="firma-sublbl">Unterschrift Kunde</div>
+        <button class="firma-clear" onclick="clearCanvas('sig-k')">Löschen</button>
       </div>
-      <canvas class="firma-canvas" id="sig-kunde" width="400" height="90"></canvas>
+      <canvas class="firma-canvas" id="sig-k" width="400" height="90"></canvas>
+      <input type="text" class="firma-name-input" id="sig-k-name" placeholder="Name der unterschreibenden Person">
       <div class="nofirma-row">
-        <input type="checkbox" id="nofirma-check" onchange="toggleNofirma()">
-        <label for="nofirma-check">Unterschrift nicht möglich — Begründung angeben</label>
+        <input type="checkbox" id="nofirma-cb" onchange="toggleNofirma()">
+        <label for="nofirma-cb">Unterschrift nicht möglich — Begründung angeben</label>
       </div>
-      <textarea class="nofirma-textarea" id="nofirma-reason" placeholder="Begründung..."></textarea>
+      <textarea class="nofirma-ta" id="nofirma-ta" placeholder="Begründung..."></textarea>
     </div>
 
-    <div class="firma-wrap" style="margin-bottom:0">
-      <div class="firma-sublabel" style="margin-bottom:8px">Unterschrift MadLeaf</div>
-      <div class="mia-firma-box">
-        <div class="mia-firma-sig">GM</div>
-        <div class="mia-firma-info">
-          <div class="mia-firma-name">Dr. Giuseppe Maddalena</div>
-          <div class="mia-firma-title">Applied Entomology &amp; Environmental Risk</div>
+    <div>
+      <div class="firma-sublbl">Unterschrift MadLeaf</div>
+      <div class="mia-firma">
+        <div class="mia-sig">GM</div>
+        <div class="mia-info">
+          <div class="mia-name">Dr. Giuseppe Maddalena</div>
+          <div class="mia-title">Applied Entomology &amp; Environmental Risk</div>
         </div>
       </div>
     </div>
@@ -338,416 +462,504 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 </div>
 
 <!-- BOTTOM BAR -->
-<div class="bottom-bar">
-  <button class="btn-save" onclick="saveDraft()" title="Entwurf speichern">
+<div class="bottombar">
+  <button class="btnsave" onclick="saveDraft()" title="Entwurf speichern">
     <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
   </button>
-  <button class="btn-main" onclick="generateAndSend()">
-    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M22 2L11 13"/><path d="M22 2L15 22 11 13 2 9l20-7z"/></svg>
+  <button class="btnmain" onclick="generateAndSend()">
+    <svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M22 2L11 13"/><path d="M22 2L15 22 11 13 2 9l20-7z"/></svg>
     PDF erstellen &amp; senden
   </button>
 </div>
 
 <!-- MODAL KUNDEN -->
-<div class="modal-overlay" id="modal-kunden">
+<div class="moverlay" id="m-kunden">
   <div class="modal">
-    <button class="modal-close" onclick="closeModal('modal-kunden')">×</button>
+    <button class="mclose" onclick="closeModal('m-kunden')">×</button>
     <h3>Kunde auswählen</h3>
-    <div id="kunden-list"></div>
-    <hr style="margin:14px 0;border-color:#f3f4f6">
-    <div style="font-size:13px;font-weight:700;color:#374151;margin-bottom:10px">Neuen Kunden anlegen</div>
-    <input type="text" id="new-k-name" placeholder="Name *">
-    <input type="text" id="new-k-address" placeholder="Adresse">
-    <input type="text" id="new-k-city" placeholder="Ort">
-    <input type="email" id="new-k-email" placeholder="E-Mail *">
-    <input type="tel" id="new-k-phone" placeholder="Telefon">
-    <div class="modal-btn-row">
-      <button class="modal-btn secondary" onclick="closeModal('modal-kunden')">Abbrechen</button>
-      <button class="modal-btn primary" onclick="saveNewKunde()">Speichern</button>
+    <div id="klist"></div>
+    <hr>
+    <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:10px">Neuen Kunden anlegen</div>
+    <input type="text" id="nk-name" placeholder="Name *">
+    <input type="text" id="nk-address" placeholder="Adresse">
+    <input type="text" id="nk-city" placeholder="Ort">
+    <input type="email" id="nk-email" placeholder="E-Mail *">
+    <input type="tel" id="nk-phone" placeholder="Telefon">
+    <div class="mbtnrow">
+      <button class="mbtn s" onclick="closeModal('m-kunden')">Abbrechen</button>
+      <button class="mbtn p" onclick="saveKunde()">Speichern</button>
     </div>
   </div>
 </div>
 
-<!-- MODAL PRODOTTI SELEZIONE -->
-<div class="modal-overlay" id="modal-prodotti-sel">
+<!-- MODAL PRODOTTI -->
+<div class="moverlay" id="m-prodotti">
   <div class="modal">
-    <button class="modal-close" onclick="closeModal('modal-prodotti-sel')">×</button>
+    <button class="mclose" onclick="closeModal('m-prodotti')">×</button>
     <h3>Mittel auswählen</h3>
-    <div id="prodotti-sel-list"></div>
-    <hr style="margin:14px 0;border-color:#f3f4f6">
-    <div style="font-size:13px;font-weight:700;color:#374151;margin-bottom:10px">Neues Mittel anlegen</div>
-    <input type="text" id="new-p-name" placeholder="Handelsname *">
-    <input type="text" id="new-p-wirkstoff" placeholder="Wirkstoff (z.B. Deltamethrin 2%)">
-    <input type="text" id="new-p-dosierung" placeholder="Dosierung (z.B. 0,75 g/100 m²)">
-    <input type="text" id="new-p-klasse" placeholder="Wirkstoffklasse (z.B. Pyrethroid)">
-    <div class="modal-btn-row">
-      <button class="modal-btn secondary" onclick="closeModal('modal-prodotti-sel')">Abbrechen</button>
-      <button class="modal-btn primary" onclick="saveNewProdotto()">Speichern &amp; hinzufügen</button>
+    <div id="psel-list"></div>
+    <hr>
+    <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:10px">Neues Mittel anlegen</div>
+    <input type="text" id="np-name" placeholder="Handelsname *">
+    <input type="text" id="np-kategorie" placeholder="Kategorie (z.B. Gel, Pheromon, Falle...)">
+    <input type="text" id="np-wirkstoff" placeholder="Wirkstoff">
+    <input type="text" id="np-dosierung" placeholder="Dosierung / Anwendung">
+    <input type="text" id="np-klasse" placeholder="Wirkstoffklasse">
+    <textarea id="np-note" placeholder="Hinweise Sicherheitsdatenblatt / Antidot"></textarea>
+    <div class="mbtnrow">
+      <button class="mbtn s" onclick="closeModal('m-prodotti')">Abbrechen</button>
+      <button class="mbtn p" onclick="saveProdotto()">Speichern &amp; hinzufügen</button>
     </div>
   </div>
 </div>
 
-<!-- MODAL FOTO DESCRIZIONE -->
-<div class="modal-overlay" id="modal-foto-desc">
+<!-- MODAL FOTO DESC -->
+<div class="moverlay" id="m-foto">
   <div class="modal">
-    <button class="modal-close" onclick="closeModal('modal-foto-desc')">×</button>
+    <button class="mclose" onclick="closeModal('m-foto')">×</button>
     <h3>Fotobeschriftung</h3>
-    <textarea id="foto-desc-input" placeholder="Beschreibung dieser Aufnahme..." style="width:100%;padding:10px;border:1px solid #e5e7eb;border-radius:8px;font-size:14px;font-family:inherit;resize:none;min-height:80px"></textarea>
-    <div class="modal-btn-row" style="margin-top:10px">
-      <button class="modal-btn secondary" onclick="closeModal('modal-foto-desc')">Abbrechen</button>
-      <button class="modal-btn primary" onclick="saveFotoDesc()">Speichern</button>
+    <textarea id="foto-desc-ta" placeholder="Beschreibung dieser Aufnahme..." style="min-height:90px;width:100%;padding:10px;border:1px solid var(--border);border-radius:8px;font-size:14px;font-family:'Satoshi',Arial,sans-serif;resize:none"></textarea>
+    <div class="mbtnrow" style="margin-top:10px">
+      <button class="mbtn s" onclick="closeModal('m-foto')">Abbrechen</button>
+      <button class="mbtn p" onclick="saveFotoDesc()">Speichern</button>
     </div>
   </div>
 </div>
 
-<!-- MODAL BERICHTE -->
-<div class="modal-overlay" id="modal-berichte">
+<!-- MODAL ARCHIVIO -->
+<div class="moverlay" id="m-archiv">
   <div class="modal">
-    <button class="modal-close" onclick="closeModal('modal-berichte')">×</button>
-    <h3>Gespeicherte Berichte</h3>
-    <div id="berichte-list"></div>
+    <button class="mclose" onclick="closeModal('m-archiv')">×</button>
+    <h3>Archiv — Gespeicherte Berichte</h3>
+    <div id="arch-list"></div>
+  </div>
+</div>
+
+<!-- MODAL NUOVA AZIONE -->
+<div class="moverlay" id="m-new-azione">
+  <div class="modal">
+    <button class="mclose" onclick="closeModal('m-new-azione')">×</button>
+    <h3>Eigene Maßnahme</h3>
+    <input type="text" id="na-label" placeholder="Kurzbezeichnung (z.B. Silberfischchen-Behandlung)">
+    <textarea id="na-text" placeholder="Vorbereiteter Text für den Bericht..." style="min-height:100px"></textarea>
+    <label style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted);margin-bottom:10px">
+      <input type="checkbox" id="na-save"> Als Vorlage speichern
+    </label>
+    <div class="mbtnrow">
+      <button class="mbtn s" onclick="closeModal('m-new-azione')">Abbrechen</button>
+      <button class="mbtn p" onclick="addCustomAzione()">Hinzufügen</button>
+    </div>
   </div>
 </div>
 
 <div class="toast" id="toast"></div>
 
 <script>
-// ══════════════════════════════════════════════
-// EMAILJS CONFIG — inserisci i tuoi dati qui
-// ══════════════════════════════════════════════
-const EMAILJS_PUBLIC_KEY  = 'TUO_PUBLIC_KEY';
-const EMAILJS_SERVICE_ID  = 'TUO_SERVICE_ID';
-const EMAILJS_TEMPLATE_ID = 'TUO_TEMPLATE_ID';
-const MY_EMAIL = 'giuseppe.maddalena@madleaf.de';
+// ═══════════════════════════════════════════
+// CONFIG
+// ═══════════════════════════════════════════
+const EMAILJS_PK  = 'pjgSQPbBuFg7mz31a';
+const EMAILJS_SVC = 'service_t5xgb3c';
+const EMAILJS_TPL = 'template_kov1hyi';
+const MY_EMAIL    = 'giuseppe.maddalena@madleaf.de';
+const MY_PHONE    = '+49 176 72002500';
 
-// ══════════════════════════════════════════════
-// STATE
-// ══════════════════════════════════════════════
-let state = {
-  kunde: null,
-  prodotti: [],
-  fotos: [],
-  gps: null,
-  currentFotoIdx: null
-};
+emailjs.init(EMAILJS_PK);
 
-// ══════════════════════════════════════════════
+// ═══════════════════════════════════════════
+// STATO
+// ═══════════════════════════════════════════
+let state = { kunde: null, prodotti: [], fotos: [], gps: null, curFoto: null };
+
+// ═══════════════════════════════════════════
+// CATALOGO PRODOTTI DEFAULT
+// ═══════════════════════════════════════════
+const PRODOTTI_DEFAULT = [
+  // GEL BLATTE
+  {cat:'Gel Blattella',name:'Advion Cockroach Gel',wirkstoff:'Indoxacarb 0,6%',dosierung:'Kleine Punkte 0,5 g alle 30 cm',klasse:'Oxadiazin',note:'Sicuro per animali dopo asciugatura. Antidot: sintomatica.',custom:false},
+  {cat:'Gel Blattella',name:'Blattanex Gel',wirkstoff:'Propoxur 1%',dosierung:'0,5 g/punto applicazione',klasse:'Carbamat',note:'Non usare in presenza di animali. Antidot: Atropina.',custom:false},
+  {cat:'Gel Blattella',name:'Goliath Gel',wirkstoff:'Fipronil 0,05%',dosierung:'Punti da 0,3–0,5 g',klasse:'Phenylpyrazol',note:'Effetto domino. Antidot: sintomatica.',custom:false},
+  {cat:'Gel Blattella',name:'Maxforce FC Magnum',wirkstoff:'Fipronil 0,05%',dosierung:'1 g/m²',klasse:'Phenylpyrazol',note:'Alta attività residuale. Antidot: sintomatica.',custom:false},
+  {cat:'Gel Blattella',name:'Maxforce Quantum',wirkstoff:'Imidacloprid 0,03%',dosierung:'Punti da 0,5 g ogni 20–30 cm',klasse:'Neonikotinoid',note:'Rotazione con Fipronil consigliata. Antidot: sintomatica.',custom:false},
+  {cat:'Gel Blattella',name:'Invict Gold',wirkstoff:'Imidacloprid 2,15%',dosierung:'Punti minimi, alta concentrazione',klasse:'Neonikotinoid',note:'Per infestazioni gravi. Antidot: sintomatica.',custom:false},
+  // POLVERI
+  {cat:'Polveri / Insektizidstaub',name:'Ficam W',wirkstoff:'Bendiocarb 80%',dosierung:'25–50 g/m²',klasse:'Carbamat',note:'Trattamento fessure e cavità. Antidot: Atropina sulfato 2mg IM.',custom:false},
+  {cat:'Polveri / Insektizidstaub',name:'Terres diatomacee',wirkstoff:'Silice amorfa >90%',dosierung:'Strato sottile nelle fessure',klasse:'Fisico-meccanico',note:'Sicuro per umani e animali. Nessun antidoto necessario.',custom:false},
+  // CIMICI LETTO
+  {cat:'Bettwanzen',name:'ClimbUp Interceptor',wirkstoff:'Dispositivo meccanico',dosierung:'1 per gamba del letto',klasse:'Monitoraggio',note:'Controllo dopo 48–72h.',custom:false},
+  {cat:'Bettwanzen',name:'Blackout Bed Bug Monitor',wirkstoff:'CO2 + feromoni sintetici',dosierung:'1–2 per stanza',klasse:'Monitoraggio attivo',note:'Lettura dopo 24h.',custom:false},
+  // PROCESSIONARIA
+  {cat:'Prozessionsspinner',name:'Collare Feromone PPM',wirkstoff:'Feromone sintetico pino',dosierung:'1 collare / albero',klasse:'Pheromonfalle',note:'Sostituire ogni 4–6 settimane.',custom:false},
+  {cat:'Prozessionsspinner',name:'Trappola Feromone EPS',wirkstoff:'Feromone sintetico quercia',dosierung:'1 trappola / 500 m²',klasse:'Pheromonfalle',note:'Controllo settimanale in stagione.',custom:false},
+  // VESPE
+  {cat:'Wespen',name:'Trappola VPL Vespe',wirkstoff:'Attrattivo alimentare',dosierung:'1–3 trappole per area',klasse:'Trappola meccanica',note:'Rinnovare attrattivo ogni 7–10 giorni.',custom:false},
+  // TARME
+  {cat:'Motten',name:'Trappola Feromone Tarme Alimentari',wirkstoff:'Feromone sintetico',dosierung:'1 per cucina / dispensa',klasse:'Pheromonfalle',note:'Sostituire ogni 3 mesi.',custom:false},
+  {cat:'Motten',name:'Trappola Feromone Tarme Tessili',wirkstoff:'Feromone sintetico tessili',dosierung:'1 per armadio',klasse:'Pheromonfalle',note:'Sostituire ogni 3 mesi.',custom:false},
+  // ZANZARE
+  {cat:'Stechmücken',name:'BG-Sentinel 2',wirkstoff:'CO2 + attrattivo BG-Lure',dosierung:'1 per 400 m²',klasse:'Trappola adulti',note:'Controllo settimanale.',custom:false},
+  {cat:'Stechmücken',name:'BG-GAT',wirkstoff:'CO2 + feromone uova',dosierung:'1 per oviposizione',klasse:'Trappola adulti + uova',note:'Lettura uova ogni 7 giorni.',custom:false},
+  {cat:'Stechmücken',name:'Ovitrappola',wirkstoff:'Acqua + paletta oviposizione',dosierung:'1 ogni 100 m²',klasse:'Monitoraggio uova',note:'Conteggio uova ogni 7 giorni.',custom:false},
+  {cat:'Stechmücken',name:'VectoBac WG',wirkstoff:'Bacillus thuringiensis israelensis',dosierung:'0,5–5 g/m² specchio d\'acqua',klasse:'Biologico larvicida',note:'Sicuro per fauna acquatica non bersaglio.',custom:false},
+  {cat:'Stechmücken',name:'Nematodi Steinernema feltiae',wirkstoff:'Nematodi entomopatogeni',dosierung:'0,5 mln/m²',klasse:'Biologico',note:'Conservare in frigorifero. Applicare la sera.',custom:false},
+  {cat:'Stechmücken',name:'Nematodi Heterorhabditis bacteriophora',wirkstoff:'Nematodi entomopatogeni',dosierung:'0,5 mln/m²',klasse:'Biologico',note:'Per larve nel suolo. Irrigare dopo applicazione.',custom:false},
+  // PESCIOLINO D'ARGENTO
+  {cat:'Silberfischchen',name:'Trappola adesiva Lepisma',wirkstoff:'Attrattivo alimentare',dosierung:'1 per angolo umido',klasse:'Monitoraggio',note:'Controllo ogni 2 settimane.',custom:false},
+];
+
+function getProdottiDB() {
+  try {
+    const saved = JSON.parse(localStorage.getItem('ml_prodotti_db') || 'null');
+    if (saved && saved.length > 0) return saved;
+  } catch(e){}
+  return [...PRODOTTI_DEFAULT];
+}
+function saveProdottiDB(p) { localStorage.setItem('ml_prodotti_db', JSON.stringify(p)); }
+function getKunden() { try { return JSON.parse(localStorage.getItem('ml_kunden') || '[]'); } catch(e){ return []; }}
+function saveKunden(k) { localStorage.setItem('ml_kunden', JSON.stringify(k)); }
+function getArchiv() { try { return JSON.parse(localStorage.getItem('ml_archiv') || '[]'); } catch(e){ return []; }}
+function saveArchiv(a) { localStorage.setItem('ml_archiv', JSON.stringify(a)); }
+function getQueue() { try { return JSON.parse(localStorage.getItem('ml_queue') || '[]'); } catch(e){ return []; }}
+function saveQueue(q) { localStorage.setItem('ml_queue', JSON.stringify(q)); }
+function getCustomAzioni() { try { return JSON.parse(localStorage.getItem('ml_custom_azioni') || '[]'); } catch(e){ return []; }}
+function saveCustomAzioni(a) { localStorage.setItem('ml_custom_azioni', JSON.stringify(a)); }
+
+// ═══════════════════════════════════════════
 // INIT
-// ══════════════════════════════════════════════
+// ═══════════════════════════════════════════
 document.addEventListener('DOMContentLoaded', () => {
-  setTodayDate();
+  setToday();
   initGPS();
-  initSignatures();
+  initSig('sig-k');
   restoreTimer();
-  renderKundenList();
-  renderProdottiSelList();
+  renderCustomAzioni();
   checkOnlineQueue();
 });
 
 window.addEventListener('online', () => {
-  showBanner();
+  document.getElementById('obanner').classList.add('show');
+  setTimeout(() => document.getElementById('obanner').classList.remove('show'), 4000);
   checkOnlineQueue();
 });
 
-// ══════════════════════════════════════════════
-// DATA HELPERS
-// ══════════════════════════════════════════════
-function getKunden() {
-  try { return JSON.parse(localStorage.getItem('ml_kunden') || '[]'); } catch(e){ return []; }
-}
-function saveKunden(k) { localStorage.setItem('ml_kunden', JSON.stringify(k)); }
-
-function getProdottiDB() {
-  const def = [
-    {name:'Aqua-K-Othrin 2 WG', wirkstoff:'Deltamethrin 2%', dosierung:'0,75 g/100 m²', klasse:'Pyrethroid'},
-    {name:'VectoBac WG', wirkstoff:'Bacillus thuringiensis israelensis', dosierung:'0,5–5 g/m²', klasse:'Biologisch'},
-    {name:'Ficam W', wirkstoff:'Bendiocarb 80%', dosierung:'nach Anweisung', klasse:'Carbamat'},
-  ];
-  try { return JSON.parse(localStorage.getItem('ml_prodotti_db') || JSON.stringify(def)); } catch(e){ return def; }
-}
-function saveProdottiDB(p) { localStorage.setItem('ml_prodotti_db', JSON.stringify(p)); }
-
-function getDrafts() {
-  try { return JSON.parse(localStorage.getItem('ml_drafts') || '[]'); } catch(e){ return []; }
-}
-function saveDrafts(d) { localStorage.setItem('ml_drafts', JSON.stringify(d)); }
-
-function getQueue() {
-  try { return JSON.parse(localStorage.getItem('ml_email_queue') || '[]'); } catch(e){ return []; }
-}
-function saveQueue(q) { localStorage.setItem('ml_email_queue', JSON.stringify(q)); }
-
-// ══════════════════════════════════════════════
+// ═══════════════════════════════════════════
 // DATE & GPS
-// ══════════════════════════════════════════════
-function setTodayDate() {
-  const today = new Date();
-  today.setMinutes(today.getMinutes() - today.getTimezoneOffset());
-  document.getElementById('datum-input').value = today.toISOString().split('T')[0];
+// ═══════════════════════════════════════════
+function setToday() {
+  const d = new Date();
+  d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
+  document.getElementById('datum-input').value = d.toISOString().split('T')[0];
 }
 
 function initGPS() {
   const badge = document.getElementById('gps-badge');
   if (!navigator.geolocation) { badge.textContent = 'Kein GPS'; return; }
-  navigator.geolocation.getCurrentPosition(pos => {
-    state.gps = { lat: pos.coords.latitude.toFixed(5), lon: pos.coords.longitude.toFixed(5) };
-    badge.innerHTML = `<svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg> ${state.gps.lat}, ${state.gps.lon}`;
-    badge.style.background = '#EAF3DE';
-    badge.style.color = '#27500A';
-  }, () => { badge.textContent = 'GPS nicht verfügbar'; });
+  navigator.geolocation.getCurrentPosition(p => {
+    state.gps = { lat: p.coords.latitude.toFixed(5), lon: p.coords.longitude.toFixed(5) };
+    badge.innerHTML = `<svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg> ${state.gps.lat}, ${state.gps.lon}`;
+    badge.style.color = '#17382d';
+    badge.style.background = 'rgba(23,56,45,.08)';
+  }, () => { badge.textContent = 'GPS n/v'; });
 }
 
-// ══════════════════════════════════════════════
+// ═══════════════════════════════════════════
 // TIMER
-// ══════════════════════════════════════════════
-let timerInterval, timerRunning = false;
+// ═══════════════════════════════════════════
+let timerInterval, timerOn = false;
 
-function toggleTimer() {
-  timerRunning ? stopTimer() : startTimer();
-}
+function toggleTimer() { timerOn ? stopTimer() : startTimer(); }
 
 function startTimer() {
-  if (!localStorage.getItem('ml_timer_start'))
-    localStorage.setItem('ml_timer_start', new Date().toISOString());
-  timerRunning = true;
-  document.getElementById('timer-dot').classList.add('running');
-  document.getElementById('timer-btn').textContent = 'STOP';
-  document.getElementById('timer-btn').classList.add('running');
+  if (!localStorage.getItem('ml_timer')) localStorage.setItem('ml_timer', new Date().toISOString());
+  timerOn = true;
+  document.getElementById('tdot').classList.add('on');
+  document.getElementById('tbtn').textContent = 'STOP';
+  document.getElementById('tbtn').classList.add('on');
   runTimer();
 }
 
 function stopTimer() {
   clearInterval(timerInterval);
-  timerRunning = false;
-  document.getElementById('timer-dot').classList.remove('running');
-  document.getElementById('timer-btn').textContent = 'START';
-  document.getElementById('timer-btn').classList.remove('running');
+  timerOn = false;
+  document.getElementById('tdot').classList.remove('on');
+  document.getElementById('tbtn').textContent = 'START';
+  document.getElementById('tbtn').classList.remove('on');
 }
 
 function runTimer() {
   timerInterval = setInterval(() => {
-    const start = new Date(localStorage.getItem('ml_timer_start'));
-    const secs = Math.floor((new Date() - start) / 1000);
-    const h = Math.floor(secs/3600), m = Math.floor((secs%3600)/60), s = secs%60;
-    document.getElementById('timer-val').textContent =
-      `${String(h).padStart(2,'0')}h ${String(m).padStart(2,'0')}m ${String(s).padStart(2,'0')}s`;
+    const s = Math.floor((new Date() - new Date(localStorage.getItem('ml_timer'))) / 1000);
+    document.getElementById('tval').textContent =
+      `${String(Math.floor(s/3600)).padStart(2,'0')}h ${String(Math.floor((s%3600)/60)).padStart(2,'0')}m ${String(s%60).padStart(2,'0')}s`;
   }, 1000);
 }
 
 function restoreTimer() {
-  if (localStorage.getItem('ml_timer_start')) startTimer();
+  if (localStorage.getItem('ml_timer')) startTimer();
 }
 
-function getTimerString() {
-  return document.getElementById('timer-val').textContent;
+function resetTimer() {
+  stopTimer();
+  localStorage.removeItem('ml_timer');
+  document.getElementById('tval').textContent = '00h 00m 00s';
 }
 
-// ══════════════════════════════════════════════
+function getTimerStr() { return document.getElementById('tval').textContent; }
+
+// ═══════════════════════════════════════════
 // KUNDEN
-// ══════════════════════════════════════════════
-function renderKundenList() {
+// ═══════════════════════════════════════════
+function openModal(id) {
+  if (id === 'm-kunden') renderKunden();
+  if (id === 'm-prodotti') renderProdottiSel();
+  if (id === 'm-archiv') renderArchiv();
+  document.getElementById(id).classList.add('open');
+}
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+
+function renderKunden() {
   const kunden = getKunden();
-  const container = document.getElementById('kunden-list');
-  if (!kunden.length) { container.innerHTML = '<p style="font-size:13px;color:#9ca3af;margin-bottom:10px">Noch keine Kunden gespeichert.</p>'; return; }
-  container.innerHTML = kunden.map((k,i) => `
-    <div class="cliente-item" onclick="selectKunde(${i})">
-      <div class="avatar">${k.name.substring(0,2).toUpperCase()}</div>
-      <div class="cliente-item-info">
-        <div class="name">${k.name}</div>
-        <div class="sub">${k.city || ''} · ${k.email || ''}</div>
-      </div>
+  const c = document.getElementById('klist');
+  if (!kunden.length) { c.innerHTML = '<p style="font-size:13px;color:var(--muted);padding:10px 0">Noch keine Kunden.</p>'; return; }
+  c.innerHTML = kunden.map((k,i) => `
+    <div class="klist-item" onclick="selectKunde(${i})">
+      <div class="avatar" style="width:32px;height:32px;font-size:11px">${k.name.substring(0,2).toUpperCase()}</div>
+      <div><div class="klist-name">${k.name}</div><div class="klist-sub">${k.city||''} · ${k.email||''}</div></div>
+      <button class="klist-del" onclick="event.stopPropagation();deleteKunde(${i})">×</button>
     </div>`).join('');
 }
 
 function selectKunde(i) {
   const k = getKunden()[i];
   state.kunde = k;
-  document.getElementById('kunde-avatar').textContent = k.name.substring(0,2).toUpperCase();
-  document.getElementById('kunde-name').textContent = k.name;
-  document.getElementById('kunde-sub').textContent = `${k.city||''} · ${k.email||''}`;
-  closeModal('modal-kunden');
+  document.getElementById('k-avatar').textContent = k.name.substring(0,2).toUpperCase();
+  document.getElementById('k-name').textContent = k.name;
+  document.getElementById('k-sub').textContent = `${k.city||''} · ${k.email||''}`;
+  closeModal('m-kunden');
 }
 
-function saveNewKunde() {
-  const name = document.getElementById('new-k-name').value.trim();
-  const email = document.getElementById('new-k-email').value.trim();
-  if (!name) { showToast('Name ist erforderlich'); return; }
+function deleteKunde(i) {
+  if (!confirm('Kunde löschen?')) return;
+  const k = getKunden(); k.splice(i,1); saveKunden(k); renderKunden();
+}
+
+function saveKunde() {
+  const name = document.getElementById('nk-name').value.trim();
+  if (!name) { showToast('Name erforderlich','red'); return; }
   const k = {
-    name, email,
-    address: document.getElementById('new-k-address').value.trim(),
-    city: document.getElementById('new-k-city').value.trim(),
-    phone: document.getElementById('new-k-phone').value.trim()
+    name, email: document.getElementById('nk-email').value.trim(),
+    address: document.getElementById('nk-address').value.trim(),
+    city: document.getElementById('nk-city').value.trim(),
+    phone: document.getElementById('nk-phone').value.trim()
   };
-  const kunden = getKunden();
-  kunden.push(k);
-  saveKunden(kunden);
-  ['new-k-name','new-k-address','new-k-city','new-k-email','new-k-phone'].forEach(id => document.getElementById(id).value='');
+  const kunden = getKunden(); kunden.push(k); saveKunden(kunden);
+  ['nk-name','nk-address','nk-city','nk-email','nk-phone'].forEach(id => document.getElementById(id).value='');
   state.kunde = k;
-  document.getElementById('kunde-avatar').textContent = k.name.substring(0,2).toUpperCase();
-  document.getElementById('kunde-name').textContent = k.name;
-  document.getElementById('kunde-sub').textContent = `${k.city||''} · ${k.email||''}`;
-  renderKundenList();
-  closeModal('modal-kunden');
-  showToast('Kunde gespeichert ✓');
+  document.getElementById('k-avatar').textContent = k.name.substring(0,2).toUpperCase();
+  document.getElementById('k-name').textContent = k.name;
+  document.getElementById('k-sub').textContent = `${k.city||''} · ${k.email||''}`;
+  renderKunden(); closeModal('m-kunden'); showToast('Kunde gespeichert ✓','gold');
 }
 
-// ══════════════════════════════════════════════
+// ═══════════════════════════════════════════
 // AZIONI
-// ══════════════════════════════════════════════
-function toggleAktion(id) {
-  const block = document.querySelector(`[data-id="${id}"]`);
-  const body = block.querySelector('.aktion-body');
-  const on = block.classList.contains('on');
-  if (on) {
-    block.classList.remove('on');
-    body.style.display = 'none';
-  } else {
-    block.classList.add('on');
-    body.style.display = 'block';
-  }
+// ═══════════════════════════════════════════
+function toggleA(id) {
+  const b = document.querySelector(`[data-id="${id}"]`);
+  const body = b.querySelector('.abody');
+  const on = b.classList.contains('on');
+  b.classList.toggle('on', !on);
+  body.style.display = on ? 'none' : 'block';
 }
 
-function getAzioniSelezionate() {
-  const result = [];
-  document.querySelectorAll('.aktion-block.on').forEach(block => {
-    const ta = block.querySelector('textarea');
-    if (ta && ta.value.trim()) result.push(ta.value.trim());
+function getAzioni() {
+  const res = [];
+  document.querySelectorAll('.ablock.on').forEach(b => {
+    const ta = b.querySelector('textarea');
+    if (ta && ta.value.trim()) res.push(ta.value.trim());
   });
-  return result;
+  return res;
 }
 
-// ══════════════════════════════════════════════
-// PRODOTTI
-// ══════════════════════════════════════════════
-function renderProdottiSelList() {
-  const db = getProdottiDB();
-  const container = document.getElementById('prodotti-sel-list');
-  container.innerHTML = db.map((p,i) => `
-    <div class="prod-select-item" onclick="addProdotto(${i})">
-      <div>
-        <div class="pname">${p.name}</div>
-        <div class="pdetail">${p.wirkstoff} · ${p.dosierung}</div>
+function renderCustomAzioni() {
+  const custom = getCustomAzioni();
+  const wrap = document.getElementById('custom-azioni');
+  wrap.innerHTML = custom.map((a,i) => `
+    <div class="ablock" data-id="ca${i}">
+      <div class="ahead" onclick="toggleA('ca${i}')">
+        <div class="achk"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="alabel">${a.label}</div>
+      </div>
+      <div class="abody" style="display:none">
+        <div class="hint">Text bearbeiten:</div>
+        <textarea>${a.text}</textarea>
       </div>
     </div>`).join('');
 }
 
+function addCustomAzione() {
+  const label = document.getElementById('na-label').value.trim();
+  const text = document.getElementById('na-text').value.trim();
+  if (!label) { showToast('Bezeichnung erforderlich','red'); return; }
+  const save = document.getElementById('na-save').checked;
+  if (save) {
+    const custom = getCustomAzioni();
+    custom.push({label, text});
+    saveCustomAzioni(custom);
+  }
+  // Aggiungi temporanea al DOM
+  const wrap = document.getElementById('custom-azioni');
+  const id = 'ca_tmp_' + Date.now();
+  const div = document.createElement('div');
+  div.className = 'ablock on';
+  div.setAttribute('data-id', id);
+  div.innerHTML = `
+    <div class="ahead" onclick="toggleA('${id}')">
+      <div class="achk" style="background:var(--green);border-color:var(--green)"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="alabel" style="color:var(--green);font-weight:600">${label}</div>
+    </div>
+    <div class="abody">
+      <div class="hint">Text bearbeiten:</div>
+      <textarea>${text}</textarea>
+    </div>`;
+  wrap.appendChild(div);
+  document.getElementById('na-label').value = '';
+  document.getElementById('na-text').value = '';
+  document.getElementById('na-save').checked = false;
+  closeModal('m-new-azione');
+  if (save) showToast('Maßnahme gespeichert ✓','gold');
+}
+
+// ═══════════════════════════════════════════
+// PRODOTTI
+// ═══════════════════════════════════════════
+function renderProdottiSel() {
+  const db = getProdottiDB();
+  const cats = [...new Set(db.map(p => p.cat))];
+  const c = document.getElementById('psel-list');
+  c.innerHTML = cats.map(cat => {
+    const items = db.filter(p => p.cat === cat);
+    return `<div class="pcat-title">${cat}</div>` +
+      items.map((p,gi) => {
+        const i = db.indexOf(p);
+        return `<div class="psel-item" onclick="addProdotto(${i})">
+          <div>
+            <div class="psel-name">${p.name}</div>
+            <div class="psel-detail">${p.wirkstoff} · ${p.dosierung}</div>
+            ${p.note ? `<div class="psel-note">${p.note.substring(0,60)}${p.note.length>60?'...':''}</div>` : ''}
+          </div>
+          ${p.custom ? `<button class="psel-del" onclick="event.stopPropagation();deleteProdottoDB(${i})">×</button>` : ''}
+        </div>`;
+      }).join('');
+  }).join('');
+}
+
 function addProdotto(i) {
   const p = getProdottiDB()[i];
-  state.prodotti.push({...p});
-  renderProdottiInForm();
-  closeModal('modal-prodotti-sel');
+  state.prodotti.push({...p, qty: ''});
+  renderProdottiForm();
+  closeModal('m-prodotti');
 }
 
-function saveNewProdotto() {
-  const name = document.getElementById('new-p-name').value.trim();
-  if (!name) { showToast('Handelsname erforderlich'); return; }
+function deleteProdottoDB(i) {
+  if (!confirm('Mittel löschen?')) return;
+  const db = getProdottiDB(); db.splice(i,1); saveProdottiDB(db); renderProdottiSel();
+}
+
+function saveProdotto() {
+  const name = document.getElementById('np-name').value.trim();
+  if (!name) { showToast('Handelsname erforderlich','red'); return; }
   const p = {
+    cat: document.getElementById('np-kategorie').value.trim() || 'Sonstiges',
     name,
-    wirkstoff: document.getElementById('new-p-wirkstoff').value.trim(),
-    dosierung: document.getElementById('new-p-dosierung').value.trim(),
-    klasse: document.getElementById('new-p-klasse').value.trim()
+    wirkstoff: document.getElementById('np-wirkstoff').value.trim(),
+    dosierung: document.getElementById('np-dosierung').value.trim(),
+    klasse: document.getElementById('np-klasse').value.trim(),
+    note: document.getElementById('np-note').value.trim(),
+    custom: true
   };
-  const db = getProdottiDB();
-  db.push(p);
-  saveProdottiDB(db);
-  state.prodotti.push({...p});
-  renderProdottiInForm();
-  renderProdottiSelList();
-  ['new-p-name','new-p-wirkstoff','new-p-dosierung','new-p-klasse'].forEach(id => document.getElementById(id).value='');
-  closeModal('modal-prodotti-sel');
-  showToast('Mittel gespeichert ✓');
+  const db = getProdottiDB(); db.push(p); saveProdottiDB(db);
+  state.prodotti.push({...p, qty: ''});
+  renderProdottiForm();
+  ['np-name','np-kategorie','np-wirkstoff','np-dosierung','np-klasse','np-note'].forEach(id => document.getElementById(id).value='');
+  closeModal('m-prodotti');
+  showToast('Mittel gespeichert ✓','gold');
 }
 
-function renderProdottiInForm() {
-  const container = document.getElementById('prodotti-list');
-  container.innerHTML = state.prodotti.map((p,i) => `
-    <div class="prod-card">
-      <div class="prod-name">${p.name}</div>
-      <div class="prod-detail">Wirkstoff: ${p.wirkstoff} · Dosierung: ${p.dosierung}</div>
-      ${p.klasse ? `<span class="prod-badge">${p.klasse}</span>` : ''}
-      <button class="prod-del" onclick="removeProdotto(${i})">×</button>
+function renderProdottiForm() {
+  document.getElementById('prod-list').innerHTML = state.prodotti.map((p,i) => `
+    <div class="pcard">
+      <div class="pname">${p.name}</div>
+      <div class="pdetail">${p.wirkstoff} · ${p.dosierung}</div>
+      ${p.klasse ? `<span class="pbadge">${p.klasse}</span>` : ''}
+      <div class="pqty"><input type="text" placeholder="Verbrauchte Menge / Einheit" value="${p.qty||''}" onchange="state.prodotti[${i}].qty=this.value"></div>
+      <button class="pdel" onclick="removeProdotto(${i})">×</button>
     </div>`).join('');
 }
 
-function removeProdotto(i) {
-  state.prodotti.splice(i,1);
-  renderProdottiInForm();
-}
+function removeProdotto(i) { state.prodotti.splice(i,1); renderProdottiForm(); }
 
-// ══════════════════════════════════════════════
+// ═══════════════════════════════════════════
 // FOTO
-// ══════════════════════════════════════════════
+// ═══════════════════════════════════════════
 function addFotos(input) {
   Array.from(input.files).forEach(file => {
-    const reader = new FileReader();
-    reader.onload = e => {
-      state.fotos.push({ dataUrl: e.target.result, desc: '', gps: state.gps ? `${state.gps.lat}, ${state.gps.lon}` : '' });
-      renderFotoStrip();
+    const r = new FileReader();
+    r.onload = e => {
+      state.fotos.push({ data: e.target.result, desc: '', gps: state.gps ? `${state.gps.lat},${state.gps.lon}` : '' });
+      renderFotos();
     };
-    reader.readAsDataURL(file);
+    r.readAsDataURL(file);
   });
   input.value = '';
 }
 
-function renderFotoStrip() {
-  const strip = document.getElementById('foto-strip');
-  const addBtn = strip.querySelector('.fadd');
+function renderFotos() {
+  const strip = document.getElementById('fstrip');
+  const add = strip.querySelector('.fadd');
   strip.querySelectorAll('.fthumb').forEach(el => el.remove());
   state.fotos.forEach((f,i) => {
     const div = document.createElement('div');
     div.className = 'fthumb';
-    div.innerHTML = `<img src="${f.dataUrl}" onclick="openFotoDesc(${i})">
-      ${f.gps ? `<div class="geo">GPS</div>` : ''}
-      <button class="del-foto" onclick="removeFoto(event,${i})">×</button>`;
-    strip.insertBefore(div, addBtn);
+    div.innerHTML = `<img src="${f.data}" onclick="openFotoDesc(${i})">
+      ${f.gps ? `<div class="fgeo">GPS</div>` : ''}
+      <button class="fdel" onclick="delFoto(event,${i})">×</button>`;
+    strip.insertBefore(div, add);
   });
 }
 
 function openFotoDesc(i) {
-  state.currentFotoIdx = i;
-  document.getElementById('foto-desc-input').value = state.fotos[i].desc || '';
-  openModal('modal-foto-desc');
+  state.curFoto = i;
+  document.getElementById('foto-desc-ta').value = state.fotos[i].desc || '';
+  openModal('m-foto');
 }
 
 function saveFotoDesc() {
-  if (state.currentFotoIdx !== null)
-    state.fotos[state.currentFotoIdx].desc = document.getElementById('foto-desc-input').value.trim();
-  closeModal('modal-foto-desc');
+  if (state.curFoto !== null) state.fotos[state.curFoto].desc = document.getElementById('foto-desc-ta').value.trim();
+  closeModal('m-foto');
 }
 
-function removeFoto(e, i) {
-  e.stopPropagation();
-  state.fotos.splice(i,1);
-  renderFotoStrip();
-}
+function delFoto(e, i) { e.stopPropagation(); state.fotos.splice(i,1); renderFotos(); }
 
-// ══════════════════════════════════════════════
-// FIRME
-// ══════════════════════════════════════════════
-function initSignatures() {
-  setupCanvas('sig-kunde');
-}
-
-function setupCanvas(id) {
+// ═══════════════════════════════════════════
+// FIRMA
+// ═══════════════════════════════════════════
+function initSig(id) {
   const canvas = document.getElementById(id);
   const ctx = canvas.getContext('2d');
   let drawing = false;
-
-  const getPos = (e) => {
-    const rect = canvas.getBoundingClientRect();
-    const scaleX = canvas.width / rect.width;
-    const scaleY = canvas.height / rect.height;
+  const pos = e => {
+    const r = canvas.getBoundingClientRect();
     const src = e.touches ? e.touches[0] : e;
-    return { x: (src.clientX - rect.left) * scaleX, y: (src.clientY - rect.top) * scaleY };
+    return { x: (src.clientX-r.left)*(canvas.width/r.width), y: (src.clientY-r.top)*(canvas.height/r.height) };
   };
-
-  canvas.addEventListener('mousedown', e => { drawing=true; ctx.beginPath(); const p=getPos(e); ctx.moveTo(p.x,p.y); });
-  canvas.addEventListener('mousemove', e => { if(!drawing)return; const p=getPos(e); ctx.lineTo(p.x,p.y); ctx.strokeStyle='#111'; ctx.lineWidth=2; ctx.lineCap='round'; ctx.stroke(); });
-  canvas.addEventListener('mouseup', () => drawing=false);
-  canvas.addEventListener('mouseleave', () => drawing=false);
-  canvas.addEventListener('touchstart', e => { e.preventDefault(); drawing=true; ctx.beginPath(); const p=getPos(e); ctx.moveTo(p.x,p.y); }, {passive:false});
-  canvas.addEventListener('touchmove', e => { e.preventDefault(); if(!drawing)return; const p=getPos(e); ctx.lineTo(p.x,p.y); ctx.strokeStyle='#111'; ctx.lineWidth=2; ctx.lineCap='round'; ctx.stroke(); }, {passive:false});
-  canvas.addEventListener('touchend', () => drawing=false);
+  canvas.addEventListener('mousedown', e => { drawing=true; ctx.beginPath(); const p=pos(e); ctx.moveTo(p.x,p.y); });
+  canvas.addEventListener('mousemove', e => { if(!drawing)return; const p=pos(e); ctx.lineTo(p.x,p.y); ctx.strokeStyle='#17382d'; ctx.lineWidth=2; ctx.lineCap='round'; ctx.stroke(); });
+  canvas.addEventListener('mouseup', ()=>drawing=false);
+  canvas.addEventListener('mouseleave', ()=>drawing=false);
+  canvas.addEventListener('touchstart', e => { e.preventDefault(); drawing=true; ctx.beginPath(); const p=pos(e); ctx.moveTo(p.x,p.y); },{passive:false});
+  canvas.addEventListener('touchmove', e => { e.preventDefault(); if(!drawing)return; const p=pos(e); ctx.lineTo(p.x,p.y); ctx.strokeStyle='#17382d'; ctx.lineWidth=2; ctx.lineCap='round'; ctx.stroke(); },{passive:false});
+  canvas.addEventListener('touchend', ()=>drawing=false);
 }
 
 function clearCanvas(id) {
@@ -756,383 +968,443 @@ function clearCanvas(id) {
 }
 
 function toggleNofirma() {
-  const checked = document.getElementById('nofirma-check').checked;
-  document.getElementById('nofirma-reason').style.display = checked ? 'block' : 'none';
-  if (checked) clearCanvas('sig-kunde');
+  const checked = document.getElementById('nofirma-cb').checked;
+  document.getElementById('nofirma-ta').style.display = checked ? 'block' : 'none';
+  if (checked) clearCanvas('sig-k');
 }
 
-// ══════════════════════════════════════════════
+// ═══════════════════════════════════════════
+// RESET COMPLETO
+// ═══════════════════════════════════════════
+function resetAll() {
+  state.kunde = null; state.prodotti = []; state.fotos = []; state.curFoto = null;
+  document.getElementById('k-avatar').textContent = '–';
+  document.getElementById('k-name').textContent = 'Kunde auswählen';
+  document.getElementById('k-sub').textContent = 'Antippen um Kunde zu wählen';
+  document.querySelectorAll('.ablock').forEach(b => {
+    b.classList.remove('on');
+    const body = b.querySelector('.abody');
+    if (body) body.style.display = 'none';
+  });
+  document.getElementById('custom-azioni').innerHTML = '';
+  renderProdottiForm();
+  renderFotos();
+  clearCanvas('sig-k');
+  document.getElementById('sig-k-name').value = '';
+  document.getElementById('nofirma-cb').checked = false;
+  document.getElementById('nofirma-ta').style.display = 'none';
+  document.getElementById('nofirma-ta').value = '';
+  document.getElementById('next-check-input').value = '';
+  setToday();
+  resetTimer();
+}
+
+// ═══════════════════════════════════════════
 // PDF GENERATION
-// ══════════════════════════════════════════════
+// ═══════════════════════════════════════════
 async function buildPDF() {
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF({ orientation:'portrait', unit:'mm', format:'a4' });
-  const W = 210, H = 297;
-  const ml = 18, mr = 18, mt = 18;
+  const W=210, H=297, ml=16, mr=16, mt=16;
   let y = mt;
-  const green = [26, 92, 58];
-  const lightGreen = [234, 243, 222];
-  const gray = [107, 114, 128];
-  const black = [17, 17, 17];
 
   const datum = document.getElementById('datum-input').value;
-  const datumFormatted = datum ? new Date(datum+'T12:00:00').toLocaleDateString('de-DE',{day:'2-digit',month:'long',year:'numeric'}) : '—';
-  const azioni = getAzioniSelezionate();
-  const arbeitszeit = document.getElementById('timer-val').textContent;
+  const datumFmt = datum ? new Date(datum+'T12:00:00').toLocaleDateString('de-DE',{day:'2-digit',month:'long',year:'numeric'}) : '—';
+  const azioni = getAzioni();
+  const arbeitszeit = getTimerStr();
+  const nextCheck = document.getElementById('next-check-input').value;
+  const nextCheckFmt = nextCheck ? new Date(nextCheck+'T12:00:00').toLocaleDateString('de-DE',{day:'2-digit',month:'long',year:'numeric'}) : null;
 
-  // Helper
-  const setColor = (r,g,b) => { doc.setTextColor(r,g,b); };
-  const setFill = (r,g,b) => { doc.setFillColor(r,g,b); };
-  const setDraw = (r,g,b) => { doc.setDrawColor(r,g,b); };
+  const green = [23,56,45], gold = [217,166,79], gray = [111,108,100], black = [40,37,29], light = [247,246,242];
 
-  // ── HEADER ──
-  setFill(...green);
-  doc.rect(0, 0, W, 30, 'F');
-
-  try {
-    doc.addImage('logo.png', 'PNG', ml, 6, 40, 12);
-  } catch(e){}
-
-  setColor(255,255,255);
-  doc.setFontSize(9); doc.setFont('helvetica','normal');
-  doc.text('APPLIED ENTOMOLOGY & ENVIRONMENTAL RISK', ml+44, 11);
-  doc.setFontSize(14); doc.setFont('helvetica','bold');
-  doc.text('Arbeitsbericht', ml+44, 18);
-  doc.setFontSize(9); doc.setFont('helvetica','normal');
-  doc.text(datumFormatted, ml+44, 24);
+  // HEADER
+  doc.setFillColor(...green);
+  doc.rect(0,0,W,28,'F');
+  doc.setFillColor(...gold);
+  doc.rect(0,28,W,1.5,'F');
+  try { doc.addImage('logo.png','PNG',ml,6,28,16); } catch(e){}
+  doc.setTextColor(217,166,79); doc.setFontSize(9); doc.setFont('helvetica','bold');
+  doc.text('MADLEAF', ml+32, 13);
+  doc.setTextColor(255,255,255); doc.setFontSize(15); doc.setFont('helvetica','bold');
+  doc.text('Arbeitsbericht', ml+32, 21);
+  doc.setFontSize(9); doc.setFont('helvetica','normal'); doc.setTextColor(200,220,210);
+  doc.text(datumFmt, W-mr, 17, {align:'right'});
 
   y = 36;
 
-  // ── MITTELTEIL: ABSENDER | EMPFÄNGER ──
-  setColor(...black);
-  doc.setFontSize(8); doc.setFont('helvetica','bold');
+  // ABSENDER / EMPFÄNGER
+  doc.setTextColor(...black); doc.setFontSize(8); doc.setFont('helvetica','bold');
   doc.text('Dr. Giuseppe Maddalena', ml, y);
-  doc.setFont('helvetica','normal');
+  doc.setFont('helvetica','normal'); doc.setTextColor(...gray);
   doc.text('Applied Entomology & Environmental Risk', ml, y+4);
   doc.text('Schillerstraße 8, 79369 Wyhl am Kaiserstuhl', ml, y+8);
-  doc.text('+49 163 3661630  |  giuseppe.maddalena@madleaf.de', ml, y+12);
+  doc.text(`${MY_PHONE}  |  giuseppe.maddalena@madleaf.de`, ml, y+12);
 
   if (state.kunde) {
-    doc.setFont('helvetica','bold');
-    doc.text(state.kunde.name, W/2+10, y);
-    doc.setFont('helvetica','normal');
-    if (state.kunde.address) doc.text(state.kunde.address, W/2+10, y+4);
-    if (state.kunde.city) doc.text(state.kunde.city, W/2+10, y+8);
-    if (state.kunde.email) doc.text(state.kunde.email, W/2+10, y+12);
-    if (state.kunde.phone) doc.text(state.kunde.phone, W/2+10, y+16);
+    doc.setTextColor(...black); doc.setFont('helvetica','bold');
+    doc.text(state.kunde.name, W-mr, y, {align:'right'});
+    doc.setFont('helvetica','normal'); doc.setTextColor(...gray);
+    if (state.kunde.address) doc.text(state.kunde.address, W-mr, y+4, {align:'right'});
+    if (state.kunde.city) doc.text(state.kunde.city, W-mr, y+8, {align:'right'});
+    if (state.kunde.email) doc.text(state.kunde.email, W-mr, y+12, {align:'right'});
+    if (state.kunde.phone) doc.text(state.kunde.phone, W-mr, y+16, {align:'right'});
   }
 
   y += 22;
-  setDraw(200,200,200); doc.setLineWidth(0.3);
-  doc.line(ml, y, W-mr, y);
-  y += 6;
+  doc.setDrawColor(220,216,210); doc.setLineWidth(0.3);
+  doc.line(ml,y,W-mr,y); y += 6;
 
-  // ── INFO BOX ──
-  setFill(...lightGreen);
-  doc.roundedRect(ml, y, W-ml-mr, 18, 2, 2, 'F');
-  setColor(...green);
-  doc.setFontSize(8); doc.setFont('helvetica','bold');
+  // INFO BOX
+  doc.setFillColor(247,246,242);
+  doc.roundedRect(ml,y,W-ml-mr,18,2,2,'F');
+  doc.setDrawColor(...gold); doc.setLineWidth(0.5);
+  doc.roundedRect(ml,y,W-ml-mr,18,2,2,'S');
+  doc.setFillColor(...gold); doc.rect(ml,y,2,18,'F');
+  doc.setTextColor(...gold); doc.setFontSize(7); doc.setFont('helvetica','bold');
   doc.text('DATUM', ml+5, y+5);
-  doc.text('ARBEITSZEIT', ml+55, y+5);
-  if (state.gps) doc.text('GPS', ml+105, y+5);
-  setColor(...black);
-  doc.setFontSize(10); doc.setFont('helvetica','bold');
-  doc.text(datumFormatted, ml+5, y+13);
-  doc.text(arbeitszeit, ml+55, y+13);
-  if (state.gps) doc.setFontSize(8) && doc.text(`${state.gps.lat}, ${state.gps.lon}`, ml+105, y+13);
-
+  doc.text('ARBEITSZEIT', ml+65, y+5);
+  if (state.gps) doc.text('GPS', ml+125, y+5);
+  doc.setTextColor(...black); doc.setFontSize(10); doc.setFont('helvetica','bold');
+  doc.text(datumFmt, ml+5, y+13);
+  doc.text(arbeitszeit, ml+65, y+13);
+  if (state.gps) { doc.setFontSize(8); doc.text(`${state.gps.lat}, ${state.gps.lon}`, ml+125, y+13); }
   y += 24;
 
-  // ── AZIONI ──
+  // AZIONI
   if (azioni.length) {
-    setColor(...green);
-    doc.setFontSize(10); doc.setFont('helvetica','bold');
-    doc.text('DURCHGEFÜHRTE MASSNAHMEN', ml, y);
-    y += 5;
-    setDraw(...green); doc.setLineWidth(0.5);
-    doc.line(ml, y, W-mr, y);
-    y += 5;
-
-    azioni.forEach((az, idx) => {
-      setFill(...lightGreen);
+    doc.setFillColor(...green);
+    doc.roundedRect(ml,y,W-ml-mr,7,1,1,'F');
+    doc.setTextColor(255,255,255); doc.setFontSize(9); doc.setFont('helvetica','bold');
+    doc.text('DURCHGEFÜHRTE MASSNAHMEN', ml+4, y+4.5);
+    y += 10;
+    azioni.forEach(az => {
       const lines = doc.splitTextToSize(az, W-ml-mr-10);
-      const boxH = lines.length * 4.5 + 7;
-      if (y + boxH > H - 40) { doc.addPage(); y = mt; }
-      doc.roundedRect(ml, y, W-ml-mr, boxH, 2, 2, 'F');
-      setFill(...green);
-      doc.rect(ml, y, 2, boxH, 'F');
-      setColor(...black);
-      doc.setFontSize(9); doc.setFont('helvetica','normal');
-      lines.forEach((line, li) => doc.text(line, ml+6, y+5+li*4.5));
-      y += boxH + 4;
+      const bh = lines.length*4.5+8;
+      if (y+bh > H-35) { addFooter(doc,W,H,ml,mr,green,gray,MY_PHONE); doc.addPage(); y=mt; }
+      doc.setFillColor(252,251,248); doc.roundedRect(ml,y,W-ml-mr,bh,2,2,'F');
+      doc.setFillColor(...gold); doc.rect(ml,y,2.5,bh,'F');
+      doc.setDrawColor(235,230,220); doc.setLineWidth(0.3);
+      doc.roundedRect(ml,y,W-ml-mr,bh,2,2,'S');
+      doc.setTextColor(...black); doc.setFontSize(9); doc.setFont('helvetica','normal');
+      lines.forEach((l,li) => doc.text(l, ml+6, y+5.5+li*4.5));
+      y += bh+4;
     });
     y += 4;
   }
 
-  // ── PRODOTTI ──
+  // PRODOTTI
   if (state.prodotti.length) {
-    if (y + 30 > H - 40) { doc.addPage(); y = mt; }
-    setColor(...green);
-    doc.setFontSize(10); doc.setFont('helvetica','bold');
-    doc.text('EINGESETZTE MITTEL', ml, y);
-    y += 5;
-    setDraw(...green); doc.setLineWidth(0.5);
-    doc.line(ml, y, W-mr, y);
-    y += 5;
-
+    if (y+30 > H-35) { addFooter(doc,W,H,ml,mr,green,gray,MY_PHONE); doc.addPage(); y=mt; }
+    doc.setFillColor(...gold);
+    doc.roundedRect(ml,y,W-ml-mr,7,1,1,'F');
+    doc.setTextColor(...green); doc.setFontSize(9); doc.setFont('helvetica','bold');
+    doc.text('EINGESETZTE MITTEL', ml+4, y+4.5);
+    y += 10;
     state.prodotti.forEach(p => {
-      if (y + 16 > H - 40) { doc.addPage(); y = mt; }
-      setFill(249,253,246);
-      doc.roundedRect(ml, y, W-ml-mr, 16, 2, 2, 'F');
-      setDraw(192,221,151); doc.setLineWidth(0.3);
-      doc.roundedRect(ml, y, W-ml-mr, 16, 2, 2, 'S');
-      setColor(...black);
-      doc.setFontSize(10); doc.setFont('helvetica','bold');
-      doc.text(p.name, ml+4, y+6);
-      doc.setFontSize(8); doc.setFont('helvetica','normal'); setColor(...gray);
-      doc.text(`Wirkstoff: ${p.wirkstoff}  ·  Dosierung: ${p.dosierung}`, ml+4, y+11);
+      if (y+20 > H-35) { addFooter(doc,W,H,ml,mr,green,gray,MY_PHONE); doc.addPage(); y=mt; }
+      doc.setFillColor(252,251,248); doc.roundedRect(ml,y,W-ml-mr,20,2,2,'F');
+      doc.setDrawColor(235,230,220); doc.setLineWidth(0.3);
+      doc.roundedRect(ml,y,W-ml-mr,20,2,2,'S');
+      doc.setFillColor(...gold); doc.rect(ml,y,2.5,20,'F');
+      doc.setTextColor(...black); doc.setFontSize(10); doc.setFont('helvetica','bold');
+      doc.text(p.name, ml+6, y+6);
+      doc.setFontSize(8); doc.setFont('helvetica','normal'); doc.setTextColor(...gray);
+      doc.text(`${p.wirkstoff}  ·  ${p.dosierung}`, ml+6, y+11);
+      if (p.qty) { doc.setTextColor(...green); doc.text(`Verbraucht: ${p.qty}`, ml+6, y+16); }
       if (p.klasse) {
-        setFill(...lightGreen); doc.roundedRect(W-mr-22, y+3, 18, 5, 1, 1, 'F');
-        setColor(...green); doc.setFontSize(7); doc.text(p.klasse, W-mr-13, y+6.5, {align:'center'});
+        doc.setFillColor(240,244,240); doc.roundedRect(W-mr-30,y+4,26,6,1,1,'F');
+        doc.setTextColor(...green); doc.setFontSize(7); doc.setFont('helvetica','bold');
+        doc.text(p.klasse, W-mr-17, y+8, {align:'center'});
       }
-      y += 20;
+      y += 24;
     });
     y += 4;
   }
 
-  // ── FOTO PAGINA 2+ ──
+  // PROSSIMA VISITA
+  if (nextCheckFmt) {
+    if (y+18 > H-35) { addFooter(doc,W,H,ml,mr,green,gray,MY_PHONE); doc.addPage(); y=mt; }
+    doc.setFillColor(252,247,235); doc.roundedRect(ml,y,W-ml-mr,14,2,2,'F');
+    doc.setFillColor(...gold); doc.rect(ml,y,2.5,14,'F');
+    doc.setDrawColor(...gold); doc.setLineWidth(0.5);
+    doc.roundedRect(ml,y,W-ml-mr,14,2,2,'S');
+    doc.setTextColor(...green); doc.setFontSize(9); doc.setFont('helvetica','bold');
+    doc.text(`Nächste Kontrolle: ${nextCheckFmt}`, ml+6, y+8.5);
+    y += 18;
+  }
+
+  // FOTO
   if (state.fotos.length) {
-    doc.addPage(); y = mt;
-    setColor(...green);
-    doc.setFontSize(10); doc.setFont('helvetica','bold');
-    doc.text('FOTODOKUMENTATION', ml, y);
-    y += 5;
-    setDraw(...green); doc.setLineWidth(0.5);
-    doc.line(ml, y, W-mr, y);
-    y += 8;
+    addFooter(doc,W,H,ml,mr,green,gray,MY_PHONE); doc.addPage(); y=mt;
+    doc.setFillColor(...green); doc.roundedRect(ml,y,W-ml-mr,7,1,1,'F');
+    doc.setTextColor(255,255,255); doc.setFontSize(9); doc.setFont('helvetica','bold');
+    doc.text('FOTODOKUMENTATION', ml+4, y+4.5);
+    y += 12;
 
     for (const foto of state.fotos) {
       try {
-        const maxW = W-ml-mr, maxH = 80;
-        const img = new Image();
-        img.src = foto.dataUrl;
-        await new Promise(r => { img.onload = r; });
+        const img = new Image(); img.src = foto.data;
+        await new Promise(r => { img.onload=r; });
+        const maxW=W-ml-mr, maxH=90;
         const ratio = Math.min(maxW/img.width, maxH/img.height);
-        const fw = img.width*ratio, fh = img.height*ratio;
-        if (y + fh + 15 > H - 30) { doc.addPage(); y = mt; }
-        doc.addImage(foto.dataUrl, 'JPEG', ml, y, fw, fh, undefined, 'MEDIUM');
+        const fw=img.width*ratio, fh=img.height*ratio;
+        if (y+fh+16 > H-35) { addFooter(doc,W,H,ml,mr,green,gray,MY_PHONE); doc.addPage(); y=mt; }
+        doc.addImage(foto.data,'JPEG',ml,y,fw,fh,undefined,'MEDIUM');
         if (foto.gps) {
-          setFill(...lightGreen);
-          doc.roundedRect(ml, y+fh-6, 40, 5.5, 1, 1, 'F');
-          setColor(...green); doc.setFontSize(7);
+          doc.setFillColor(247,246,242); doc.roundedRect(ml,y+fh-6,42,5.5,1,1,'F');
+          doc.setTextColor(...green); doc.setFontSize(7);
           doc.text(`GPS: ${foto.gps}`, ml+2, y+fh-2.5);
         }
+        y += fh+4;
         if (foto.desc) {
-          y += fh + 3;
-          setColor(...gray); doc.setFontSize(8); doc.setFont('helvetica','italic');
-          const descLines = doc.splitTextToSize(foto.desc, W-ml-mr);
-          doc.text(descLines, ml, y);
-          y += descLines.length * 4 + 6;
-        } else {
-          y += fh + 8;
-        }
-      } catch(e) { y += 8; }
+          doc.setTextColor(...gray); doc.setFontSize(8); doc.setFont('helvetica','italic');
+          const dl = doc.splitTextToSize(foto.desc, W-ml-mr);
+          doc.text(dl, ml, y); y += dl.length*4+6;
+        } else { y += 4; }
+      } catch(e){ y+=4; }
     }
   }
 
-  // ── FIRME ──
-  if (y + 60 > H - 15) { doc.addPage(); y = mt; }
-  else { y += 6; }
+  // FIRME
+  if (y+55 > H-35) { addFooter(doc,W,H,ml,mr,green,gray,MY_PHONE); doc.addPage(); y=mt; }
+  else y += 6;
+  doc.setDrawColor(220,216,210); doc.setLineWidth(0.3); doc.line(ml,y,W-mr,y); y += 8;
 
-  setDraw(220,220,220); doc.setLineWidth(0.3);
-  doc.line(ml, y, W-mr, y);
-  y += 8;
-
-  const sigKunde = document.getElementById('sig-kunde');
-  const nofirma = document.getElementById('nofirma-check').checked;
-  const halfW = (W-ml-mr)/2 - 5;
+  const half = (W-ml-mr)/2-5;
+  const sigKCanvas = document.getElementById('sig-k');
+  const nofirma = document.getElementById('nofirma-cb').checked;
+  const sigName = document.getElementById('sig-k-name').value.trim();
 
   // Firma cliente
-  setColor(...gray); doc.setFontSize(8); doc.setFont('helvetica','normal');
+  doc.setTextColor(...gray); doc.setFontSize(8); doc.setFont('helvetica','normal');
   doc.text('Unterschrift Kunde', ml, y);
+  if (sigName) { doc.setFont('helvetica','bold'); doc.setTextColor(...black); doc.text(sigName, ml, y+4); doc.setFont('helvetica','normal'); }
   if (nofirma) {
-    const reason = document.getElementById('nofirma-reason').value;
-    setColor(...black); doc.setFontSize(8);
-    doc.text('Unterschrift nicht möglich.', ml, y+8);
-    if (reason) { const rl = doc.splitTextToSize(reason, halfW); doc.text(rl, ml, y+13); }
+    const reason = document.getElementById('nofirma-ta').value;
+    doc.setTextColor(...black); doc.setFontSize(8);
+    doc.text('Unterschrift nicht möglich.', ml, y+10);
+    if (reason) { const rl = doc.splitTextToSize(reason,half); doc.text(rl,ml,y+15); }
   } else {
-    setDraw(220,220,220); doc.setLineWidth(0.3);
-    doc.rect(ml, y+3, halfW, 22, 'S');
-    try {
-      const sigData = sigKunde.toDataURL('image/png');
-      doc.addImage(sigData, 'PNG', ml+1, y+4, halfW-2, 20);
-    } catch(e){}
+    doc.setDrawColor(220,216,210); doc.roundedRect(ml,y+6,half,22,2,2,'S');
+    try { doc.addImage(sigKCanvas.toDataURL('image/png'),'PNG',ml+1,y+7,half-2,20); } catch(e){}
   }
 
   // Firma mia
-  const sigX = ml + halfW + 10;
-  setColor(...gray); doc.setFontSize(8); doc.setFont('helvetica','normal');
+  const sigX = ml+half+10;
+  doc.setTextColor(...gray); doc.setFontSize(8); doc.setFont('helvetica','normal');
   doc.text('Unterschrift MadLeaf', sigX, y);
-  try {
-    doc.addImage('Signature_giuseppe.png', 'PNG', sigX, y+3, halfW, 18, undefined, 'FAST');
-  } catch(e){
-    setFill(...lightGreen);
-    doc.roundedRect(sigX, y+3, halfW, 18, 2, 2, 'F');
-    setColor(...green); doc.setFontSize(18); doc.setFont('helvetica','bold');
-    doc.text('GM', sigX + halfW/2, y+15, {align:'center'});
+  try { doc.addImage('Signature_giuseppe.png','PNG',sigX,y+6,half,18,undefined,'FAST'); }
+  catch(e) {
+    doc.setFillColor(247,246,242); doc.roundedRect(sigX,y+6,half,18,2,2,'F');
+    doc.setTextColor(...green); doc.setFontSize(18); doc.setFont('helvetica','bold');
+    doc.text('GM', sigX+half/2, y+18, {align:'center'});
   }
+  doc.setTextColor(...black); doc.setFontSize(8); doc.setFont('helvetica','bold');
+  doc.text('Dr. Giuseppe Maddalena', ml, y+32);
+  doc.setFont('helvetica','normal'); doc.setTextColor(...gray);
+  doc.text('Applied Entomology & Environmental Risk', ml, y+36);
+  doc.text(MY_PHONE, ml, y+40);
 
-  setColor(...black);
-  doc.setFontSize(8); doc.setFont('helvetica','bold');
-  doc.text('Dr. Giuseppe Maddalena', ml, y+28);
-  doc.setFont('helvetica','normal'); setColor(...gray);
-  doc.text('Applied Entomology & Environmental Risk', ml, y+32);
-
-  // ── FOOTER SU OGNI PAGINA ──
-  const pageCount = doc.internal.getNumberOfPages();
-  for (let i=1; i<=pageCount; i++) {
-    doc.setPage(i);
-    setFill(...green);
-    doc.rect(0, H-10, W, 10, 'F');
-    setColor(255,255,255); doc.setFontSize(7); doc.setFont('helvetica','normal');
-    doc.text('MadLeaf · Dr. Giuseppe Maddalena · Schillerstraße 8 · 79369 Wyhl am Kaiserstuhl · giuseppe.maddalena@madleaf.de', ml, H-4.5);
-    doc.text(`Seite ${i} / ${pageCount}`, W-mr, H-4.5, {align:'right'});
-  }
+  // FOOTER SU OGNI PAGINA
+  const pages = doc.internal.getNumberOfPages();
+  for (let i=1; i<=pages; i++) { doc.setPage(i); addFooter(doc,W,H,ml,mr,green,gray,MY_PHONE); }
 
   return doc;
 }
 
-// ══════════════════════════════════════════════
+function addFooter(doc,W,H,ml,mr,green,gray,phone) {
+  doc.setFillColor(...green);
+  doc.rect(0,H-10,W,10,'F');
+  doc.setTextColor(200,220,210); doc.setFontSize(7); doc.setFont('helvetica','normal');
+  doc.text(`MadLeaf · Dr. Giuseppe Maddalena · Schillerstraße 8 · 79369 Wyhl am Kaiserstuhl · ${phone}`, ml, H-4.5);
+  doc.text(`Seite ${doc.internal.getCurrentPageInfo().pageNumber}`, W-mr, H-4.5, {align:'right'});
+}
+
+// ═══════════════════════════════════════════
+// FILENAME
+// ═══════════════════════════════════════════
+function buildFilename() {
+  const datum = document.getElementById('datum-input').value;
+  const d = datum ? datum.split('-').reverse().join('.') : 'keinDatum';
+  const k = state.kunde ? state.kunde.name.replace(/\s+/g,'_').replace(/[^a-zA-Z0-9_äöüÄÖÜß]/g,'') : 'keinKunde';
+  return `MadLeaf_Bericht_${d}_${k}.pdf`;
+}
+
+// ═══════════════════════════════════════════
 // GENERATE & SEND
-// ══════════════════════════════════════════════
+// ═══════════════════════════════════════════
 async function generateAndSend() {
-  if (!state.kunde) { showToast('Bitte zuerst einen Kunden auswählen'); return; }
-  if (timerRunning) stopTimer();
-  showToast('PDF wird erstellt...');
+  if (!state.kunde) { showToast('Bitte zuerst Kunde auswählen','red'); return; }
+  if (timerOn) stopTimer();
+  showSpinner('PDF wird erstellt...');
   try {
     const doc = await buildPDF();
-    const pdfBase64 = doc.output('datauristring');
-    const datum = document.getElementById('datum-input').value;
-    const filename = `MadLeaf_Bericht_${datum}_${state.kunde.name.replace(/\s/g,'_')}.pdf`;
+    const filename = buildFilename();
     doc.save(filename);
+
+    // Salva in archivio
+    const archiv = getArchiv();
+    archiv.unshift({ name: filename, datum: document.getElementById('datum-input').value, kunde: state.kunde.name, ts: new Date().toISOString() });
+    if (archiv.length > 30) archiv.pop();
+    saveArchiv(archiv);
+
+    hideSpinner();
+
+    const datum = document.getElementById('datum-input').value;
+    const datumFmt = datum ? new Date(datum+'T12:00:00').toLocaleDateString('de-DE',{day:'2-digit',month:'long',year:'numeric'}) : '—';
+    const nextCheck = document.getElementById('next-check-input').value;
+    const nextCheckFmt = nextCheck ? new Date(nextCheck+'T12:00:00').toLocaleDateString('de-DE',{day:'2-digit',month:'long',year:'numeric'}) : null;
+
     const mailData = {
       to: state.kunde.email || '',
       kunde: state.kunde.name,
-      datum,
-      filename,
-      pdf: pdfBase64
+      datum: datumFmt,
+      nextcheck: nextCheckFmt || '—',
+      filename
     };
-    if (navigator.onLine) {
+
+    if (navigator.onLine && state.kunde.email) {
+      showSpinner('E-Mail wird gesendet...');
       await sendEmail(mailData);
+      hideSpinner();
+      showToast('PDF gespeichert & E-Mail gesendet ✓','gold');
     } else {
-      const queue = getQueue();
-      queue.push(mailData);
-      saveQueue(queue);
-      showToast('Offline gespeichert — wird gesendet wenn online ✓');
+      if (state.kunde.email) {
+        const q = getQueue(); q.push(mailData); saveQueue(q);
+        showToast('PDF gespeichert — E-Mail wird gesendet wenn online','');
+      } else {
+        showToast('PDF gespeichert ✓','gold');
+      }
     }
-    saveDraftData(filename, datum);
+
+    setTimeout(() => { if(confirm('Neuen Bericht erstellen? Alle Daten werden zurückgesetzt.')) resetAll(); }, 500);
+
   } catch(e) {
+    hideSpinner();
     console.error(e);
-    showToast('Fehler beim Erstellen — bitte erneut versuchen');
+    showToast('Fehler — bitte erneut versuchen','red');
   }
 }
 
 async function sendEmail(data) {
-  if (EMAILJS_PUBLIC_KEY === 'TUO_PUBLIC_KEY') {
-    showToast('EmailJS noch nicht konfiguriert — PDF gespeichert ✓');
-    return;
-  }
-  try {
-    await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
-      to_email: data.to,
-      cc_email: MY_EMAIL,
-      kunde_name: data.kunde,
-      datum: data.datum,
-      message: 'Anbei der Arbeitsbericht der heutigen Begehung.',
-    }, EMAILJS_PUBLIC_KEY);
-    showToast('E-Mail gesendet ✓');
-  } catch(e) {
-    showToast('E-Mail-Fehler — PDF lokal gespeichert');
-    const queue = getQueue();
-    queue.push(data);
-    saveQueue(queue);
+  await emailjs.send(EMAILJS_SVC, EMAILJS_TPL, {
+    to_email: data.to,
+    cc_email: MY_EMAIL,
+    kunde_name: data.kunde,
+    datum: data.datum,
+    next_check: data.nextcheck,
+    message: `Anbei der Arbeitsbericht der Begehung vom ${data.datum}.${data.nextcheck !== '—' ? `\n\nNächste Kontrolle: ${data.nextcheck}` : ''}`
+  });
+
+  // Email promemoria prossima visita
+  if (data.nextcheck && data.nextcheck !== '—') {
+    const nextDate = document.getElementById('next-check-input').value;
+    if (nextDate) {
+      const reminderDate = new Date(nextDate);
+      reminderDate.setDate(reminderDate.getDate() - 3);
+      // Salva promemoria in queue separata
+      const reminders = JSON.parse(localStorage.getItem('ml_reminders') || '[]');
+      reminders.push({
+        kunde: data.kunde,
+        nextcheck: data.nextcheck,
+        reminderDate: reminderDate.toISOString().split('T')[0],
+        sent: false
+      });
+      localStorage.setItem('ml_reminders', JSON.stringify(reminders));
+    }
   }
 }
 
 async function checkOnlineQueue() {
-  const queue = getQueue();
-  if (!queue.length || !navigator.onLine) return;
-  const remaining = [];
-  for (const item of queue) {
+  const q = getQueue();
+  if (!q.length || !navigator.onLine) return;
+  const rem = [];
+  for (const item of q) {
     try { await sendEmail(item); }
-    catch(e) { remaining.push(item); }
+    catch(e) { rem.push(item); }
   }
-  saveQueue(remaining);
+  saveQueue(rem);
+
+  // Controlla promemoria
+  checkReminders();
 }
 
-function showBanner() {
-  const b = document.getElementById('online-banner');
-  b.classList.add('show');
-  setTimeout(() => b.classList.remove('show'), 4000);
+async function checkReminders() {
+  const today = new Date().toISOString().split('T')[0];
+  const reminders = JSON.parse(localStorage.getItem('ml_reminders') || '[]');
+  let changed = false;
+  for (const r of reminders) {
+    if (!r.sent && r.reminderDate <= today) {
+      try {
+        await emailjs.send(EMAILJS_SVC, EMAILJS_TPL, {
+          to_email: MY_EMAIL,
+          cc_email: MY_EMAIL,
+          kunde_name: r.kunde,
+          datum: r.nextcheck,
+          next_check: r.nextcheck,
+          message: `⏰ ERINNERUNG: Nächste Kontrolle bei ${r.kunde} am ${r.nextcheck} — bitte rechtzeitig vorbereiten.`
+        });
+        r.sent = true; changed = true;
+      } catch(e){}
+    }
+  }
+  if (changed) localStorage.setItem('ml_reminders', JSON.stringify(reminders));
 }
 
-// ══════════════════════════════════════════════
-// DRAFT / SAVE
-// ══════════════════════════════════════════════
-function saveDraft() {
-  const datum = document.getElementById('datum-input').value;
-  const filename = `Entwurf_${datum}_${state.kunde ? state.kunde.name : 'kein_Kunde'}`;
-  saveDraftData(filename, datum);
-  showToast('Entwurf gespeichert ✓');
-}
-
-function saveDraftData(name, datum) {
-  const drafts = getDrafts();
-  drafts.unshift({ name, datum, ts: new Date().toISOString() });
-  if (drafts.length > 20) drafts.pop();
-  saveDrafts(drafts);
-}
-
-function openModal(id) {
-  if (id === 'modal-berichte') renderBerichte();
-  document.getElementById(id).classList.add('open');
-}
-function closeModal(id) {
-  document.getElementById(id).classList.remove('open');
-}
-
-function renderBerichte() {
-  const drafts = getDrafts();
-  const container = document.getElementById('berichte-list');
-  if (!drafts.length) { container.innerHTML = '<p style="font-size:13px;color:#9ca3af">Keine gespeicherten Berichte.</p>'; return; }
-  container.innerHTML = drafts.map(d => `
-    <div style="padding:10px 0;border-bottom:1px solid #f3f4f6">
-      <div style="font-size:13px;font-weight:600;color:#111">${d.name}</div>
-      <div style="font-size:11px;color:#9ca3af;margin-top:2px">${new Date(d.ts).toLocaleString('de-DE')}</div>
+// ═══════════════════════════════════════════
+// ARCHIVIO
+// ═══════════════════════════════════════════
+function renderArchiv() {
+  const archiv = getArchiv();
+  const c = document.getElementById('arch-list');
+  if (!archiv.length) { c.innerHTML = '<p style="font-size:13px;color:var(--muted);padding:10px 0">Noch keine Berichte erstellt.</p>'; return; }
+  c.innerHTML = archiv.map(a => `
+    <div class="arch-item">
+      <div class="arch-name">${a.name}</div>
+      <div class="arch-date">${a.kunde} · ${new Date(a.ts).toLocaleString('de-DE')}</div>
     </div>`).join('');
 }
 
-// ══════════════════════════════════════════════
-// TOAST
-// ══════════════════════════════════════════════
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 3000);
+// ═══════════════════════════════════════════
+// DRAFT
+// ═══════════════════════════════════════════
+function saveDraft() {
+  const datum = document.getElementById('datum-input').value;
+  const archiv = getArchiv();
+  const name = `Entwurf_${datum}_${state.kunde ? state.kunde.name : 'keinKunde'}`;
+  archiv.unshift({ name, datum, kunde: state.kunde?.name || '—', ts: new Date().toISOString() });
+  if (archiv.length > 30) archiv.pop();
+  saveArchiv(archiv);
+  showToast('Entwurf gespeichert ✓','gold');
 }
 
-// ══════════════════════════════════════════════
+// ═══════════════════════════════════════════
+// SPINNER & TOAST
+// ═══════════════════════════════════════════
+function showSpinner(txt) {
+  document.getElementById('spin-txt').textContent = txt || 'Bitte warten...';
+  document.getElementById('spinner').classList.add('show');
+}
+function hideSpinner() { document.getElementById('spinner').classList.remove('show'); }
+
+function showToast(msg, type='') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast show' + (type ? ' '+type : '');
+  setTimeout(() => t.className = 'toast', 3000);
+}
+
+// ═══════════════════════════════════════════
+// MODALI — chiudi cliccando fuori
+// ═══════════════════════════════════════════
+document.querySelectorAll('.moverlay').forEach(o => {
+  o.addEventListener('click', e => { if(e.target===o) o.classList.remove('open'); });
+});
+
 // SERVICE WORKER
-// ══════════════════════════════════════════════
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('sw.js').catch(e => console.log('SW:', e));
 }
-
-// Chiudi modal cliccando fuori
-document.querySelectorAll('.modal-overlay').forEach(overlay => {
-  overlay.addEventListener('click', e => { if(e.target === overlay) overlay.classList.remove('open'); });
-});
 </script>
 </body>
 </html>
