@@ -12,32 +12,15 @@
 <link rel="apple-touch-icon" href="logo.png">
 <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 <style>
-:root {
-  --green: #17382d;
-  --green2: #1f4c3b;
-  --gold: #d9a64f;
-  --bg: #f7f6f2;
-  --surface: #fcfbf8;
-  --surface2: #f1eee8;
-  --text: #28251d;
-  --muted: #6f6c64;
-  --border: rgba(23,56,45,0.12);
-  --shadow: 0 4px 16px rgba(23,56,45,0.10);
-  --radius: 12px;
-}
+:root{--green:#17382d;--green2:#1f4c3b;--gold:#d9a64f;--bg:#f7f6f2;--surface:#fcfbf8;--surface2:#f1eee8;--text:#28251d;--muted:#6f6c64;--border:rgba(23,56,45,0.12);--shadow:0 4px 16px rgba(23,56,45,0.10);--radius:12px}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 body{font-family:'Satoshi',Arial,sans-serif;background:var(--bg);min-height:100vh;padding-bottom:88px;color:var(--text)}
-
-/* TOPBAR */
 .topbar{background:var(--green);padding:10px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(23,56,45,0.3)}
 .topbar-brand .sub{color:var(--gold);font-size:10px;letter-spacing:.12em;text-transform:uppercase;font-weight:700}
 .topbar-brand .title{color:#fff;font-size:17px;font-weight:700}
 .topbar-icons{display:flex;gap:8px}
 .icon-btn{background:rgba(255,255,255,.12);border:none;border-radius:8px;width:38px;height:38px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#fff;font-size:18px}
-
-/* TIMER */
 .timer-bar{background:#0f2d24;padding:8px 16px;display:flex;align-items:center;gap:10px;position:sticky;top:58px;z-index:99}
 .tdot{width:9px;height:9px;border-radius:50%;background:#4b5563;flex-shrink:0;transition:all .3s}
 .tdot.on{background:#22c55e;animation:blink 1.2s infinite}
@@ -45,33 +28,23 @@ body{font-family:'Satoshi',Arial,sans-serif;background:var(--bg);min-height:100v
 .tval{color:#fff;font-size:15px;font-weight:700;flex:1;font-variant-numeric:tabular-nums}
 .tbtn{background:transparent;border:1.5px solid rgba(217,166,79,.6);color:var(--gold);font-size:12px;font-weight:700;padding:5px 14px;border-radius:6px;cursor:pointer}
 .tbtn.on{border-color:#f87171;color:#f87171}
-
-/* ONLINE BANNER */
 .obanner{display:none;background:#EAF3DE;color:#27500A;font-size:12px;padding:6px 16px;text-align:center;font-weight:700}
 .obanner.show{display:block}
-
-/* SECTIONS */
 .section{background:var(--surface);margin:10px 12px;border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);border:1px solid var(--border)}
 .shead{padding:12px 14px 0;display:flex;align-items:center;justify-content:space-between}
 .slbl{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.09em;font-weight:700}
 .sbody{padding:10px 14px 14px}
-
-/* KUNDE */
 .krow{display:flex;align-items:center;gap:10px}
 .avatar{width:38px;height:38px;border-radius:50%;background:rgba(217,166,79,.15);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:var(--gold);flex-shrink:0;border:1.5px solid rgba(217,166,79,.3)}
 .kname{font-size:15px;font-weight:700;color:var(--text)}
 .ksub{font-size:11px;color:var(--muted);margin-top:2px}
 .wbtn{margin-left:auto;font-size:12px;color:var(--green);border:1px solid var(--border);border-radius:6px;padding:4px 10px;cursor:pointer;background:var(--surface2);flex-shrink:0}
-
-/* DATUM */
 .drow{display:flex;align-items:center;gap:10px}
 .drow input[type=date]{border:1px solid var(--border);border-radius:8px;padding:8px 10px;font-size:14px;color:var(--text);background:var(--bg);flex:1;font-family:'Satoshi',Arial,sans-serif}
 .gpsbadge{font-size:11px;color:var(--green);background:rgba(23,56,45,.08);border-radius:6px;padding:5px 8px;display:flex;align-items:center;gap:4px;white-space:nowrap;border:1px solid var(--border)}
-
-/* AZIONI */
 .ablock{border:1px solid var(--border);border-radius:10px;margin-bottom:7px;overflow:hidden;background:var(--surface)}
 .ablock.on{border-color:var(--gold)}
-.ahead{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;cursor:pointer;background:var(--surface)}
+.ahead{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;cursor:pointer}
 .ablock.on .ahead{background:rgba(217,166,79,.08)}
 .achk{width:20px;height:20px;border-radius:5px;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;background:var(--surface)}
 .ablock.on .achk{background:var(--green);border-color:var(--green)}
@@ -84,37 +57,30 @@ body{font-family:'Satoshi',Arial,sans-serif;background:var(--bg);min-height:100v
 .abody textarea{width:100%;font-size:13px;padding:8px 10px;border:1px solid var(--border);border-radius:7px;background:var(--surface);color:var(--text);resize:none;min-height:72px;line-height:1.55;font-family:'Satoshi',Arial,sans-serif}
 .abody textarea:focus{outline:none;border-color:var(--gold)}
 .ablank{font-size:13px;color:var(--muted);font-style:italic;flex:1;line-height:1.45}
-
-/* PRODOTTI */
 .pcard{border:1px solid var(--border);border-radius:10px;padding:10px 12px;margin-bottom:8px;background:var(--surface);position:relative}
 .pcard::before{content:"";position:absolute;left:0;top:12px;bottom:12px;width:3px;background:var(--gold);border-radius:0 2px 2px 0}
 .pname{font-size:13px;font-weight:700;color:var(--green);padding-left:8px}
 .pdetail{font-size:11px;color:var(--muted);margin-top:2px;line-height:1.5;padding-left:8px}
 .pbadge{display:inline-block;font-size:10px;padding:2px 7px;background:rgba(23,56,45,.08);color:var(--green);border-radius:4px;margin-top:3px;font-weight:700;margin-left:8px}
 .pqty{margin-top:6px;padding-left:8px}
-.pqty input{font-size:12px;padding:4px 8px;border:1px solid var(--border);border-radius:6px;width:100%;background:var(--bg);color:var(--text);font-family:'Satoshi',Arial,sans-serif}
+.pqty input{font-size:12px;padding:5px 8px;border:1px solid var(--border);border-radius:6px;width:100%;background:var(--bg);color:var(--text);font-family:'Satoshi',Arial,sans-serif}
 .pdel{position:absolute;top:8px;right:10px;font-size:18px;color:var(--muted);cursor:pointer;background:none;border:none;line-height:1}
 .addrow{border:1.5px dashed var(--border);border-radius:10px;padding:10px;text-align:center;font-size:13px;color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px}
-
-/* NEXT CHECK */
-.ncheck-row{display:flex;align-items:center;gap:10px;margin-top:8px;padding:10px;background:rgba(217,166,79,.08);border-radius:8px;border:1px solid rgba(217,166,79,.25)}
+.ncheck-row{display:flex;align-items:center;gap:10px;padding:10px;background:rgba(217,166,79,.08);border-radius:8px;border:1px solid rgba(217,166,79,.25)}
 .ncheck-row label{font-size:12px;color:var(--green);font-weight:600;white-space:nowrap}
 .ncheck-row input{flex:1;font-size:13px;padding:6px 10px;border:1px solid var(--border);border-radius:6px;background:var(--surface);color:var(--text);font-family:'Satoshi',Arial,sans-serif}
-
-/* FOTO */
 .fstrip{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px}
-.fthumb{width:72px;height:72px;border-radius:8px;background:var(--surface2);border:1px solid var(--border);display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;position:relative;overflow:hidden;cursor:pointer}
+.fthumb{width:80px;height:80px;border-radius:8px;background:var(--surface2);border:1px solid var(--border);display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;position:relative;overflow:hidden;cursor:pointer}
 .fthumb img{width:100%;height:100%;object-fit:cover}
 .fgeo{position:absolute;bottom:2px;left:2px;font-size:9px;color:var(--green);background:rgba(247,246,242,.9);padding:1px 5px;border-radius:3px;font-weight:700}
+.fdesc-badge{position:absolute;top:2px;left:2px;font-size:9px;color:#fff;background:rgba(23,56,45,.7);padding:1px 5px;border-radius:3px;max-width:70px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .fdel{position:absolute;top:2px;right:2px;background:rgba(23,56,45,.7);color:#fff;border:none;border-radius:50%;width:18px;height:18px;font-size:12px;line-height:18px;text-align:center;cursor:pointer;padding:0}
-.fadd{width:72px;height:72px;border-radius:8px;border:1.5px dashed var(--border);display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer;color:var(--muted);font-size:11px;gap:4px;background:var(--surface)}
-
-/* FIRME */
+.fadd{width:80px;height:80px;border-radius:8px;border:1.5px dashed var(--border);display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer;color:var(--muted);font-size:11px;gap:4px;background:var(--surface)}
 .firma-sublbl{font-size:12px;color:var(--muted);font-weight:600;margin-bottom:6px}
 .firma-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
 .firma-clear{font-size:12px;color:var(--green);cursor:pointer;background:none;border:none;font-family:'Satoshi',Arial,sans-serif}
-.firma-canvas{border:1.5px solid var(--border);border-radius:8px;background:#fff;width:100%;height:90px;touch-action:none;display:block}
-.firma-name-input{width:100%;margin-top:6px;font-size:13px;padding:7px 10px;border:1px solid var(--border);border-radius:7px;background:var(--bg);color:var(--text);font-family:'Satoshi',Arial,sans-serif}
+.firma-canvas{border:1.5px solid var(--border);border-radius:8px;background:#fff;width:100%;height:160px;touch-action:none;display:block}
+.firma-name-input{width:100%;margin-top:8px;font-size:13px;padding:8px 10px;border:1px solid var(--border);border-radius:7px;background:var(--bg);color:var(--text);font-family:'Satoshi',Arial,sans-serif}
 .nofirma-row{display:flex;align-items:center;gap:8px;margin-top:8px}
 .nofirma-row label{font-size:12px;color:var(--muted)}
 .nofirma-ta{width:100%;margin-top:6px;font-size:12px;padding:7px 10px;border:1px solid var(--border);border-radius:7px;resize:none;min-height:52px;font-family:'Satoshi',Arial,sans-serif;display:none}
@@ -123,14 +89,11 @@ body{font-family:'Satoshi',Arial,sans-serif;background:var(--bg);min-height:100v
 .mia-info{text-align:right}
 .mia-name{font-size:12px;font-weight:700;color:var(--green)}
 .mia-title{font-size:10px;color:var(--muted);margin-top:2px}
-
-/* BOTTOM */
+.woche-btn{width:100%;background:rgba(217,166,79,.12);border:1.5px solid rgba(217,166,79,.4);border-radius:10px;padding:12px;font-size:14px;font-weight:700;color:var(--green);cursor:pointer;font-family:'Satoshi',Arial,sans-serif;display:flex;align-items:center;justify-content:center;gap:8px}
 .bottombar{position:fixed;bottom:0;left:0;right:0;background:var(--surface);border-top:1px solid var(--border);padding:10px 14px;display:flex;gap:8px;z-index:200}
 .btnmain{flex:1;background:var(--green);color:#fff;border:none;border-radius:10px;padding:13px;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;font-family:'Satoshi',Arial,sans-serif}
 .btnmain:active{background:var(--green2)}
 .btnsave{background:var(--surface2);border:1px solid var(--border);color:var(--muted);border-radius:10px;padding:13px 15px;cursor:pointer;font-size:20px}
-
-/* MODAL */
 .moverlay{display:none;position:fixed;inset:0;background:rgba(23,56,45,.5);z-index:300;align-items:flex-end;justify-content:center}
 .moverlay.open{display:flex}
 .modal{background:var(--surface);border-radius:20px 20px 0 0;width:100%;max-width:480px;padding:20px 16px 32px;max-height:88vh;overflow-y:auto}
@@ -144,50 +107,62 @@ body{font-family:'Satoshi',Arial,sans-serif;background:var(--bg);min-height:100v
 .mbtn.p{background:var(--green);color:#fff}
 .mbtn.s{background:var(--surface2);color:var(--text)}
 .modal hr{border:none;border-top:1px solid var(--border);margin:14px 0}
-
-/* KUNDEN LIST */
 .klist-item{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);cursor:pointer}
 .klist-item:last-child{border-bottom:none}
 .klist-name{font-size:14px;font-weight:600;color:var(--text)}
 .klist-sub{font-size:12px;color:var(--muted)}
 .klist-del{margin-left:auto;background:none;border:none;color:var(--muted);font-size:16px;cursor:pointer;padding:4px}
-
-/* PRODOTTI SEL */
 .psel-item{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);cursor:pointer}
 .psel-item:last-child{border-bottom:none}
-.psel-item:active{background:var(--surface2);border-radius:8px}
 .psel-name{font-size:13px;font-weight:700;color:var(--green)}
 .psel-detail{font-size:11px;color:var(--muted);margin-top:2px;line-height:1.5}
 .psel-note{font-size:10px;color:var(--muted);margin-top:2px;font-style:italic}
 .pcat-title{font-size:11px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:.08em;padding:10px 0 4px;border-bottom:1px solid rgba(217,166,79,.2);margin-bottom:4px}
 .psel-del{margin-left:auto;background:none;border:none;color:var(--muted);font-size:16px;cursor:pointer;flex-shrink:0}
-
-/* ARCHIVIO */
 .arch-item{padding:10px 0;border-bottom:1px solid var(--border)}
 .arch-item:last-child{border-bottom:none}
 .arch-name{font-size:13px;font-weight:600;color:var(--text)}
-.arch-date{font-size:11px;color:var(--muted);margin-top:2px}
-
-/* TOAST */
+.arch-sub{font-size:11px;color:var(--muted);margin-top:2px}
+.woche-item{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)}
+.woche-item:last-child{border-bottom:none}
+.woche-check{width:20px;height:20px;border-radius:5px;border:2px solid var(--border);flex-shrink:0;cursor:pointer;background:var(--surface)}
+.woche-check.done{background:var(--green);border-color:var(--green)}
 .toast{position:fixed;top:80px;left:50%;transform:translateX(-50%);background:var(--green);color:#fff;padding:10px 20px;border-radius:8px;font-size:13px;font-weight:700;z-index:500;opacity:0;transition:opacity .3s;pointer-events:none;white-space:nowrap;max-width:90vw;text-align:center}
 .toast.show{opacity:1}
 .toast.gold{background:var(--gold);color:var(--green)}
 .toast.red{background:#dc2626}
-
-/* SPINNER */
-.spinner{display:none;position:fixed;inset:0;background:rgba(23,56,45,.6);z-index:400;align-items:center;justify-content:center;flex-direction:column;gap:14px}
+.spinner{display:none;position:fixed;inset:0;background:rgba(23,56,45,.65);z-index:400;align-items:center;justify-content:center;flex-direction:column;gap:14px}
 .spinner.show{display:flex}
-.spin{width:44px;height:44px;border:4px solid rgba(255,255,255,.2);border-top-color:#fff;border-radius:50%;animation:spin .8s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
-.spin-txt{color:#fff;font-size:14px;font-weight:600}
+.spin{width:44px;height:44px;border:4px solid rgba(255,255,255,.2);border-top-color:#fff;border-radius:50%;animation:rot .8s linear infinite}
+@keyframes rot{to{transform:rotate(360deg)}}
+.spin-txt{color:#fff;font-size:14px;font-weight:600;text-align:center;padding:0 20px}
+.pwd-modal{background:var(--surface);border-radius:16px;width:calc(100% - 40px);max-width:360px;padding:24px;box-shadow:0 20px 60px rgba(23,56,45,.3)}
+.pwd-modal h3{font-size:16px;font-weight:700;color:var(--text);margin-bottom:8px}
+.pwd-modal p{font-size:13px;color:var(--muted);margin-bottom:16px}
+.pwd-modal input{width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:8px;font-size:15px;font-family:'Satoshi',Arial,sans-serif;margin-bottom:14px;color:var(--text);background:var(--bg)}
+.pwd-modal input:focus{outline:none;border-color:var(--gold)}
+.pwd-overlay{display:none;position:fixed;inset:0;background:rgba(23,56,45,.5);z-index:350;align-items:center;justify-content:center}
+.pwd-overlay.open{display:flex}
 </style>
 </head>
 <body>
 
-<!-- SPINNER -->
 <div class="spinner" id="spinner">
   <div class="spin"></div>
   <div class="spin-txt" id="spin-txt">PDF wird erstellt...</div>
+</div>
+
+<!-- PASSWORD MODAL -->
+<div class="pwd-overlay" id="pwd-overlay">
+  <div class="pwd-modal">
+    <h3>E-Mail senden</h3>
+    <p>Bitte geben Sie Ihr E-Mail-Passwort ein. Es wird nur für diesen Versand verwendet und nicht gespeichert.</p>
+    <input type="password" id="pwd-input" placeholder="Passwort eingeben..." autocomplete="current-password">
+    <div class="mbtnrow">
+      <button class="mbtn s" onclick="cancelSend()">Abbrechen</button>
+      <button class="mbtn p" onclick="confirmSend()">Senden</button>
+    </div>
+  </div>
 </div>
 
 <div class="topbar">
@@ -216,7 +191,7 @@ body{font-family:'Satoshi',Arial,sans-serif;background:var(--bg);min-height:100v
   <div class="sbody">
     <div class="krow">
       <div class="avatar" id="k-avatar">–</div>
-      <div>
+      <div style="flex:1;min-width:0">
         <div class="kname" id="k-name">Kunde auswählen</div>
         <div class="ksub" id="k-sub">Antippen um Kunde zu wählen</div>
       </div>
@@ -225,16 +200,13 @@ body{font-family:'Satoshi',Arial,sans-serif;background:var(--bg);min-height:100v
   </div>
 </div>
 
-<!-- DATUM & STANDORT -->
+<!-- DATUM -->
 <div class="section">
   <div class="shead"><div class="slbl">Datum &amp; Standort</div></div>
   <div class="sbody">
     <div class="drow">
       <input type="date" id="datum-input">
-      <div class="gpsbadge" id="gps-badge">
-        <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>
-        GPS...
-      </div>
+      <div class="gpsbadge" id="gps-badge">GPS...</div>
     </div>
   </div>
 </div>
@@ -249,10 +221,8 @@ body{font-family:'Satoshi',Arial,sans-serif;background:var(--bg);min-height:100v
         <div class="achk"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
         <div class="alabel">Geländebegehung zur Erfassung und Bewertung biologischer Risikofaktoren</div>
       </div>
-      <div class="abody" style="display:none">
-        <div class="hint">Text bearbeiten:</div>
-        <textarea>Geländebegehung zur Erfassung und Bewertung biologischer Risikofaktoren. Zielorganismus: [bitte ergänzen]. Befund und Empfehlungen werden im Detailbericht übermittelt.</textarea>
-      </div>
+      <div class="abody" style="display:none"><div class="hint">Text bearbeiten:</div>
+        <textarea>Geländebegehung zur Erfassung und Bewertung biologischer Risikofaktoren. Zielorganismus: [bitte ergänzen]. Befund und Empfehlungen werden im Detailbericht übermittelt.</textarea></div>
     </div>
 
     <div class="ablock" data-id="a2">
@@ -260,10 +230,8 @@ body{font-family:'Satoshi',Arial,sans-serif;background:var(--bg);min-height:100v
         <div class="achk"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
         <div class="alabel">Monitoring-Kontrolle — Auswertung und Bericht folgen separat</div>
       </div>
-      <div class="abody" style="display:none">
-        <div class="hint">Text bearbeiten:</div>
-        <textarea>Monitoring-Kontrolle durchgeführt. [Anzahl] Fallen kontrolliert, [Anzahl] ersetzt. Ergebnisse werden nach Auswertung separat übermittelt. Nächste Kontrolle: [Datum/KW].</textarea>
-      </div>
+      <div class="abody" style="display:none"><div class="hint">Text bearbeiten:</div>
+        <textarea>Monitoring-Kontrolle durchgeführt. [Anzahl] Fallen kontrolliert, [Anzahl] ersetzt. Ergebnisse werden nach Auswertung separat übermittelt. Nächste Kontrolle: [Datum/KW].</textarea></div>
     </div>
 
     <div class="ablock" data-id="a3">
@@ -271,10 +239,8 @@ body{font-family:'Satoshi',Arial,sans-serif;background:var(--bg);min-height:100v
         <div class="achk"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
         <div class="alabel">Behandlung mit Pflanzenschutz- / Biozidmittel durchgeführt</div>
       </div>
-      <div class="abody" style="display:none">
-        <div class="hint">Text bearbeiten:</div>
-        <textarea>Behandlung durchgeführt mit [Mittelname] gegen [Zielorganismus]. Wirkstoff: [Wirkstoff], Dosierung: [Menge]. Behandelte Fläche: [m²]. Nächste Kontrolle: [Datum].</textarea>
-      </div>
+      <div class="abody" style="display:none"><div class="hint">Text bearbeiten:</div>
+        <textarea>Behandlung durchgeführt mit [Mittelname] gegen [Zielorganismus]. Wirkstoff: [Wirkstoff], Dosierung: [Menge]. Behandelte Fläche: [m²]. Nächste Kontrolle: [Datum].</textarea></div>
     </div>
 
     <div class="ablock" data-id="a4">
@@ -282,10 +248,8 @@ body{font-family:'Satoshi',Arial,sans-serif;background:var(--bg);min-height:100v
         <div class="achk"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
         <div class="alabel">Thermische Behandlung — Heißdampf 180 °C</div>
       </div>
-      <div class="abody" style="display:none">
-        <div class="hint">Text bearbeiten:</div>
-        <textarea>Thermische Behandlung mit Heißdampf (180 °C) durchgeführt gegen [Zielorganismus]. Behandelte Bereiche: [Beschreibung]. Keine chemischen Rückstände. Nächste Kontrolle: [Datum].</textarea>
-      </div>
+      <div class="abody" style="display:none"><div class="hint">Text bearbeiten:</div>
+        <textarea>Thermische Behandlung mit Heißdampf (180 °C) durchgeführt gegen [Zielorganismus]. Behandelte Bereiche: [Beschreibung]. Keine chemischen Rückstände. Nächste Kontrolle: [Datum].</textarea></div>
     </div>
 
     <div class="ablock" data-id="a5">
@@ -293,10 +257,8 @@ body{font-family:'Satoshi',Arial,sans-serif;background:var(--bg);min-height:100v
         <div class="achk"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
         <div class="alabel">Mechanische Absaugung durchgeführt</div>
       </div>
-      <div class="abody" style="display:none">
-        <div class="hint">Text bearbeiten:</div>
-        <textarea>Mechanische Absaugung durchgeführt — Entfernung von [Zielorganismus / Nestern / Kokons / Rückständen]. Behandelte Bereiche: [Beschreibung]. Abgesaugtes Material fachgerecht entsorgt.</textarea>
-      </div>
+      <div class="abody" style="display:none"><div class="hint">Text bearbeiten:</div>
+        <textarea>Mechanische Absaugung durchgeführt — Entfernung von [Zielorganismus / Nestern / Kokons / Rückständen]. Behandelte Bereiche: [Beschreibung]. Material fachgerecht entsorgt.</textarea></div>
     </div>
 
     <div class="ablock" data-id="a6">
@@ -304,10 +266,8 @@ body{font-family:'Satoshi',Arial,sans-serif;background:var(--bg);min-height:100v
         <div class="achk"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
         <div class="alabel">Fallen / Pheromone positioniert oder kontrolliert</div>
       </div>
-      <div class="abody" style="display:none">
-        <div class="hint">Text bearbeiten:</div>
-        <textarea>Fallen / Pheromonfallen positioniert / kontrolliert. Typ: [Fallentyp]. Anzahl: [n]. Fangzahl: [n]. Befallsdruck: [gering / mittel / hoch]. Nächste Kontrolle: [Datum/KW].</textarea>
-      </div>
+      <div class="abody" style="display:none"><div class="hint">Text bearbeiten:</div>
+        <textarea>Fallen / Pheromonfallen positioniert / kontrolliert. Typ: [Fallentyp]. Anzahl: [n]. Fangzahl: [n]. Befallsdruck: [gering / mittel / hoch]. Nächste Kontrolle: [Datum/KW].</textarea></div>
     </div>
 
     <div class="ablock" data-id="a7">
@@ -315,10 +275,8 @@ body{font-family:'Satoshi',Arial,sans-serif;background:var(--bg);min-height:100v
         <div class="achk"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
         <div class="alabel">Bettwanzen-Monitoring mit zertifizierten Geräten</div>
       </div>
-      <div class="abody" style="display:none">
-        <div class="hint">Text bearbeiten:</div>
-        <textarea>Bettwanzen-Monitoring durchgeführt mit ClimbUp Interceptor / Blackout Bed Bug Monitor. Anzahl Geräte: [n]. Befund: [positiv / negativ]. Nächste Kontrolle: [Datum].</textarea>
-      </div>
+      <div class="abody" style="display:none"><div class="hint">Text bearbeiten:</div>
+        <textarea>Bettwanzen-Monitoring durchgeführt mit ClimbUp Interceptor / Blackout Bed Bug Monitor. Anzahl Geräte: [n]. Befund: [positiv / negativ]. Nächste Kontrolle: [Datum].</textarea></div>
     </div>
 
     <div class="ablock" data-id="a8">
@@ -326,10 +284,8 @@ body{font-family:'Satoshi',Arial,sans-serif;background:var(--bg);min-height:100v
         <div class="achk"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
         <div class="alabel">Larvenbekämpfung an Gewässern / Wasseransammlungen</div>
       </div>
-      <div class="abody" style="display:none">
-        <div class="hint">Text bearbeiten:</div>
-        <textarea>Larvenbekämpfung durchgeführt an [Anzahl] Gewässern / Wasseransammlungen mit [Mittelname / Bti]. Behandelte Fläche: [m²]. Nächste Kontrolle: [Datum].</textarea>
-      </div>
+      <div class="abody" style="display:none"><div class="hint">Text bearbeiten:</div>
+        <textarea>Larvenbekämpfung durchgeführt an [Anzahl] Gewässern / Wasseransammlungen mit [Mittelname / Bti]. Behandelte Fläche: [m²]. Nächste Kontrolle: [Datum].</textarea></div>
     </div>
 
     <div class="ablock" data-id="a9">
@@ -337,10 +293,8 @@ body{font-family:'Satoshi',Arial,sans-serif;background:var(--bg);min-height:100v
         <div class="achk"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
         <div class="alabel">Nachkontrolle / Follow-up nach vorheriger Behandlung</div>
       </div>
-      <div class="abody" style="display:none">
-        <div class="hint">Text bearbeiten:</div>
-        <textarea>Nachkontrolle nach Behandlung vom [Datum]. Befund: [Beschreibung]. Wirksamkeit: [sehr gut / gut / ausreichend / unzureichend]. Weiteres Vorgehen: [Beschreibung].</textarea>
-      </div>
+      <div class="abody" style="display:none"><div class="hint">Text bearbeiten:</div>
+        <textarea>Nachkontrolle nach Behandlung vom [Datum]. Befund: [Beschreibung]. Wirksamkeit: [sehr gut / gut / ausreichend / unzureichend]. Weiteres Vorgehen: [Beschreibung].</textarea></div>
     </div>
 
     <div class="ablock" data-id="a10">
@@ -348,10 +302,8 @@ body{font-family:'Satoshi',Arial,sans-serif;background:var(--bg);min-height:100v
         <div class="achk"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
         <div class="alabel">Risikoeinschätzung vor Ort — Detailbericht folgt</div>
       </div>
-      <div class="abody" style="display:none">
-        <div class="hint">Text bearbeiten:</div>
-        <textarea>Risikoeinschätzung vor Ort durchgeführt bezüglich [Thema / Zielorganismus]. Ein ausführlicher Detailbericht wird in Kürze nachgereicht.</textarea>
-      </div>
+      <div class="abody" style="display:none"><div class="hint">Text bearbeiten:</div>
+        <textarea>Risikoeinschätzung vor Ort durchgeführt bezüglich [Thema / Zielorganismus]. Ein ausführlicher Detailbericht wird in Kürze nachgereicht.</textarea></div>
     </div>
 
     <div class="ablock" data-id="a11">
@@ -359,10 +311,8 @@ body{font-family:'Satoshi',Arial,sans-serif;background:var(--bg);min-height:100v
         <div class="achk"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
         <div class="alabel">Beratungsgespräch — schriftliche Empfehlungen folgen</div>
       </div>
-      <div class="abody" style="display:none">
-        <div class="hint">Text bearbeiten:</div>
-        <textarea>Beratungsgespräch geführt zum Thema [Thema]. Schriftliche Empfehlungen und Maßnahmenplan werden separat übermittelt.</textarea>
-      </div>
+      <div class="abody" style="display:none"><div class="hint">Text bearbeiten:</div>
+        <textarea>Beratungsgespräch geführt zum Thema [Thema]. Schriftliche Empfehlungen und Maßnahmenplan werden separat übermittelt.</textarea></div>
     </div>
 
     <div class="ablock" data-id="a12">
@@ -370,15 +320,11 @@ body{font-family:'Satoshi',Arial,sans-serif;background:var(--bg);min-height:100v
         <div class="achk"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
         <div class="ablank">Freie Eingabe — eigene Maßnahme beschreiben</div>
       </div>
-      <div class="abody" style="display:none">
-        <div class="hint">Beschreibung:</div>
-        <textarea placeholder="Hier frei beschreiben..."></textarea>
-      </div>
+      <div class="abody" style="display:none"><div class="hint">Beschreibung:</div>
+        <textarea placeholder="Hier frei beschreiben..."></textarea></div>
     </div>
 
-    <!-- AZIONI CUSTOM -->
     <div id="custom-azioni"></div>
-
     <div class="addrow" onclick="openModal('m-new-azione')" style="margin-top:4px">
       <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
       Eigene Maßnahme hinzufügen
@@ -386,16 +332,16 @@ body{font-family:'Satoshi',Arial,sans-serif;background:var(--bg);min-height:100v
   </div>
 </div>
 
-<!-- PROSSIMO CONTROLLO -->
+<!-- NÄCHSTE KONTROLLE -->
 <div class="section">
   <div class="shead"><div class="slbl">Nächste Kontrolle</div></div>
   <div class="sbody">
     <div class="ncheck-row">
       <svg width="16" height="16" fill="none" stroke="var(--gold)" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
       <label>Datum</label>
-      <input type="date" id="next-check-input" placeholder="Nächste Kontrolle">
+      <input type="date" id="next-check-input">
     </div>
-    <p style="font-size:11px;color:var(--muted);margin-top:6px">📧 Du erhältst 3 Tage vorher eine Erinnerungs-E-Mail.</p>
+    <p style="font-size:11px;color:var(--muted);margin-top:6px">📧 Erinnerung 3 Tage vorher per E-Mail.</p>
   </div>
 </div>
 
@@ -420,7 +366,7 @@ body{font-family:'Satoshi',Arial,sans-serif;background:var(--bg);min-height:100v
   <div class="sbody">
     <div class="fstrip" id="fstrip">
       <div class="fadd" onclick="document.getElementById('foto-input').click()">
-        <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
         Foto
       </div>
     </div>
@@ -428,17 +374,28 @@ body{font-family:'Satoshi',Arial,sans-serif;background:var(--bg);min-height:100v
   </div>
 </div>
 
+<!-- WOCHENBERICHT -->
+<div class="section">
+  <div class="shead"><div class="slbl">Wochenbericht</div></div>
+  <div class="sbody">
+    <button class="woche-btn" onclick="openWochenbericht()">
+      <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      Wochenübersicht Kontrollen
+    </button>
+    <p style="font-size:11px;color:var(--muted);margin-top:8px">Alle ausstehenden Nachkontrollen dieser Woche auf einen Blick.</p>
+  </div>
+</div>
+
 <!-- FIRME -->
 <div class="section">
   <div class="shead"><div class="slbl">Unterschriften</div></div>
   <div class="sbody">
-
-    <div style="margin-bottom:16px">
+    <div style="margin-bottom:18px">
       <div class="firma-row">
         <div class="firma-sublbl">Unterschrift Kunde</div>
         <button class="firma-clear" onclick="clearCanvas('sig-k')">Löschen</button>
       </div>
-      <canvas class="firma-canvas" id="sig-k" width="400" height="90"></canvas>
+      <canvas class="firma-canvas" id="sig-k" width="600" height="160"></canvas>
       <input type="text" class="firma-name-input" id="sig-k-name" placeholder="Name der unterschreibenden Person">
       <div class="nofirma-row">
         <input type="checkbox" id="nofirma-cb" onchange="toggleNofirma()">
@@ -446,7 +403,6 @@ body{font-family:'Satoshi',Arial,sans-serif;background:var(--bg);min-height:100v
       </div>
       <textarea class="nofirma-ta" id="nofirma-ta" placeholder="Begründung..."></textarea>
     </div>
-
     <div>
       <div class="firma-sublbl">Unterschrift MadLeaf</div>
       <div class="mia-firma">
@@ -457,29 +413,27 @@ body{font-family:'Satoshi',Arial,sans-serif;background:var(--bg);min-height:100v
         </div>
       </div>
     </div>
-
   </div>
 </div>
 
-<!-- BOTTOM BAR -->
 <div class="bottombar">
   <button class="btnsave" onclick="saveDraft()" title="Entwurf speichern">
     <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
   </button>
-  <button class="btnmain" onclick="generateAndSend()">
-    <svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M22 2L11 13"/><path d="M22 2L15 22 11 13 2 9l20-7z"/></svg>
+  <button class="btnmain" onclick="generatePDF()">
+    <svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
     PDF erstellen &amp; senden
   </button>
 </div>
 
-<!-- MODAL KUNDEN -->
+<!-- MODALI -->
 <div class="moverlay" id="m-kunden">
   <div class="modal">
     <button class="mclose" onclick="closeModal('m-kunden')">×</button>
     <h3>Kunde auswählen</h3>
     <div id="klist"></div>
     <hr>
-    <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:10px">Neuen Kunden anlegen</div>
+    <div style="font-size:13px;font-weight:700;margin-bottom:10px">Neuen Kunden anlegen</div>
     <input type="text" id="nk-name" placeholder="Name *">
     <input type="text" id="nk-address" placeholder="Adresse">
     <input type="text" id="nk-city" placeholder="Ort">
@@ -492,14 +446,13 @@ body{font-family:'Satoshi',Arial,sans-serif;background:var(--bg);min-height:100v
   </div>
 </div>
 
-<!-- MODAL PRODOTTI -->
 <div class="moverlay" id="m-prodotti">
   <div class="modal">
     <button class="mclose" onclick="closeModal('m-prodotti')">×</button>
     <h3>Mittel auswählen</h3>
     <div id="psel-list"></div>
     <hr>
-    <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:10px">Neues Mittel anlegen</div>
+    <div style="font-size:13px;font-weight:700;margin-bottom:10px">Neues Mittel anlegen</div>
     <input type="text" id="np-name" placeholder="Handelsname *">
     <input type="text" id="np-kategorie" placeholder="Kategorie (z.B. Gel, Pheromon, Falle...)">
     <input type="text" id="np-wirkstoff" placeholder="Wirkstoff">
@@ -513,7 +466,6 @@ body{font-family:'Satoshi',Arial,sans-serif;background:var(--bg);min-height:100v
   </div>
 </div>
 
-<!-- MODAL FOTO DESC -->
 <div class="moverlay" id="m-foto">
   <div class="modal">
     <button class="mclose" onclick="closeModal('m-foto')">×</button>
@@ -526,22 +478,20 @@ body{font-family:'Satoshi',Arial,sans-serif;background:var(--bg);min-height:100v
   </div>
 </div>
 
-<!-- MODAL ARCHIVIO -->
 <div class="moverlay" id="m-archiv">
   <div class="modal">
     <button class="mclose" onclick="closeModal('m-archiv')">×</button>
-    <h3>Archiv — Gespeicherte Berichte</h3>
+    <h3>Archiv</h3>
     <div id="arch-list"></div>
   </div>
 </div>
 
-<!-- MODAL NUOVA AZIONE -->
 <div class="moverlay" id="m-new-azione">
   <div class="modal">
     <button class="mclose" onclick="closeModal('m-new-azione')">×</button>
     <h3>Eigene Maßnahme</h3>
-    <input type="text" id="na-label" placeholder="Kurzbezeichnung (z.B. Silberfischchen-Behandlung)">
-    <textarea id="na-text" placeholder="Vorbereiteter Text für den Bericht..." style="min-height:100px"></textarea>
+    <input type="text" id="na-label" placeholder="Kurzbezeichnung">
+    <textarea id="na-text" placeholder="Vorbereiteter Text..." style="min-height:100px"></textarea>
     <label style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted);margin-bottom:10px">
       <input type="checkbox" id="na-save"> Als Vorlage speichern
     </label>
@@ -552,858 +502,892 @@ body{font-family:'Satoshi',Arial,sans-serif;background:var(--bg);min-height:100v
   </div>
 </div>
 
+<div class="moverlay" id="m-woche">
+  <div class="modal">
+    <button class="mclose" onclick="closeModal('m-woche')">×</button>
+    <h3>Kontrollen diese Woche</h3>
+    <div id="woche-list"></div>
+    <div class="mbtnrow" style="margin-top:14px">
+      <button class="mbtn s" onclick="closeModal('m-woche')">Schließen</button>
+      <button class="mbtn p" onclick="sendWochenbericht()">Per E-Mail senden</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL POST-PDF — invia -->
+<div class="moverlay" id="m-send">
+  <div class="modal">
+    <button class="mclose" onclick="closeModal('m-send')">×</button>
+    <h3>Bericht senden</h3>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:16px">
+      PDF wurde gespeichert. Wie möchten Sie den Bericht senden?
+    </p>
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <button class="btnmain" style="border-radius:10px;padding:14px" onclick="sendViaMail()">
+        <svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,12 2,6"/></svg>
+        Per E-Mail senden
+      </button>
+      <button class="btnmain" style="border-radius:10px;padding:14px;background:#25d366" onclick="sendViaWhatsApp()">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.554 4.116 1.526 5.845L.057 23.009a.75.75 0 0 0 .934.934l5.164-1.469A11.945 11.945 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.75a9.726 9.726 0 0 1-4.964-1.362l-.356-.212-3.685 1.048 1.048-3.685-.212-.356A9.726 9.726 0 0 1 2.25 12C2.25 6.615 6.615 2.25 12 2.25S21.75 6.615 21.75 12 17.385 21.75 12 21.75z"/></svg>
+        Per WhatsApp senden
+      </button>
+      <button class="mbtn s" onclick="closeModal('m-send');setTimeout(()=>{if(confirm(\"Neuen Bericht erstellen? Alle Daten werden zurückgesetzt.\")) resetAll();},200)">
+        Schließen
+      </button>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
-// ═══════════════════════════════════════════
-// CONFIG
-// ═══════════════════════════════════════════
-const EMAILJS_PK  = 'pjgSQPbBuFg7mz31a';
-const EMAILJS_SVC = 'service_t5xgb3c';
-const EMAILJS_TPL = 'template_kov1hyi';
+// ═══════════════════════════════════
+// CONFIG — sostituisci con URL Render dopo deploy
+// ═══════════════════════════════════
+const MAIL_SERVER = 'https://madleaf-mailserver.onrender.com';
 const MY_EMAIL    = 'giuseppe.maddalena@madleaf.de';
 const MY_PHONE    = '+49 176 72002500';
 
-emailjs.init(EMAILJS_PK);
-
-// ═══════════════════════════════════════════
+// ═══════════════════════════════════
 // STATO
-// ═══════════════════════════════════════════
-let state = { kunde: null, prodotti: [], fotos: [], gps: null, curFoto: null };
+// ═══════════════════════════════════
+let state = { kunde:null, prodotti:[], fotos:[], gps:null, curFoto:null };
+let pendingSend = false;
 
-// ═══════════════════════════════════════════
-// CATALOGO PRODOTTI DEFAULT
-// ═══════════════════════════════════════════
+// ═══════════════════════════════════
+// STORAGE
+// ═══════════════════════════════════
 const PRODOTTI_DEFAULT = [
-  // GEL BLATTE
-  {cat:'Gel Blattella',name:'Advion Cockroach Gel',wirkstoff:'Indoxacarb 0,6%',dosierung:'Kleine Punkte 0,5 g alle 30 cm',klasse:'Oxadiazin',note:'Sicuro per animali dopo asciugatura. Antidot: sintomatica.',custom:false},
-  {cat:'Gel Blattella',name:'Blattanex Gel',wirkstoff:'Propoxur 1%',dosierung:'0,5 g/punto applicazione',klasse:'Carbamat',note:'Non usare in presenza di animali. Antidot: Atropina.',custom:false},
-  {cat:'Gel Blattella',name:'Goliath Gel',wirkstoff:'Fipronil 0,05%',dosierung:'Punti da 0,3–0,5 g',klasse:'Phenylpyrazol',note:'Effetto domino. Antidot: sintomatica.',custom:false},
-  {cat:'Gel Blattella',name:'Maxforce FC Magnum',wirkstoff:'Fipronil 0,05%',dosierung:'1 g/m²',klasse:'Phenylpyrazol',note:'Alta attività residuale. Antidot: sintomatica.',custom:false},
-  {cat:'Gel Blattella',name:'Maxforce Quantum',wirkstoff:'Imidacloprid 0,03%',dosierung:'Punti da 0,5 g ogni 20–30 cm',klasse:'Neonikotinoid',note:'Rotazione con Fipronil consigliata. Antidot: sintomatica.',custom:false},
-  {cat:'Gel Blattella',name:'Invict Gold',wirkstoff:'Imidacloprid 2,15%',dosierung:'Punti minimi, alta concentrazione',klasse:'Neonikotinoid',note:'Per infestazioni gravi. Antidot: sintomatica.',custom:false},
-  // POLVERI
-  {cat:'Polveri / Insektizidstaub',name:'Ficam W',wirkstoff:'Bendiocarb 80%',dosierung:'25–50 g/m²',klasse:'Carbamat',note:'Trattamento fessure e cavità. Antidot: Atropina sulfato 2mg IM.',custom:false},
-  {cat:'Polveri / Insektizidstaub',name:'Terres diatomacee',wirkstoff:'Silice amorfa >90%',dosierung:'Strato sottile nelle fessure',klasse:'Fisico-meccanico',note:'Sicuro per umani e animali. Nessun antidoto necessario.',custom:false},
-  // CIMICI LETTO
-  {cat:'Bettwanzen',name:'ClimbUp Interceptor',wirkstoff:'Dispositivo meccanico',dosierung:'1 per gamba del letto',klasse:'Monitoraggio',note:'Controllo dopo 48–72h.',custom:false},
-  {cat:'Bettwanzen',name:'Blackout Bed Bug Monitor',wirkstoff:'CO2 + feromoni sintetici',dosierung:'1–2 per stanza',klasse:'Monitoraggio attivo',note:'Lettura dopo 24h.',custom:false},
-  // PROCESSIONARIA
-  {cat:'Prozessionsspinner',name:'Collare Feromone PPM',wirkstoff:'Feromone sintetico pino',dosierung:'1 collare / albero',klasse:'Pheromonfalle',note:'Sostituire ogni 4–6 settimane.',custom:false},
-  {cat:'Prozessionsspinner',name:'Trappola Feromone EPS',wirkstoff:'Feromone sintetico quercia',dosierung:'1 trappola / 500 m²',klasse:'Pheromonfalle',note:'Controllo settimanale in stagione.',custom:false},
-  // VESPE
-  {cat:'Wespen',name:'Trappola VPL Vespe',wirkstoff:'Attrattivo alimentare',dosierung:'1–3 trappole per area',klasse:'Trappola meccanica',note:'Rinnovare attrattivo ogni 7–10 giorni.',custom:false},
-  // TARME
-  {cat:'Motten',name:'Trappola Feromone Tarme Alimentari',wirkstoff:'Feromone sintetico',dosierung:'1 per cucina / dispensa',klasse:'Pheromonfalle',note:'Sostituire ogni 3 mesi.',custom:false},
-  {cat:'Motten',name:'Trappola Feromone Tarme Tessili',wirkstoff:'Feromone sintetico tessili',dosierung:'1 per armadio',klasse:'Pheromonfalle',note:'Sostituire ogni 3 mesi.',custom:false},
-  // ZANZARE
-  {cat:'Stechmücken',name:'BG-Sentinel 2',wirkstoff:'CO2 + attrattivo BG-Lure',dosierung:'1 per 400 m²',klasse:'Trappola adulti',note:'Controllo settimanale.',custom:false},
-  {cat:'Stechmücken',name:'BG-GAT',wirkstoff:'CO2 + feromone uova',dosierung:'1 per oviposizione',klasse:'Trappola adulti + uova',note:'Lettura uova ogni 7 giorni.',custom:false},
-  {cat:'Stechmücken',name:'Ovitrappola',wirkstoff:'Acqua + paletta oviposizione',dosierung:'1 ogni 100 m²',klasse:'Monitoraggio uova',note:'Conteggio uova ogni 7 giorni.',custom:false},
-  {cat:'Stechmücken',name:'VectoBac WG',wirkstoff:'Bacillus thuringiensis israelensis',dosierung:'0,5–5 g/m² specchio d\'acqua',klasse:'Biologico larvicida',note:'Sicuro per fauna acquatica non bersaglio.',custom:false},
-  {cat:'Stechmücken',name:'Nematodi Steinernema feltiae',wirkstoff:'Nematodi entomopatogeni',dosierung:'0,5 mln/m²',klasse:'Biologico',note:'Conservare in frigorifero. Applicare la sera.',custom:false},
-  {cat:'Stechmücken',name:'Nematodi Heterorhabditis bacteriophora',wirkstoff:'Nematodi entomopatogeni',dosierung:'0,5 mln/m²',klasse:'Biologico',note:'Per larve nel suolo. Irrigare dopo applicazione.',custom:false},
-  // PESCIOLINO D'ARGENTO
-  {cat:'Silberfischchen',name:'Trappola adesiva Lepisma',wirkstoff:'Attrattivo alimentare',dosierung:'1 per angolo umido',klasse:'Monitoraggio',note:'Controllo ogni 2 settimane.',custom:false},
+  {cat:'Gel Blattella',name:'Advion Cockroach Gel',wirkstoff:'Indoxacarb 0,6%',dosierung:'Kleine Punkte 0,5 g alle 30 cm',klasse:'Oxadiazin',note:'Sicher für Tiere nach Trocknung. Antidot: symptomatisch.',custom:false},
+  {cat:'Gel Blattella',name:'Blattanex Gel',wirkstoff:'Propoxur 1%',dosierung:'0,5 g/Applikationspunkt',klasse:'Carbamat',note:'Nicht bei Tierpräsenz verwenden. Antidot: Atropin.',custom:false},
+  {cat:'Gel Blattella',name:'Goliath Gel',wirkstoff:'Fipronil 0,05%',dosierung:'Punkte 0,3–0,5 g',klasse:'Phenylpyrazol',note:'Dominoeffekt. Antidot: symptomatisch.',custom:false},
+  {cat:'Gel Blattella',name:'Maxforce FC Magnum',wirkstoff:'Fipronil 0,05%',dosierung:'1 g/m²',klasse:'Phenylpyrazol',note:'Hohe Restwirkung. Antidot: symptomatisch.',custom:false},
+  {cat:'Gel Blattella',name:'Maxforce Quantum',wirkstoff:'Imidacloprid 0,03%',dosierung:'Punkte 0,5 g alle 20–30 cm',klasse:'Neonikotinoid',note:'Rotation mit Fipronil empfohlen. Antidot: symptomatisch.',custom:false},
+  {cat:'Gel Blattella',name:'Invict Gold',wirkstoff:'Imidacloprid 2,15%',dosierung:'Minimale Punkte, hohe Konzentration',klasse:'Neonikotinoid',note:'Bei starkem Befall. Antidot: symptomatisch.',custom:false},
+  {cat:'Insektizidstaub',name:'Ficam W',wirkstoff:'Bendiocarb 80%',dosierung:'25–50 g/m²',klasse:'Carbamat',note:'Anwendung in Ritzen und Hohlräumen. Antidot: Atropinsulfat 2mg IM.',custom:false},
+  {cat:'Insektizidstaub',name:'Kieselgur / Kieselerde',wirkstoff:'Amorphes Siliziumdioxid >90%',dosierung:'Dünne Schicht in Ritzen',klasse:'Physikalisch-mechanisch',note:'Sicher für Menschen und Tiere. Kein Antidot erforderlich.',custom:false},
+  {cat:'Bettwanzen',name:'ClimbUp Interceptor',wirkstoff:'Mechanisches Gerät',dosierung:'1 pro Bettbein',klasse:'Monitoring',note:'Kontrolle nach 48–72 Std.',custom:false},
+  {cat:'Bettwanzen',name:'Blackout Bed Bug Monitor',wirkstoff:'CO2 + synthetische Pheromone',dosierung:'1–2 pro Zimmer',klasse:'Aktives Monitoring',note:'Ablesung nach 24 Std.',custom:false},
+  {cat:'Prozessionsspinner',name:'Pheromon-Halsband PPM',wirkstoff:'Synthetisches Pheromon Kiefer',dosierung:'1 Halsband / Baum',klasse:'Pheromonalle',note:'Alle 4–6 Wochen ersetzen.',custom:false},
+  {cat:'Prozessionsspinner',name:'Pheromonfalle EPS',wirkstoff:'Synthetisches Pheromon Eiche',dosierung:'1 Falle / 500 m²',klasse:'Pheromonfalle',note:'Wöchentliche Kontrolle in der Saison.',custom:false},
+  {cat:'Wespen',name:'VPL Wespenfalle',wirkstoff:'Nahrungslockmittel',dosierung:'1–3 Fallen pro Bereich',klasse:'Mechanische Falle',note:'Lockmittel alle 7–10 Tage erneuern.',custom:false},
+  {cat:'Motten',name:'Pheromonfalle Lebensmittelmotten',wirkstoff:'Synthetisches Pheromon',dosierung:'1 pro Küche / Vorratskammer',klasse:'Pheromonfalle',note:'Alle 3 Monate ersetzen.',custom:false},
+  {cat:'Motten',name:'Pheromonfalle Kleidermotten',wirkstoff:'Synthetisches Pheromon Textil',dosierung:'1 pro Kleiderschrank',klasse:'Pheromonfalle',note:'Alle 3 Monate ersetzen.',custom:false},
+  {cat:'Stechmücken',name:'BG-GAT (ohne CO2)',wirkstoff:'Synthetisches Lockmittel BG-Sweetscent',dosierung:'1 pro Bereich',klasse:'Erwachsenenfalle',note:'Wöchentliche Kontrolle.',custom:false},
+  {cat:'Stechmücken',name:'Ovitrappola',wirkstoff:'Wasser + Eiablageplatte',dosierung:'1 pro 100 m²',klasse:'Eiermonitoring',note:'Eierzählung alle 7 Tage.',custom:false},
+  {cat:'Stechmücken',name:'VectoBac WG',wirkstoff:'Bacillus thuringiensis israelensis',dosierung:'0,5–5 g/m² Wasserfläche',klasse:'Biologisches Larvizid',note:'Sicher für aquatische Nichtzielorganismen.',custom:false},
+  {cat:'Stechmücken',name:'Steinernema feltiae',wirkstoff:'Entomopathogene Nematoden',dosierung:'0,5 Mio/m²',klasse:'Biologisch',note:'Kühl lagern. Abends ausbringen.',custom:false},
+  {cat:'Stechmücken',name:'Heterorhabditis bacteriophora',wirkstoff:'Entomopathogene Nematoden',dosierung:'0,5 Mio/m²',klasse:'Biologisch',note:'Für Larven im Boden. Nach Ausbringen bewässern.',custom:false},
+  {cat:'Silberfischchen',name:'Klebefalle Lepisma',wirkstoff:'Nahrungslockmittel',dosierung:'1 pro feuchte Ecke',klasse:'Monitoring',note:'Kontrolle alle 2 Wochen.',custom:false},
 ];
 
-function getProdottiDB() {
-  try {
-    const saved = JSON.parse(localStorage.getItem('ml_prodotti_db') || 'null');
-    if (saved && saved.length > 0) return saved;
-  } catch(e){}
-  return [...PRODOTTI_DEFAULT];
-}
-function saveProdottiDB(p) { localStorage.setItem('ml_prodotti_db', JSON.stringify(p)); }
-function getKunden() { try { return JSON.parse(localStorage.getItem('ml_kunden') || '[]'); } catch(e){ return []; }}
-function saveKunden(k) { localStorage.setItem('ml_kunden', JSON.stringify(k)); }
-function getArchiv() { try { return JSON.parse(localStorage.getItem('ml_archiv') || '[]'); } catch(e){ return []; }}
-function saveArchiv(a) { localStorage.setItem('ml_archiv', JSON.stringify(a)); }
-function getQueue() { try { return JSON.parse(localStorage.getItem('ml_queue') || '[]'); } catch(e){ return []; }}
-function saveQueue(q) { localStorage.setItem('ml_queue', JSON.stringify(q)); }
-function getCustomAzioni() { try { return JSON.parse(localStorage.getItem('ml_custom_azioni') || '[]'); } catch(e){ return []; }}
-function saveCustomAzioni(a) { localStorage.setItem('ml_custom_azioni', JSON.stringify(a)); }
+function getProdottiDB(){try{const s=JSON.parse(localStorage.getItem('ml_prodotti')||'null');if(s&&s.length)return s;}catch(e){}return[...PRODOTTI_DEFAULT];}
+function saveProdottiDB(p){localStorage.setItem('ml_prodotti',JSON.stringify(p));}
+function getKunden(){try{return JSON.parse(localStorage.getItem('ml_kunden')||'[]');}catch(e){return[];}}
+function saveKunden(k){localStorage.setItem('ml_kunden',JSON.stringify(k));}
+function getArchiv(){try{return JSON.parse(localStorage.getItem('ml_archiv')||'[]');}catch(e){return[];}}
+function saveArchiv(a){localStorage.setItem('ml_archiv',JSON.stringify(a));}
+function getNachkontrollen(){try{return JSON.parse(localStorage.getItem('ml_nk')||'[]');}catch(e){return[];}}
+function saveNachkontrollen(n){localStorage.setItem('ml_nk',JSON.stringify(n));}
+function getCustomAzioni(){try{return JSON.parse(localStorage.getItem('ml_custom_az')||'[]');}catch(e){return[];}}
+function saveCustomAzioni(a){localStorage.setItem('ml_custom_az',JSON.stringify(a));}
 
-// ═══════════════════════════════════════════
+// ═══════════════════════════════════
 // INIT
-// ═══════════════════════════════════════════
-document.addEventListener('DOMContentLoaded', () => {
+// ═══════════════════════════════════
+document.addEventListener('DOMContentLoaded',()=>{
   setToday();
   initGPS();
   initSig('sig-k');
-  restoreTimer();
   renderCustomAzioni();
-  checkOnlineQueue();
 });
 
-window.addEventListener('online', () => {
+window.addEventListener('online',()=>{
   document.getElementById('obanner').classList.add('show');
-  setTimeout(() => document.getElementById('obanner').classList.remove('show'), 4000);
-  checkOnlineQueue();
+  setTimeout(()=>document.getElementById('obanner').classList.remove('show'),4000);
 });
 
-// ═══════════════════════════════════════════
+// ═══════════════════════════════════
 // DATE & GPS
-// ═══════════════════════════════════════════
-function setToday() {
-  const d = new Date();
-  d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
-  document.getElementById('datum-input').value = d.toISOString().split('T')[0];
+// ═══════════════════════════════════
+function setToday(){
+  const d=new Date();
+  d.setMinutes(d.getMinutes()-d.getTimezoneOffset());
+  document.getElementById('datum-input').value=d.toISOString().split('T')[0];
 }
 
-function initGPS() {
-  const badge = document.getElementById('gps-badge');
-  if (!navigator.geolocation) { badge.textContent = 'Kein GPS'; return; }
-  navigator.geolocation.getCurrentPosition(p => {
-    state.gps = { lat: p.coords.latitude.toFixed(5), lon: p.coords.longitude.toFixed(5) };
-    badge.innerHTML = `<svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg> ${state.gps.lat}, ${state.gps.lon}`;
-    badge.style.color = '#17382d';
-    badge.style.background = 'rgba(23,56,45,.08)';
-  }, () => { badge.textContent = 'GPS n/v'; });
+function initGPS(){
+  const b=document.getElementById('gps-badge');
+  if(!navigator.geolocation){b.textContent='Kein GPS';return;}
+  navigator.geolocation.getCurrentPosition(p=>{
+    state.gps={lat:p.coords.latitude.toFixed(5),lon:p.coords.longitude.toFixed(5)};
+    b.textContent=`📍 ${state.gps.lat}, ${state.gps.lon}`;
+  },()=>{b.textContent='GPS n/v';});
 }
 
-// ═══════════════════════════════════════════
-// TIMER
-// ═══════════════════════════════════════════
-let timerInterval, timerOn = false;
+// ═══════════════════════════════════
+// TIMER — riscritto con setInterval semplice
+// ═══════════════════════════════════
+let _timerInterval = null;
+let _timerStart = null;
+let _timerOn = false;
 
-function toggleTimer() { timerOn ? stopTimer() : startTimer(); }
+function toggleTimer(){_timerOn?_stopTimer():_startTimer();}
 
-function startTimer() {
-  if (!localStorage.getItem('ml_timer')) localStorage.setItem('ml_timer', new Date().toISOString());
-  timerOn = true;
+function _startTimer(){
+  if(!_timerStart) _timerStart = Date.now() - (_getSavedElapsed()||0);
+  _timerOn=true;
   document.getElementById('tdot').classList.add('on');
-  document.getElementById('tbtn').textContent = 'STOP';
+  document.getElementById('tbtn').textContent='STOP';
   document.getElementById('tbtn').classList.add('on');
-  runTimer();
+  _timerInterval=setInterval(_tickTimer,500);
 }
 
-function stopTimer() {
-  clearInterval(timerInterval);
-  timerOn = false;
+function _stopTimer(){
+  clearInterval(_timerInterval);
+  _timerInterval=null;
+  _timerOn=false;
   document.getElementById('tdot').classList.remove('on');
-  document.getElementById('tbtn').textContent = 'START';
+  document.getElementById('tbtn').textContent='START';
   document.getElementById('tbtn').classList.remove('on');
+  if(_timerStart) localStorage.setItem('ml_timer_elapsed', Date.now()-_timerStart);
 }
 
-function runTimer() {
-  timerInterval = setInterval(() => {
-    const s = Math.floor((new Date() - new Date(localStorage.getItem('ml_timer'))) / 1000);
-    document.getElementById('tval').textContent =
-      `${String(Math.floor(s/3600)).padStart(2,'0')}h ${String(Math.floor((s%3600)/60)).padStart(2,'0')}m ${String(s%60).padStart(2,'0')}s`;
-  }, 1000);
+function _resetTimer(){
+  _stopTimer();
+  _timerStart=null;
+  localStorage.removeItem('ml_timer_elapsed');
+  document.getElementById('tval').textContent='00h 00m 00s';
 }
 
-function restoreTimer() {
-  if (localStorage.getItem('ml_timer')) startTimer();
+function _tickTimer(){
+  if(!_timerStart) return;
+  const s=Math.floor((Date.now()-_timerStart)/1000);
+  document.getElementById('tval').textContent=
+    `${String(Math.floor(s/3600)).padStart(2,'0')}h ${String(Math.floor((s%3600)/60)).padStart(2,'0')}m ${String(s%60).padStart(2,'0')}s`;
 }
 
-function resetTimer() {
-  stopTimer();
-  localStorage.removeItem('ml_timer');
-  document.getElementById('tval').textContent = '00h 00m 00s';
+function _getSavedElapsed(){
+  const v=localStorage.getItem('ml_timer_elapsed');
+  return v?parseInt(v):0;
 }
 
-function getTimerStr() { return document.getElementById('tval').textContent; }
+function getTimerStr(){return document.getElementById('tval').textContent;}
 
-// ═══════════════════════════════════════════
+// ═══════════════════════════════════
 // KUNDEN
-// ═══════════════════════════════════════════
-function openModal(id) {
-  if (id === 'm-kunden') renderKunden();
-  if (id === 'm-prodotti') renderProdottiSel();
-  if (id === 'm-archiv') renderArchiv();
+// ═══════════════════════════════════
+function openModal(id){
+  if(id==='m-kunden') renderKunden();
+  if(id==='m-prodotti') renderProdottiSel();
+  if(id==='m-archiv') renderArchiv();
   document.getElementById(id).classList.add('open');
 }
-function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+function closeModal(id){document.getElementById(id).classList.remove('open');}
 
-function renderKunden() {
-  const kunden = getKunden();
-  const c = document.getElementById('klist');
-  if (!kunden.length) { c.innerHTML = '<p style="font-size:13px;color:var(--muted);padding:10px 0">Noch keine Kunden.</p>'; return; }
-  c.innerHTML = kunden.map((k,i) => `
-    <div class="klist-item" onclick="selectKunde(${i})">
-      <div class="avatar" style="width:32px;height:32px;font-size:11px">${k.name.substring(0,2).toUpperCase()}</div>
-      <div><div class="klist-name">${k.name}</div><div class="klist-sub">${k.city||''} · ${k.email||''}</div></div>
-      <button class="klist-del" onclick="event.stopPropagation();deleteKunde(${i})">×</button>
-    </div>`).join('');
+function renderKunden(){
+  const k=getKunden(),c=document.getElementById('klist');
+  if(!k.length){c.innerHTML='<p style="font-size:13px;color:var(--muted);padding:10px 0">Noch keine Kunden.</p>';return;}
+  c.innerHTML=k.map((k,i)=>`<div class="klist-item" onclick="selectKunde(${i})">
+    <div class="avatar" style="width:32px;height:32px;font-size:11px">${k.name.substring(0,2).toUpperCase()}</div>
+    <div><div class="klist-name">${k.name}</div><div class="klist-sub">${k.city||''} · ${k.email||''}</div></div>
+    <button class="klist-del" onclick="event.stopPropagation();delKunde(${i})">×</button>
+  </div>`).join('');
 }
 
-function selectKunde(i) {
-  const k = getKunden()[i];
-  state.kunde = k;
-  document.getElementById('k-avatar').textContent = k.name.substring(0,2).toUpperCase();
-  document.getElementById('k-name').textContent = k.name;
-  document.getElementById('k-sub').textContent = `${k.city||''} · ${k.email||''}`;
+function selectKunde(i){
+  const k=getKunden()[i];state.kunde=k;
+  document.getElementById('k-avatar').textContent=k.name.substring(0,2).toUpperCase();
+  document.getElementById('k-name').textContent=k.name;
+  document.getElementById('k-sub').textContent=`${k.city||''} · ${k.email||''}`;
   closeModal('m-kunden');
 }
 
-function deleteKunde(i) {
-  if (!confirm('Kunde löschen?')) return;
-  const k = getKunden(); k.splice(i,1); saveKunden(k); renderKunden();
+function delKunde(i){
+  if(!confirm('Kunde löschen?'))return;
+  const k=getKunden();k.splice(i,1);saveKunden(k);renderKunden();
 }
 
-function saveKunde() {
-  const name = document.getElementById('nk-name').value.trim();
-  if (!name) { showToast('Name erforderlich','red'); return; }
-  const k = {
-    name, email: document.getElementById('nk-email').value.trim(),
-    address: document.getElementById('nk-address').value.trim(),
-    city: document.getElementById('nk-city').value.trim(),
-    phone: document.getElementById('nk-phone').value.trim()
-  };
-  const kunden = getKunden(); kunden.push(k); saveKunden(kunden);
-  ['nk-name','nk-address','nk-city','nk-email','nk-phone'].forEach(id => document.getElementById(id).value='');
-  state.kunde = k;
-  document.getElementById('k-avatar').textContent = k.name.substring(0,2).toUpperCase();
-  document.getElementById('k-name').textContent = k.name;
-  document.getElementById('k-sub').textContent = `${k.city||''} · ${k.email||''}`;
-  renderKunden(); closeModal('m-kunden'); showToast('Kunde gespeichert ✓','gold');
+function saveKunde(){
+  const name=document.getElementById('nk-name').value.trim();
+  if(!name){showToast('Name erforderlich','red');return;}
+  const k={name,email:document.getElementById('nk-email').value.trim(),
+    address:document.getElementById('nk-address').value.trim(),
+    city:document.getElementById('nk-city').value.trim(),
+    phone:document.getElementById('nk-phone').value.trim()};
+  const kunden=getKunden();kunden.push(k);saveKunden(kunden);
+  ['nk-name','nk-address','nk-city','nk-email','nk-phone'].forEach(id=>document.getElementById(id).value='');
+  state.kunde=k;
+  document.getElementById('k-avatar').textContent=k.name.substring(0,2).toUpperCase();
+  document.getElementById('k-name').textContent=k.name;
+  document.getElementById('k-sub').textContent=`${k.city||''} · ${k.email||''}`;
+  renderKunden();closeModal('m-kunden');showToast('Kunde gespeichert ✓','gold');
 }
 
-// ═══════════════════════════════════════════
+// ═══════════════════════════════════
 // AZIONI
-// ═══════════════════════════════════════════
-function toggleA(id) {
-  const b = document.querySelector(`[data-id="${id}"]`);
-  const body = b.querySelector('.abody');
-  const on = b.classList.contains('on');
-  b.classList.toggle('on', !on);
-  body.style.display = on ? 'none' : 'block';
+// ═══════════════════════════════════
+function toggleA(id){
+  const b=document.querySelector(`[data-id="${id}"]`);
+  const body=b.querySelector('.abody');
+  const on=b.classList.contains('on');
+  b.classList.toggle('on',!on);
+  body.style.display=on?'none':'block';
 }
 
-function getAzioni() {
-  const res = [];
-  document.querySelectorAll('.ablock.on').forEach(b => {
-    const ta = b.querySelector('textarea');
-    if (ta && ta.value.trim()) res.push(ta.value.trim());
+function getAzioni(){
+  const res=[];
+  document.querySelectorAll('.ablock.on').forEach(b=>{
+    const ta=b.querySelector('textarea');
+    if(ta&&ta.value.trim()) res.push(ta.value.trim());
   });
   return res;
 }
 
-function renderCustomAzioni() {
-  const custom = getCustomAzioni();
-  const wrap = document.getElementById('custom-azioni');
-  wrap.innerHTML = custom.map((a,i) => `
+function renderCustomAzioni(){
+  const custom=getCustomAzioni();
+  document.getElementById('custom-azioni').innerHTML=custom.map((a,i)=>`
     <div class="ablock" data-id="ca${i}">
       <div class="ahead" onclick="toggleA('ca${i}')">
         <div class="achk"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
         <div class="alabel">${a.label}</div>
       </div>
-      <div class="abody" style="display:none">
-        <div class="hint">Text bearbeiten:</div>
-        <textarea>${a.text}</textarea>
-      </div>
+      <div class="abody" style="display:none"><div class="hint">Text bearbeiten:</div>
+        <textarea>${a.text}</textarea></div>
     </div>`).join('');
 }
 
-function addCustomAzione() {
-  const label = document.getElementById('na-label').value.trim();
-  const text = document.getElementById('na-text').value.trim();
-  if (!label) { showToast('Bezeichnung erforderlich','red'); return; }
-  const save = document.getElementById('na-save').checked;
-  if (save) {
-    const custom = getCustomAzioni();
-    custom.push({label, text});
-    saveCustomAzioni(custom);
+function addCustomAzione(){
+  const label=document.getElementById('na-label').value.trim();
+  const text=document.getElementById('na-text').value.trim();
+  if(!label){showToast('Bezeichnung erforderlich','red');return;}
+  if(document.getElementById('na-save').checked){
+    const c=getCustomAzioni();c.push({label,text});saveCustomAzioni(c);
   }
-  // Aggiungi temporanea al DOM
-  const wrap = document.getElementById('custom-azioni');
-  const id = 'ca_tmp_' + Date.now();
-  const div = document.createElement('div');
-  div.className = 'ablock on';
-  div.setAttribute('data-id', id);
-  div.innerHTML = `
-    <div class="ahead" onclick="toggleA('${id}')">
-      <div class="achk" style="background:var(--green);border-color:var(--green)"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-      <div class="alabel" style="color:var(--green);font-weight:600">${label}</div>
-    </div>
-    <div class="abody">
-      <div class="hint">Text bearbeiten:</div>
-      <textarea>${text}</textarea>
-    </div>`;
+  const wrap=document.getElementById('custom-azioni');
+  const id='ca_'+Date.now();
+  const div=document.createElement('div');
+  div.className='ablock on';div.setAttribute('data-id',id);
+  div.innerHTML=`<div class="ahead" onclick="toggleA('${id}')">
+    <div class="achk" style="background:var(--green);border-color:var(--green)"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <div class="alabel" style="color:var(--green);font-weight:600">${label}</div></div>
+  <div class="abody"><div class="hint">Text bearbeiten:</div><textarea>${text}</textarea></div>`;
   wrap.appendChild(div);
-  document.getElementById('na-label').value = '';
-  document.getElementById('na-text').value = '';
-  document.getElementById('na-save').checked = false;
+  document.getElementById('na-label').value='';
+  document.getElementById('na-text').value='';
+  document.getElementById('na-save').checked=false;
   closeModal('m-new-azione');
-  if (save) showToast('Maßnahme gespeichert ✓','gold');
 }
 
-// ═══════════════════════════════════════════
+// ═══════════════════════════════════
 // PRODOTTI
-// ═══════════════════════════════════════════
-function renderProdottiSel() {
-  const db = getProdottiDB();
-  const cats = [...new Set(db.map(p => p.cat))];
-  const c = document.getElementById('psel-list');
-  c.innerHTML = cats.map(cat => {
-    const items = db.filter(p => p.cat === cat);
-    return `<div class="pcat-title">${cat}</div>` +
-      items.map((p,gi) => {
-        const i = db.indexOf(p);
-        return `<div class="psel-item" onclick="addProdotto(${i})">
+// ═══════════════════════════════════
+function renderProdottiSel(){
+  const db=getProdottiDB();
+  const cats=[...new Set(db.map(p=>p.cat))];
+  document.getElementById('psel-list').innerHTML=cats.map(cat=>{
+    return`<div class="pcat-title">${cat}</div>`+
+      db.filter(p=>p.cat===cat).map(p=>{
+        const i=db.indexOf(p);
+        return`<div class="psel-item" onclick="addProdotto(${i})">
           <div>
             <div class="psel-name">${p.name}</div>
             <div class="psel-detail">${p.wirkstoff} · ${p.dosierung}</div>
-            ${p.note ? `<div class="psel-note">${p.note.substring(0,60)}${p.note.length>60?'...':''}</div>` : ''}
+            ${p.note?`<div class="psel-note">${p.note.substring(0,70)}${p.note.length>70?'...':''}</div>`:''}
           </div>
-          ${p.custom ? `<button class="psel-del" onclick="event.stopPropagation();deleteProdottoDB(${i})">×</button>` : ''}
+          ${p.custom?`<button class="psel-del" onclick="event.stopPropagation();delProdottoDB(${i})">×</button>`:''}
         </div>`;
       }).join('');
   }).join('');
 }
 
-function addProdotto(i) {
-  const p = getProdottiDB()[i];
-  state.prodotti.push({...p, qty: ''});
+function addProdotto(i){
+  const p=getProdottiDB()[i];
+  state.prodotti.push({...p,qty:''});
+  renderProdottiForm();closeModal('m-prodotti');
+}
+
+function delProdottoDB(i){
+  if(!confirm('Mittel löschen?'))return;
+  const db=getProdottiDB();db.splice(i,1);saveProdottiDB(db);renderProdottiSel();
+}
+
+function saveProdotto(){
+  const name=document.getElementById('np-name').value.trim();
+  if(!name){showToast('Handelsname erforderlich','red');return;}
+  const p={cat:document.getElementById('np-kategorie').value.trim()||'Sonstiges',
+    name,wirkstoff:document.getElementById('np-wirkstoff').value.trim(),
+    dosierung:document.getElementById('np-dosierung').value.trim(),
+    klasse:document.getElementById('np-klasse').value.trim(),
+    note:document.getElementById('np-note').value.trim(),custom:true};
+  const db=getProdottiDB();db.push(p);saveProdottiDB(db);
+  state.prodotti.push({...p,qty:''});
   renderProdottiForm();
-  closeModal('m-prodotti');
+  ['np-name','np-kategorie','np-wirkstoff','np-dosierung','np-klasse','np-note'].forEach(id=>document.getElementById(id).value='');
+  closeModal('m-prodotti');showToast('Mittel gespeichert ✓','gold');
 }
 
-function deleteProdottoDB(i) {
-  if (!confirm('Mittel löschen?')) return;
-  const db = getProdottiDB(); db.splice(i,1); saveProdottiDB(db); renderProdottiSel();
-}
-
-function saveProdotto() {
-  const name = document.getElementById('np-name').value.trim();
-  if (!name) { showToast('Handelsname erforderlich','red'); return; }
-  const p = {
-    cat: document.getElementById('np-kategorie').value.trim() || 'Sonstiges',
-    name,
-    wirkstoff: document.getElementById('np-wirkstoff').value.trim(),
-    dosierung: document.getElementById('np-dosierung').value.trim(),
-    klasse: document.getElementById('np-klasse').value.trim(),
-    note: document.getElementById('np-note').value.trim(),
-    custom: true
-  };
-  const db = getProdottiDB(); db.push(p); saveProdottiDB(db);
-  state.prodotti.push({...p, qty: ''});
-  renderProdottiForm();
-  ['np-name','np-kategorie','np-wirkstoff','np-dosierung','np-klasse','np-note'].forEach(id => document.getElementById(id).value='');
-  closeModal('m-prodotti');
-  showToast('Mittel gespeichert ✓','gold');
-}
-
-function renderProdottiForm() {
-  document.getElementById('prod-list').innerHTML = state.prodotti.map((p,i) => `
+function renderProdottiForm(){
+  document.getElementById('prod-list').innerHTML=state.prodotti.map((p,i)=>`
     <div class="pcard">
       <div class="pname">${p.name}</div>
       <div class="pdetail">${p.wirkstoff} · ${p.dosierung}</div>
-      ${p.klasse ? `<span class="pbadge">${p.klasse}</span>` : ''}
-      <div class="pqty"><input type="text" placeholder="Verbrauchte Menge / Einheit" value="${p.qty||''}" onchange="state.prodotti[${i}].qty=this.value"></div>
+      ${p.klasse?`<span class="pbadge">${p.klasse}</span>`:''}
+      <div class="pqty"><input type="text" placeholder="Verbrauchte Menge / Einheit" value="${p.qty||''}" oninput="state.prodotti[${i}].qty=this.value"></div>
       <button class="pdel" onclick="removeProdotto(${i})">×</button>
     </div>`).join('');
 }
 
-function removeProdotto(i) { state.prodotti.splice(i,1); renderProdottiForm(); }
+function removeProdotto(i){state.prodotti.splice(i,1);renderProdottiForm();}
 
-// ═══════════════════════════════════════════
+// ═══════════════════════════════════
 // FOTO
-// ═══════════════════════════════════════════
-function addFotos(input) {
-  Array.from(input.files).forEach(file => {
-    const r = new FileReader();
-    r.onload = e => {
-      state.fotos.push({ data: e.target.result, desc: '', gps: state.gps ? `${state.gps.lat},${state.gps.lon}` : '' });
+// ═══════════════════════════════════
+function addFotos(input){
+  Array.from(input.files).forEach(file=>{
+    const r=new FileReader();
+    r.onload=e=>{
+      state.fotos.push({data:e.target.result,desc:'',gps:state.gps?`${state.gps.lat},${state.gps.lon}`:''});
       renderFotos();
     };
     r.readAsDataURL(file);
   });
-  input.value = '';
+  input.value='';
 }
 
-function renderFotos() {
-  const strip = document.getElementById('fstrip');
-  const add = strip.querySelector('.fadd');
-  strip.querySelectorAll('.fthumb').forEach(el => el.remove());
-  state.fotos.forEach((f,i) => {
-    const div = document.createElement('div');
-    div.className = 'fthumb';
-    div.innerHTML = `<img src="${f.data}" onclick="openFotoDesc(${i})">
-      ${f.gps ? `<div class="fgeo">GPS</div>` : ''}
+function renderFotos(){
+  const strip=document.getElementById('fstrip');
+  const add=strip.querySelector('.fadd');
+  strip.querySelectorAll('.fthumb').forEach(el=>el.remove());
+  state.fotos.forEach((f,i)=>{
+    const div=document.createElement('div');
+    div.className='fthumb';
+    div.innerHTML=`<img src="${f.data}" onclick="openFotoDesc(${i})">
+      ${f.gps?`<div class="fgeo">GPS</div>`:''}
+      ${f.desc?`<div class="fdesc-badge">${f.desc}</div>`:''}
       <button class="fdel" onclick="delFoto(event,${i})">×</button>`;
-    strip.insertBefore(div, add);
+    strip.insertBefore(div,add);
   });
 }
 
-function openFotoDesc(i) {
-  state.curFoto = i;
-  document.getElementById('foto-desc-ta').value = state.fotos[i].desc || '';
+function openFotoDesc(i){
+  state.curFoto=i;
+  document.getElementById('foto-desc-ta').value=state.fotos[i].desc||'';
   openModal('m-foto');
 }
 
-function saveFotoDesc() {
-  if (state.curFoto !== null) state.fotos[state.curFoto].desc = document.getElementById('foto-desc-ta').value.trim();
+function saveFotoDesc(){
+  if(state.curFoto!==null) state.fotos[state.curFoto].desc=document.getElementById('foto-desc-ta').value.trim();
   closeModal('m-foto');
+  renderFotos();
 }
 
-function delFoto(e, i) { e.stopPropagation(); state.fotos.splice(i,1); renderFotos(); }
+function delFoto(e,i){e.stopPropagation();state.fotos.splice(i,1);renderFotos();}
 
-// ═══════════════════════════════════════════
+// ═══════════════════════════════════
 // FIRMA
-// ═══════════════════════════════════════════
-function initSig(id) {
-  const canvas = document.getElementById(id);
-  const ctx = canvas.getContext('2d');
-  let drawing = false;
-  const pos = e => {
-    const r = canvas.getBoundingClientRect();
-    const src = e.touches ? e.touches[0] : e;
-    return { x: (src.clientX-r.left)*(canvas.width/r.width), y: (src.clientY-r.top)*(canvas.height/r.height) };
+// ═══════════════════════════════════
+function initSig(id){
+  const canvas=document.getElementById(id);
+  const ctx=canvas.getContext('2d');
+  let drawing=false;
+  const pos=e=>{
+    const r=canvas.getBoundingClientRect();
+    const src=e.touches?e.touches[0]:e;
+    return{x:(src.clientX-r.left)*(canvas.width/r.width),y:(src.clientY-r.top)*(canvas.height/r.height)};
   };
-  canvas.addEventListener('mousedown', e => { drawing=true; ctx.beginPath(); const p=pos(e); ctx.moveTo(p.x,p.y); });
-  canvas.addEventListener('mousemove', e => { if(!drawing)return; const p=pos(e); ctx.lineTo(p.x,p.y); ctx.strokeStyle='#17382d'; ctx.lineWidth=2; ctx.lineCap='round'; ctx.stroke(); });
-  canvas.addEventListener('mouseup', ()=>drawing=false);
-  canvas.addEventListener('mouseleave', ()=>drawing=false);
-  canvas.addEventListener('touchstart', e => { e.preventDefault(); drawing=true; ctx.beginPath(); const p=pos(e); ctx.moveTo(p.x,p.y); },{passive:false});
-  canvas.addEventListener('touchmove', e => { e.preventDefault(); if(!drawing)return; const p=pos(e); ctx.lineTo(p.x,p.y); ctx.strokeStyle='#17382d'; ctx.lineWidth=2; ctx.lineCap='round'; ctx.stroke(); },{passive:false});
-  canvas.addEventListener('touchend', ()=>drawing=false);
+  const start=e=>{e.preventDefault();drawing=true;ctx.beginPath();const p=pos(e);ctx.moveTo(p.x,p.y);};
+  const move=e=>{e.preventDefault();if(!drawing)return;const p=pos(e);ctx.lineTo(p.x,p.y);ctx.strokeStyle='#17382d';ctx.lineWidth=2.5;ctx.lineCap='round';ctx.lineJoin='round';ctx.stroke();};
+  const end=()=>drawing=false;
+  canvas.addEventListener('mousedown',start);canvas.addEventListener('mousemove',move);
+  canvas.addEventListener('mouseup',end);canvas.addEventListener('mouseleave',end);
+  canvas.addEventListener('touchstart',start,{passive:false});
+  canvas.addEventListener('touchmove',move,{passive:false});
+  canvas.addEventListener('touchend',end);
 }
 
-function clearCanvas(id) {
-  const c = document.getElementById(id);
+function clearCanvas(id){
+  const c=document.getElementById(id);
   c.getContext('2d').clearRect(0,0,c.width,c.height);
 }
 
-function toggleNofirma() {
-  const checked = document.getElementById('nofirma-cb').checked;
-  document.getElementById('nofirma-ta').style.display = checked ? 'block' : 'none';
-  if (checked) clearCanvas('sig-k');
+function toggleNofirma(){
+  const checked=document.getElementById('nofirma-cb').checked;
+  document.getElementById('nofirma-ta').style.display=checked?'block':'none';
+  if(checked) clearCanvas('sig-k');
 }
 
-// ═══════════════════════════════════════════
-// RESET COMPLETO
-// ═══════════════════════════════════════════
-function resetAll() {
-  state.kunde = null; state.prodotti = []; state.fotos = []; state.curFoto = null;
-  document.getElementById('k-avatar').textContent = '–';
-  document.getElementById('k-name').textContent = 'Kunde auswählen';
-  document.getElementById('k-sub').textContent = 'Antippen um Kunde zu wählen';
-  document.querySelectorAll('.ablock').forEach(b => {
-    b.classList.remove('on');
-    const body = b.querySelector('.abody');
-    if (body) body.style.display = 'none';
+// ═══════════════════════════════════
+// WOCHENBERICHT
+// ═══════════════════════════════════
+function openWochenbericht(){
+  const nk=getNachkontrollen();
+  const now=new Date();
+  const startW=new Date(now);
+  startW.setDate(now.getDate()-now.getDay()+1);
+  startW.setHours(0,0,0,0);
+  const endW=new Date(startW);
+  endW.setDate(startW.getDate()+6);
+  endW.setHours(23,59,59,999);
+
+  const questa=nk.filter(k=>{
+    const d=new Date(k.datum);
+    return d>=startW&&d<=endW&&!k.done;
   });
-  document.getElementById('custom-azioni').innerHTML = '';
-  renderProdottiForm();
-  renderFotos();
-  clearCanvas('sig-k');
-  document.getElementById('sig-k-name').value = '';
-  document.getElementById('nofirma-cb').checked = false;
-  document.getElementById('nofirma-ta').style.display = 'none';
-  document.getElementById('nofirma-ta').value = '';
-  document.getElementById('next-check-input').value = '';
-  setToday();
-  resetTimer();
+  // Aggiunge anche quelle scadute settimane precedenti
+  const scadute=nk.filter(k=>{
+    const d=new Date(k.datum);
+    return d<startW&&!k.done;
+  });
+  const tutte=[...scadute.map(k=>({...k,scaduta:true})),...questa];
+
+  const c=document.getElementById('woche-list');
+  if(!tutte.length){
+    c.innerHTML='<p style="font-size:13px;color:var(--muted);padding:10px 0">Keine Kontrollen diese Woche.</p>';
+  } else {
+    c.innerHTML=tutte.map((k,i)=>`
+      <div class="woche-item">
+        <div class="woche-check ${k.done?'done':''}" onclick="toggleNK(${nk.indexOf(k)},this)"></div>
+        <div style="flex:1">
+          <div style="font-size:14px;font-weight:600;color:var(--green)">${k.kunde}</div>
+          <div style="font-size:12px;color:${k.scaduta?'#dc2626':'var(--muted)'}">
+            ${k.typ||'Kontrolle'} · ${k.datumFmt}${k.scaduta?' ⚠ Überfällig':''}
+          </div>
+        </div>
+      </div>`).join('');
+  }
+  openModal('m-woche');
 }
 
-// ═══════════════════════════════════════════
+function toggleNK(i,el){
+  const nk=getNachkontrollen();
+  if(i>=0&&i<nk.length){
+    nk[i].done=!nk[i].done;
+    saveNachkontrollen(nk);
+    el.classList.toggle('done',nk[i].done);
+  }
+}
+
+async function sendWochenbericht(){
+  const nk=getNachkontrollen().filter(k=>!k.done);
+  if(!nk.length){showToast('Keine offenen Kontrollen','');closeModal('m-woche');return;}
+  showPwdModal(async(pwd)=>{
+    showSpinner('Wochenbericht wird gesendet...');
+    try{
+      const res=await fetch(`${MAIL_SERVER}/send-wochenbericht`,{
+        method:'POST',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({password:pwd,kontrollen:nk.map(k=>({kunde:k.kunde,typ:k.typ||'Kontrolle',datum:k.datumFmt}))})
+      });
+      const json=await res.json();
+      hideSpinner();
+      if(json.ok){showToast('Wochenbericht gesendet ✓','gold');closeModal('m-woche');}
+      else showToast('Fehler: '+json.error,'red');
+    }catch(e){hideSpinner();showToast('Verbindungsfehler','red');}
+  });
+}
+
+// ═══════════════════════════════════
+// RESET
+// ═══════════════════════════════════
+function resetAll(){
+  state.kunde=null;state.prodotti=[];state.fotos=[];state.curFoto=null;
+  document.getElementById('k-avatar').textContent='–';
+  document.getElementById('k-name').textContent='Kunde auswählen';
+  document.getElementById('k-sub').textContent='Antippen um Kunde zu wählen';
+  document.querySelectorAll('.ablock').forEach(b=>{
+    b.classList.remove('on');
+    const body=b.querySelector('.abody');
+    if(body) body.style.display='none';
+  });
+  document.getElementById('custom-azioni').innerHTML='';
+  renderProdottiForm();renderFotos();
+  clearCanvas('sig-k');
+  document.getElementById('sig-k-name').value='';
+  document.getElementById('nofirma-cb').checked=false;
+  document.getElementById('nofirma-ta').style.display='none';
+  document.getElementById('nofirma-ta').value='';
+  document.getElementById('next-check-input').value='';
+  setToday();_resetTimer();
+}
+
+// ═══════════════════════════════════
 // PDF GENERATION
-// ═══════════════════════════════════════════
-async function buildPDF() {
-  const { jsPDF } = window.jspdf;
-  const doc = new jsPDF({ orientation:'portrait', unit:'mm', format:'a4' });
-  const W=210, H=297, ml=16, mr=16, mt=16;
-  let y = mt;
+// ═══════════════════════════════════
+async function buildPDF(){
+  const{jsPDF}=window.jspdf;
+  const doc=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
+  const W=210,H=297,ml=16,mr=16,mt=16;
+  let y=mt;
+  const green=[23,56,45],gold=[217,166,79],gray=[111,108,100],black=[40,37,29];
 
-  const datum = document.getElementById('datum-input').value;
-  const datumFmt = datum ? new Date(datum+'T12:00:00').toLocaleDateString('de-DE',{day:'2-digit',month:'long',year:'numeric'}) : '—';
-  const azioni = getAzioni();
-  const arbeitszeit = getTimerStr();
-  const nextCheck = document.getElementById('next-check-input').value;
-  const nextCheckFmt = nextCheck ? new Date(nextCheck+'T12:00:00').toLocaleDateString('de-DE',{day:'2-digit',month:'long',year:'numeric'}) : null;
-
-  const green = [23,56,45], gold = [217,166,79], gray = [111,108,100], black = [40,37,29], light = [247,246,242];
+  const datum=document.getElementById('datum-input').value;
+  const datumFmt=datum?new Date(datum+'T12:00:00').toLocaleDateString('de-DE',{day:'2-digit',month:'long',year:'numeric'}):'—';
+  const azioni=getAzioni();
+  const nextCheck=document.getElementById('next-check-input').value;
+  const nextFmt=nextCheck?new Date(nextCheck+'T12:00:00').toLocaleDateString('de-DE',{day:'2-digit',month:'long',year:'numeric'}):null;
 
   // HEADER
-  doc.setFillColor(...green);
-  doc.rect(0,0,W,28,'F');
-  doc.setFillColor(...gold);
-  doc.rect(0,28,W,1.5,'F');
-  try { doc.addImage('logo.png','PNG',ml,6,28,16); } catch(e){}
-  doc.setTextColor(217,166,79); doc.setFontSize(9); doc.setFont('helvetica','bold');
-  doc.text('MADLEAF', ml+32, 13);
-  doc.setTextColor(255,255,255); doc.setFontSize(15); doc.setFont('helvetica','bold');
-  doc.text('Arbeitsbericht', ml+32, 21);
-  doc.setFontSize(9); doc.setFont('helvetica','normal'); doc.setTextColor(200,220,210);
-  doc.text(datumFmt, W-mr, 17, {align:'right'});
-
-  y = 36;
+  doc.setFillColor(...green);doc.rect(0,0,W,28,'F');
+  doc.setFillColor(...gold);doc.rect(0,28,W,1.5,'F');
+  try{doc.addImage('logo.png','PNG',ml,6,28,16);}catch(e){}
+  doc.setTextColor(...gold);doc.setFontSize(9);doc.setFont('helvetica','bold');
+  doc.text('MADLEAF',ml+32,13);
+  doc.setTextColor(255,255,255);doc.setFontSize(15);doc.setFont('helvetica','bold');
+  doc.text('Arbeitsbericht',ml+32,21);
+  doc.setFontSize(9);doc.setFont('helvetica','normal');doc.setTextColor(200,220,210);
+  doc.text(datumFmt,W-mr,17,{align:'right'});
+  y=36;
 
   // ABSENDER / EMPFÄNGER
-  doc.setTextColor(...black); doc.setFontSize(8); doc.setFont('helvetica','bold');
-  doc.text('Dr. Giuseppe Maddalena', ml, y);
-  doc.setFont('helvetica','normal'); doc.setTextColor(...gray);
-  doc.text('Applied Entomology & Environmental Risk', ml, y+4);
-  doc.text('Schillerstraße 8, 79369 Wyhl am Kaiserstuhl', ml, y+8);
-  doc.text(`${MY_PHONE}  |  giuseppe.maddalena@madleaf.de`, ml, y+12);
-
-  if (state.kunde) {
-    doc.setTextColor(...black); doc.setFont('helvetica','bold');
-    doc.text(state.kunde.name, W-mr, y, {align:'right'});
-    doc.setFont('helvetica','normal'); doc.setTextColor(...gray);
-    if (state.kunde.address) doc.text(state.kunde.address, W-mr, y+4, {align:'right'});
-    if (state.kunde.city) doc.text(state.kunde.city, W-mr, y+8, {align:'right'});
-    if (state.kunde.email) doc.text(state.kunde.email, W-mr, y+12, {align:'right'});
-    if (state.kunde.phone) doc.text(state.kunde.phone, W-mr, y+16, {align:'right'});
+  doc.setTextColor(...black);doc.setFontSize(8);doc.setFont('helvetica','bold');
+  doc.text('Dr. Giuseppe Maddalena',ml,y);
+  doc.setFont('helvetica','normal');doc.setTextColor(...gray);
+  doc.text('Applied Entomology & Environmental Risk',ml,y+4);
+  doc.text('Schillerstraße 8, 79369 Wyhl am Kaiserstuhl',ml,y+8);
+  doc.text(`${MY_PHONE}  |  ${MY_EMAIL}`,ml,y+12);
+  if(state.kunde){
+    doc.setTextColor(...black);doc.setFont('helvetica','bold');
+    doc.text(state.kunde.name,W-mr,y,{align:'right'});
+    doc.setFont('helvetica','normal');doc.setTextColor(...gray);
+    if(state.kunde.address) doc.text(state.kunde.address,W-mr,y+4,{align:'right'});
+    if(state.kunde.city) doc.text(state.kunde.city,W-mr,y+8,{align:'right'});
+    if(state.kunde.email) doc.text(state.kunde.email,W-mr,y+12,{align:'right'});
+    if(state.kunde.phone) doc.text(state.kunde.phone,W-mr,y+16,{align:'right'});
   }
-
-  y += 22;
-  doc.setDrawColor(220,216,210); doc.setLineWidth(0.3);
-  doc.line(ml,y,W-mr,y); y += 6;
+  y+=22;
+  doc.setDrawColor(220,216,210);doc.setLineWidth(0.3);doc.line(ml,y,W-mr,y);y+=6;
 
   // INFO BOX
-  doc.setFillColor(247,246,242);
-  doc.roundedRect(ml,y,W-ml-mr,18,2,2,'F');
-  doc.setDrawColor(...gold); doc.setLineWidth(0.5);
-  doc.roundedRect(ml,y,W-ml-mr,18,2,2,'S');
-  doc.setFillColor(...gold); doc.rect(ml,y,2,18,'F');
-  doc.setTextColor(...gold); doc.setFontSize(7); doc.setFont('helvetica','bold');
-  doc.text('DATUM', ml+5, y+5);
-  doc.text('ARBEITSZEIT', ml+65, y+5);
-  if (state.gps) doc.text('GPS', ml+125, y+5);
-  doc.setTextColor(...black); doc.setFontSize(10); doc.setFont('helvetica','bold');
-  doc.text(datumFmt, ml+5, y+13);
-  doc.text(arbeitszeit, ml+65, y+13);
-  if (state.gps) { doc.setFontSize(8); doc.text(`${state.gps.lat}, ${state.gps.lon}`, ml+125, y+13); }
-  y += 24;
+  doc.setFillColor(247,246,242);doc.roundedRect(ml,y,W-ml-mr,18,2,2,'F');
+  doc.setFillColor(...gold);doc.rect(ml,y,2,18,'F');
+  doc.setTextColor(...gold);doc.setFontSize(7);doc.setFont('helvetica','bold');
+  doc.text('DATUM',ml+5,y+5);doc.text('ARBEITSZEIT',ml+65,y+5);
+  if(state.gps) doc.text('GPS',ml+125,y+5);
+  doc.setTextColor(...black);doc.setFontSize(10);doc.setFont('helvetica','bold');
+  doc.text(datumFmt,ml+5,y+13);doc.text(getTimerStr(),ml+65,y+13);
+  if(state.gps){doc.setFontSize(8);doc.text(`${state.gps.lat}, ${state.gps.lon}`,ml+125,y+13);}
+  y+=24;
 
   // AZIONI
-  if (azioni.length) {
-    doc.setFillColor(...green);
-    doc.roundedRect(ml,y,W-ml-mr,7,1,1,'F');
-    doc.setTextColor(255,255,255); doc.setFontSize(9); doc.setFont('helvetica','bold');
-    doc.text('DURCHGEFÜHRTE MASSNAHMEN', ml+4, y+4.5);
-    y += 10;
-    azioni.forEach(az => {
-      const lines = doc.splitTextToSize(az, W-ml-mr-10);
-      const bh = lines.length*4.5+8;
-      if (y+bh > H-35) { addFooter(doc,W,H,ml,mr,green,gray,MY_PHONE); doc.addPage(); y=mt; }
-      doc.setFillColor(252,251,248); doc.roundedRect(ml,y,W-ml-mr,bh,2,2,'F');
-      doc.setFillColor(...gold); doc.rect(ml,y,2.5,bh,'F');
-      doc.setDrawColor(235,230,220); doc.setLineWidth(0.3);
-      doc.roundedRect(ml,y,W-ml-mr,bh,2,2,'S');
-      doc.setTextColor(...black); doc.setFontSize(9); doc.setFont('helvetica','normal');
-      lines.forEach((l,li) => doc.text(l, ml+6, y+5.5+li*4.5));
-      y += bh+4;
-    });
-    y += 4;
+  if(azioni.length){
+    doc.setFillColor(...green);doc.roundedRect(ml,y,W-ml-mr,7,1,1,'F');
+    doc.setTextColor(255,255,255);doc.setFontSize(9);doc.setFont('helvetica','bold');
+    doc.text('DURCHGEFÜHRTE MASSNAHMEN',ml+4,y+4.5);y+=10;
+    azioni.forEach(az=>{
+      const lines=doc.splitTextToSize(az,W-ml-mr-10);
+      const bh=lines.length*4.5+8;
+      if(y+bh>H-35){_addFooter(doc,W,H,ml,mr,green,gray);doc.addPage();y=mt;}
+      doc.setFillColor(252,251,248);doc.roundedRect(ml,y,W-ml-mr,bh,2,2,'F');
+      doc.setFillColor(...gold);doc.rect(ml,y,2.5,bh,'F');
+      doc.setDrawColor(235,230,220);doc.setLineWidth(0.3);doc.roundedRect(ml,y,W-ml-mr,bh,2,2,'S');
+      doc.setTextColor(...black);doc.setFontSize(9);doc.setFont('helvetica','normal');
+      lines.forEach((l,li)=>doc.text(l,ml+6,y+5.5+li*4.5));
+      y+=bh+4;
+    });y+=4;
   }
 
   // PRODOTTI
-  if (state.prodotti.length) {
-    if (y+30 > H-35) { addFooter(doc,W,H,ml,mr,green,gray,MY_PHONE); doc.addPage(); y=mt; }
-    doc.setFillColor(...gold);
-    doc.roundedRect(ml,y,W-ml-mr,7,1,1,'F');
-    doc.setTextColor(...green); doc.setFontSize(9); doc.setFont('helvetica','bold');
-    doc.text('EINGESETZTE MITTEL', ml+4, y+4.5);
-    y += 10;
-    state.prodotti.forEach(p => {
-      if (y+20 > H-35) { addFooter(doc,W,H,ml,mr,green,gray,MY_PHONE); doc.addPage(); y=mt; }
-      doc.setFillColor(252,251,248); doc.roundedRect(ml,y,W-ml-mr,20,2,2,'F');
-      doc.setDrawColor(235,230,220); doc.setLineWidth(0.3);
-      doc.roundedRect(ml,y,W-ml-mr,20,2,2,'S');
-      doc.setFillColor(...gold); doc.rect(ml,y,2.5,20,'F');
-      doc.setTextColor(...black); doc.setFontSize(10); doc.setFont('helvetica','bold');
-      doc.text(p.name, ml+6, y+6);
-      doc.setFontSize(8); doc.setFont('helvetica','normal'); doc.setTextColor(...gray);
-      doc.text(`${p.wirkstoff}  ·  ${p.dosierung}`, ml+6, y+11);
-      if (p.qty) { doc.setTextColor(...green); doc.text(`Verbraucht: ${p.qty}`, ml+6, y+16); }
-      if (p.klasse) {
-        doc.setFillColor(240,244,240); doc.roundedRect(W-mr-30,y+4,26,6,1,1,'F');
-        doc.setTextColor(...green); doc.setFontSize(7); doc.setFont('helvetica','bold');
-        doc.text(p.klasse, W-mr-17, y+8, {align:'center'});
+  if(state.prodotti.length){
+    if(y+30>H-35){_addFooter(doc,W,H,ml,mr,green,gray);doc.addPage();y=mt;}
+    doc.setFillColor(...gold);doc.roundedRect(ml,y,W-ml-mr,7,1,1,'F');
+    doc.setTextColor(...green);doc.setFontSize(9);doc.setFont('helvetica','bold');
+    doc.text('EINGESETZTE MITTEL',ml+4,y+4.5);y+=10;
+    state.prodotti.forEach(p=>{
+      if(y+22>H-35){_addFooter(doc,W,H,ml,mr,green,gray);doc.addPage();y=mt;}
+      doc.setFillColor(252,251,248);doc.roundedRect(ml,y,W-ml-mr,22,2,2,'F');
+      doc.setFillColor(...gold);doc.rect(ml,y,2.5,22,'F');
+      doc.setDrawColor(235,230,220);doc.setLineWidth(0.3);doc.roundedRect(ml,y,W-ml-mr,22,2,2,'S');
+      doc.setTextColor(...black);doc.setFontSize(10);doc.setFont('helvetica','bold');doc.text(p.name,ml+6,y+6);
+      doc.setFontSize(8);doc.setFont('helvetica','normal');doc.setTextColor(...gray);
+      doc.text(`${p.wirkstoff}  ·  ${p.dosierung}`,ml+6,y+11);
+      if(p.qty){doc.setTextColor(...green);doc.text(`Verbraucht: ${p.qty}`,ml+6,y+16);}
+      if(p.klasse){
+        doc.setFillColor(240,244,240);doc.roundedRect(W-mr-32,y+4,28,6,1,1,'F');
+        doc.setTextColor(...green);doc.setFontSize(7);doc.setFont('helvetica','bold');
+        doc.text(p.klasse,W-mr-18,y+8,{align:'center'});
       }
-      y += 24;
-    });
-    y += 4;
+      y+=26;
+    });y+=4;
   }
 
-  // PROSSIMA VISITA
-  if (nextCheckFmt) {
-    if (y+18 > H-35) { addFooter(doc,W,H,ml,mr,green,gray,MY_PHONE); doc.addPage(); y=mt; }
-    doc.setFillColor(252,247,235); doc.roundedRect(ml,y,W-ml-mr,14,2,2,'F');
-    doc.setFillColor(...gold); doc.rect(ml,y,2.5,14,'F');
-    doc.setDrawColor(...gold); doc.setLineWidth(0.5);
-    doc.roundedRect(ml,y,W-ml-mr,14,2,2,'S');
-    doc.setTextColor(...green); doc.setFontSize(9); doc.setFont('helvetica','bold');
-    doc.text(`Nächste Kontrolle: ${nextCheckFmt}`, ml+6, y+8.5);
-    y += 18;
+  // NÄCHSTE KONTROLLE
+  if(nextFmt){
+    if(y+16>H-35){_addFooter(doc,W,H,ml,mr,green,gray);doc.addPage();y=mt;}
+    doc.setFillColor(252,247,235);doc.roundedRect(ml,y,W-ml-mr,14,2,2,'F');
+    doc.setFillColor(...gold);doc.rect(ml,y,2.5,14,'F');
+    doc.setDrawColor(...gold);doc.setLineWidth(0.5);doc.roundedRect(ml,y,W-ml-mr,14,2,2,'S');
+    doc.setTextColor(...green);doc.setFontSize(9);doc.setFont('helvetica','bold');
+    doc.text(`Nächste Kontrolle: ${nextFmt}`,ml+6,y+8.5);y+=18;
   }
 
   // FOTO
-  if (state.fotos.length) {
-    addFooter(doc,W,H,ml,mr,green,gray,MY_PHONE); doc.addPage(); y=mt;
-    doc.setFillColor(...green); doc.roundedRect(ml,y,W-ml-mr,7,1,1,'F');
-    doc.setTextColor(255,255,255); doc.setFontSize(9); doc.setFont('helvetica','bold');
-    doc.text('FOTODOKUMENTATION', ml+4, y+4.5);
-    y += 12;
-
-    for (const foto of state.fotos) {
-      try {
-        const img = new Image(); img.src = foto.data;
-        await new Promise(r => { img.onload=r; });
-        const maxW=W-ml-mr, maxH=90;
-        const ratio = Math.min(maxW/img.width, maxH/img.height);
-        const fw=img.width*ratio, fh=img.height*ratio;
-        if (y+fh+16 > H-35) { addFooter(doc,W,H,ml,mr,green,gray,MY_PHONE); doc.addPage(); y=mt; }
+  if(state.fotos.length){
+    _addFooter(doc,W,H,ml,mr,green,gray);doc.addPage();y=mt;
+    doc.setFillColor(...green);doc.roundedRect(ml,y,W-ml-mr,7,1,1,'F');
+    doc.setTextColor(255,255,255);doc.setFontSize(9);doc.setFont('helvetica','bold');
+    doc.text('FOTODOKUMENTATION',ml+4,y+4.5);y+=12;
+    for(const foto of state.fotos){
+      try{
+        const img=new Image();img.src=foto.data;
+        await new Promise(r=>{img.onload=r;});
+        const maxW=W-ml-mr,maxH=90;
+        const ratio=Math.min(maxW/img.width,maxH/img.height);
+        const fw=img.width*ratio,fh=img.height*ratio;
+        if(y+fh+18>H-35){_addFooter(doc,W,H,ml,mr,green,gray);doc.addPage();y=mt;}
         doc.addImage(foto.data,'JPEG',ml,y,fw,fh,undefined,'MEDIUM');
-        if (foto.gps) {
-          doc.setFillColor(247,246,242); doc.roundedRect(ml,y+fh-6,42,5.5,1,1,'F');
-          doc.setTextColor(...green); doc.setFontSize(7);
-          doc.text(`GPS: ${foto.gps}`, ml+2, y+fh-2.5);
+        if(foto.gps){
+          doc.setFillColor(247,246,242);doc.roundedRect(ml,y+fh-6,44,5.5,1,1,'F');
+          doc.setTextColor(...green);doc.setFontSize(7);
+          doc.text(`GPS: ${foto.gps}`,ml+2,y+fh-2.5);
         }
-        y += fh+4;
-        if (foto.desc) {
-          doc.setTextColor(...gray); doc.setFontSize(8); doc.setFont('helvetica','italic');
-          const dl = doc.splitTextToSize(foto.desc, W-ml-mr);
-          doc.text(dl, ml, y); y += dl.length*4+6;
-        } else { y += 4; }
-      } catch(e){ y+=4; }
+        y+=fh+4;
+        if(foto.desc){
+          doc.setTextColor(...gray);doc.setFontSize(8);doc.setFont('helvetica','italic');
+          const dl=doc.splitTextToSize(foto.desc,W-ml-mr);
+          doc.text(dl,ml,y);y+=dl.length*4+6;
+        }else{y+=4;}
+      }catch(e){y+=4;}
     }
   }
 
   // FIRME
-  if (y+55 > H-35) { addFooter(doc,W,H,ml,mr,green,gray,MY_PHONE); doc.addPage(); y=mt; }
-  else y += 6;
-  doc.setDrawColor(220,216,210); doc.setLineWidth(0.3); doc.line(ml,y,W-mr,y); y += 8;
+  if(y+60>H-35){_addFooter(doc,W,H,ml,mr,green,gray);doc.addPage();y=mt;}
+  else y+=6;
+  doc.setDrawColor(220,216,210);doc.setLineWidth(0.3);doc.line(ml,y,W-mr,y);y+=8;
 
-  const half = (W-ml-mr)/2-5;
-  const sigKCanvas = document.getElementById('sig-k');
-  const nofirma = document.getElementById('nofirma-cb').checked;
-  const sigName = document.getElementById('sig-k-name').value.trim();
+  const half=(W-ml-mr)/2-5;
+  const nofirma=document.getElementById('nofirma-cb').checked;
+  const sigName=document.getElementById('sig-k-name').value.trim();
 
   // Firma cliente
-  doc.setTextColor(...gray); doc.setFontSize(8); doc.setFont('helvetica','normal');
-  doc.text('Unterschrift Kunde', ml, y);
-  if (sigName) { doc.setFont('helvetica','bold'); doc.setTextColor(...black); doc.text(sigName, ml, y+4); doc.setFont('helvetica','normal'); }
-  if (nofirma) {
-    const reason = document.getElementById('nofirma-ta').value;
-    doc.setTextColor(...black); doc.setFontSize(8);
-    doc.text('Unterschrift nicht möglich.', ml, y+10);
-    if (reason) { const rl = doc.splitTextToSize(reason,half); doc.text(rl,ml,y+15); }
-  } else {
-    doc.setDrawColor(220,216,210); doc.roundedRect(ml,y+6,half,22,2,2,'S');
-    try { doc.addImage(sigKCanvas.toDataURL('image/png'),'PNG',ml+1,y+7,half-2,20); } catch(e){}
+  doc.setTextColor(...gray);doc.setFontSize(8);doc.setFont('helvetica','normal');
+  doc.text('Unterschrift Kunde',ml,y);
+  if(sigName){doc.setFont('helvetica','bold');doc.setTextColor(...black);doc.text(sigName,ml,y+5);doc.setFont('helvetica','normal');}
+  if(nofirma){
+    const reason=document.getElementById('nofirma-ta').value;
+    doc.setTextColor(...black);doc.setFontSize(8);
+    doc.text('Unterschrift nicht möglich.',ml,y+12);
+    if(reason){const rl=doc.splitTextToSize(reason,half);doc.text(rl,ml,y+17);}
+  }else{
+    doc.setDrawColor(220,216,210);doc.roundedRect(ml,y+8,half,26,2,2,'S');
+    try{doc.addImage(document.getElementById('sig-k').toDataURL('image/png'),'PNG',ml+1,y+9,half-2,24);}catch(e){}
   }
 
   // Firma mia
-  const sigX = ml+half+10;
-  doc.setTextColor(...gray); doc.setFontSize(8); doc.setFont('helvetica','normal');
-  doc.text('Unterschrift MadLeaf', sigX, y);
-  try { doc.addImage('Signature_giuseppe.png','PNG',sigX,y+6,half,18,undefined,'FAST'); }
-  catch(e) {
-    doc.setFillColor(247,246,242); doc.roundedRect(sigX,y+6,half,18,2,2,'F');
-    doc.setTextColor(...green); doc.setFontSize(18); doc.setFont('helvetica','bold');
-    doc.text('GM', sigX+half/2, y+18, {align:'center'});
+  const sigX=ml+half+10;
+  doc.setTextColor(...gray);doc.setFontSize(8);doc.setFont('helvetica','normal');
+  doc.text('Unterschrift MadLeaf',sigX,y);
+  try{doc.addImage('Signature_giuseppe.png','PNG',sigX,y+8,half,20,undefined,'FAST');}
+  catch(e){
+    doc.setFillColor(247,246,242);doc.roundedRect(sigX,y+8,half,20,2,2,'F');
+    doc.setTextColor(...green);doc.setFontSize(18);doc.setFont('helvetica','bold');
+    doc.text('GM',sigX+half/2,y+21,{align:'center'});
   }
-  doc.setTextColor(...black); doc.setFontSize(8); doc.setFont('helvetica','bold');
-  doc.text('Dr. Giuseppe Maddalena', ml, y+32);
-  doc.setFont('helvetica','normal'); doc.setTextColor(...gray);
-  doc.text('Applied Entomology & Environmental Risk', ml, y+36);
-  doc.text(MY_PHONE, ml, y+40);
+  doc.setTextColor(...black);doc.setFontSize(8);doc.setFont('helvetica','bold');
+  doc.text('Dr. Giuseppe Maddalena',ml,y+38);
+  doc.setFont('helvetica','normal');doc.setTextColor(...gray);
+  doc.text('Applied Entomology & Environmental Risk',ml,y+43);
+  doc.text(MY_PHONE,ml,y+48);
 
-  // FOOTER SU OGNI PAGINA
-  const pages = doc.internal.getNumberOfPages();
-  for (let i=1; i<=pages; i++) { doc.setPage(i); addFooter(doc,W,H,ml,mr,green,gray,MY_PHONE); }
-
+  // FOOTER TUTTE LE PAGINE
+  const pages=doc.internal.getNumberOfPages();
+  for(let i=1;i<=pages;i++){doc.setPage(i);_addFooter(doc,W,H,ml,mr,green,gray);}
   return doc;
 }
 
-function addFooter(doc,W,H,ml,mr,green,gray,phone) {
-  doc.setFillColor(...green);
-  doc.rect(0,H-10,W,10,'F');
-  doc.setTextColor(200,220,210); doc.setFontSize(7); doc.setFont('helvetica','normal');
-  doc.text(`MadLeaf · Dr. Giuseppe Maddalena · Schillerstraße 8 · 79369 Wyhl am Kaiserstuhl · ${phone}`, ml, H-4.5);
-  doc.text(`Seite ${doc.internal.getCurrentPageInfo().pageNumber}`, W-mr, H-4.5, {align:'right'});
+function _addFooter(doc,W,H,ml,mr,green,gray){
+  doc.setFillColor(...green);doc.rect(0,H-10,W,10,'F');
+  doc.setTextColor(200,220,210);doc.setFontSize(7);doc.setFont('helvetica','normal');
+  doc.text(`MadLeaf · Dr. Giuseppe Maddalena · Schillerstraße 8 · 79369 Wyhl am Kaiserstuhl · ${MY_PHONE}`,ml,H-4.5);
+  doc.text(`Seite ${doc.internal.getCurrentPageInfo().pageNumber}`,W-mr,H-4.5,{align:'right'});
 }
 
-// ═══════════════════════════════════════════
+// ═══════════════════════════════════
 // FILENAME
-// ═══════════════════════════════════════════
-function buildFilename() {
-  const datum = document.getElementById('datum-input').value;
-  const d = datum ? datum.split('-').reverse().join('.') : 'keinDatum';
-  const k = state.kunde ? state.kunde.name.replace(/\s+/g,'_').replace(/[^a-zA-Z0-9_äöüÄÖÜß]/g,'') : 'keinKunde';
+// ═══════════════════════════════════
+function buildFilename(){
+  const datum=document.getElementById('datum-input').value;
+  const d=datum?datum.split('-').reverse().join('.'):'keinDatum';
+  const k=state.kunde?state.kunde.name.replace(/\s+/g,'_').replace(/[^a-zA-Z0-9_äöüÄÖÜß]/g,''):'keinKunde';
   return `MadLeaf_Bericht_${d}_${k}.pdf`;
 }
 
-// ═══════════════════════════════════════════
-// GENERATE & SEND
-// ═══════════════════════════════════════════
-async function generateAndSend() {
-  if (!state.kunde) { showToast('Bitte zuerst Kunde auswählen','red'); return; }
-  if (timerOn) stopTimer();
+// ═══════════════════════════════════
+// PASSWORD MODAL
+// ═══════════════════════════════════
+let _pwdCallback=null;
+
+function showPwdModal(callback){
+  _pwdCallback=callback;
+  document.getElementById('pwd-input').value='';
+  document.getElementById('pwd-overlay').classList.add('open');
+  setTimeout(()=>document.getElementById('pwd-input').focus(),300);
+}
+
+function cancelSend(){
+  document.getElementById('pwd-overlay').classList.remove('open');
+  _pwdCallback=null;
+}
+
+function confirmSend(){
+  const pwd=document.getElementById('pwd-input').value;
+  if(!pwd){showToast('Passwort eingeben','red');return;}
+  document.getElementById('pwd-overlay').classList.remove('open');
+  if(_pwdCallback) _pwdCallback(pwd);
+  _pwdCallback=null;
+}
+
+document.getElementById('pwd-input').addEventListener('keydown',e=>{
+  if(e.key==='Enter') confirmSend();
+});
+
+// ═══════════════════════════════════
+// GENERA PDF E APRE MODAL INVIO
+// ═══════════════════════════════════
+let _lastFilename = '';
+let _lastDatumFmt = '';
+let _lastNextFmt = '';
+
+async function generatePDF(){
+  if(!state.kunde){showToast('Bitte zuerst Kunde auswählen','red');return;}
+  if(_timerOn) _stopTimer();
   showSpinner('PDF wird erstellt...');
-  try {
-    const doc = await buildPDF();
-    const filename = buildFilename();
-    doc.save(filename);
+  try{
+    const doc=await buildPDF();
+    _lastFilename=buildFilename();
+    _lastDatumFmt=document.getElementById('datum-input').value
+      ? new Date(document.getElementById('datum-input').value+'T12:00:00').toLocaleDateString('de-DE',{day:'2-digit',month:'long',year:'numeric'})
+      : '—';
+    const nextCheck=document.getElementById('next-check-input').value;
+    _lastNextFmt=nextCheck
+      ? new Date(nextCheck+'T12:00:00').toLocaleDateString('de-DE',{day:'2-digit',month:'long',year:'numeric'})
+      : '';
+
+    // Scarica PDF sul telefono
+    doc.save(_lastFilename);
 
     // Salva in archivio
-    const archiv = getArchiv();
-    archiv.unshift({ name: filename, datum: document.getElementById('datum-input').value, kunde: state.kunde.name, ts: new Date().toISOString() });
-    if (archiv.length > 30) archiv.pop();
+    const archiv=getArchiv();
+    archiv.unshift({name:_lastFilename,datum:document.getElementById('datum-input').value,kunde:state.kunde.name,ts:new Date().toISOString()});
+    if(archiv.length>30) archiv.pop();
     saveArchiv(archiv);
 
-    hideSpinner();
-
-    const datum = document.getElementById('datum-input').value;
-    const datumFmt = datum ? new Date(datum+'T12:00:00').toLocaleDateString('de-DE',{day:'2-digit',month:'long',year:'numeric'}) : '—';
-    const nextCheck = document.getElementById('next-check-input').value;
-    const nextCheckFmt = nextCheck ? new Date(nextCheck+'T12:00:00').toLocaleDateString('de-DE',{day:'2-digit',month:'long',year:'numeric'}) : null;
-
-    const mailData = {
-      to: state.kunde.email || '',
-      kunde: state.kunde.name,
-      datum: datumFmt,
-      nextcheck: nextCheckFmt || '—',
-      filename
-    };
-
-    if (navigator.onLine && state.kunde.email) {
-      showSpinner('E-Mail wird gesendet...');
-      await sendEmail(mailData);
-      hideSpinner();
-      showToast('PDF gespeichert & E-Mail gesendet ✓','gold');
-    } else {
-      if (state.kunde.email) {
-        const q = getQueue(); q.push(mailData); saveQueue(q);
-        showToast('PDF gespeichert — E-Mail wird gesendet wenn online','');
-      } else {
-        showToast('PDF gespeichert ✓','gold');
-      }
+    // Salva Nachkontrolle
+    if(nextCheck&&state.kunde){
+      const nk=getNachkontrollen();
+      nk.push({kunde:state.kunde.name,datum:nextCheck,datumFmt:_lastNextFmt,typ:'Nachkontrolle',done:false,ts:new Date().toISOString()});
+      saveNachkontrollen(nk);
     }
 
-    setTimeout(() => { if(confirm('Neuen Bericht erstellen? Alle Daten werden zurückgesetzt.')) resetAll(); }, 500);
+    hideSpinner();
+    // Apre modal con opzioni invio
+    openModal('m-send');
 
-  } catch(e) {
+  }catch(e){
     hideSpinner();
     console.error(e);
-    showToast('Fehler — bitte erneut versuchen','red');
+    showToast('Fehler beim Erstellen','red');
   }
 }
 
-async function sendEmail(data) {
-  await emailjs.send(EMAILJS_SVC, EMAILJS_TPL, {
-    to_email: data.to,
-    cc_email: MY_EMAIL,
-    kunde_name: data.kunde,
-    datum: data.datum,
-    next_check: data.nextcheck,
-    message: `Anbei der Arbeitsbericht der Begehung vom ${data.datum}.${data.nextcheck !== '—' ? `\n\nNächste Kontrolle: ${data.nextcheck}` : ''}`
-  });
-
-  // Email promemoria prossima visita
-  if (data.nextcheck && data.nextcheck !== '—') {
-    const nextDate = document.getElementById('next-check-input').value;
-    if (nextDate) {
-      const reminderDate = new Date(nextDate);
-      reminderDate.setDate(reminderDate.getDate() - 3);
-      // Salva promemoria in queue separata
-      const reminders = JSON.parse(localStorage.getItem('ml_reminders') || '[]');
-      reminders.push({
-        kunde: data.kunde,
-        nextcheck: data.nextcheck,
-        reminderDate: reminderDate.toISOString().split('T')[0],
-        sent: false
-      });
-      localStorage.setItem('ml_reminders', JSON.stringify(reminders));
-    }
-  }
+function sendViaMail(){
+  const to=state.kunde?.email||'';
+  const subject=encodeURIComponent(`MadLeaf – Arbeitsbericht ${_lastDatumFmt}`);
+  const nc=_lastNextFmt?`\n\nNächste Kontrolle: ${_lastNextFmt}`:'';
+  const body=encodeURIComponent(
+    `Sehr geehrte Damen und Herren,\n\nanbei erhalten Sie den Arbeitsbericht der Begehung vom ${_lastDatumFmt}.\nBitte fügen Sie die Datei "${_lastFilename}" aus Ihrem Download-Ordner bei.${nc}\n\nMit freundlichen Grüßen\n\nDr. Giuseppe Maddalena\nMadLeaf – Applied Entomology & Environmental Risk\n${MY_PHONE}\ngiuseppe.maddalena@madleaf.de\nwww.madleaf.de`
+  );
+  window.location.href=`mailto:${to}?subject=${subject}&body=${body}`;
+  setTimeout(()=>{
+    closeModal('m-send');
+    setTimeout(()=>{if(confirm('Neuen Bericht erstellen? Alle Daten werden zurückgesetzt.')) resetAll();},400);
+  },500);
 }
 
-async function checkOnlineQueue() {
-  const q = getQueue();
-  if (!q.length || !navigator.onLine) return;
-  const rem = [];
-  for (const item of q) {
-    try { await sendEmail(item); }
-    catch(e) { rem.push(item); }
-  }
-  saveQueue(rem);
-
-  // Controlla promemoria
-  checkReminders();
+function sendViaWhatsApp(){
+  const phone=(state.kunde?.phone||'').replace(/\D/g,'');
+  const nc=_lastNextFmt?`\n\n📅 Nächste Kontrolle: ${_lastNextFmt}`:'';
+  const msg=encodeURIComponent(
+    `Sehr geehrte Damen und Herren,\n\nanbei der Arbeitsbericht vom ${_lastDatumFmt}.\nBitte öffnen Sie die Datei "${_lastFilename}" aus Ihrem Download-Ordner.${nc}\n\nMit freundlichen Grüßen\nDr. Giuseppe Maddalena – MadLeaf`
+  );
+  const url=phone
+    ? `https://wa.me/${phone}?text=${msg}`
+    : `https://wa.me/?text=${msg}`;
+  window.open(url,'_blank');
+  setTimeout(()=>{
+    closeModal('m-send');
+    setTimeout(()=>{if(confirm('Neuen Bericht erstellen? Alle Daten werden zurückgesetzt.')) resetAll();},400);
+  },500);
 }
 
-async function checkReminders() {
-  const today = new Date().toISOString().split('T')[0];
-  const reminders = JSON.parse(localStorage.getItem('ml_reminders') || '[]');
-  let changed = false;
-  for (const r of reminders) {
-    if (!r.sent && r.reminderDate <= today) {
-      try {
-        await emailjs.send(EMAILJS_SVC, EMAILJS_TPL, {
-          to_email: MY_EMAIL,
-          cc_email: MY_EMAIL,
-          kunde_name: r.kunde,
-          datum: r.nextcheck,
-          next_check: r.nextcheck,
-          message: `⏰ ERINNERUNG: Nächste Kontrolle bei ${r.kunde} am ${r.nextcheck} — bitte rechtzeitig vorbereiten.`
+// Controlla promemoria all'avvio se online
+window.addEventListener('load',()=>{
+  if(navigator.onLine) checkReminders();
+});
+
+async function checkReminders(){
+  const today=new Date().toISOString().split('T')[0];
+  const reminders=JSON.parse(localStorage.getItem('ml_reminders')||'[]');
+  let changed=false;
+  for(const r of reminders){
+    if(!r.sent&&r.reminderDate<=today&&r.pwd){
+      try{
+        await fetch(`${MAIL_SERVER}/send-reminder`,{
+          method:'POST',headers:{'Content-Type':'application/json'},
+          body:JSON.stringify({password:r.pwd,kunde:r.kunde,datum:r.datum})
         });
-        r.sent = true; changed = true;
-      } catch(e){}
+        r.sent=true;changed=true;
+      }catch(e){}
     }
   }
-  if (changed) localStorage.setItem('ml_reminders', JSON.stringify(reminders));
+  if(changed) localStorage.setItem('ml_reminders',JSON.stringify(reminders));
 }
 
-// ═══════════════════════════════════════════
-// ARCHIVIO
-// ═══════════════════════════════════════════
-function renderArchiv() {
-  const archiv = getArchiv();
-  const c = document.getElementById('arch-list');
-  if (!archiv.length) { c.innerHTML = '<p style="font-size:13px;color:var(--muted);padding:10px 0">Noch keine Berichte erstellt.</p>'; return; }
-  c.innerHTML = archiv.map(a => `
-    <div class="arch-item">
-      <div class="arch-name">${a.name}</div>
-      <div class="arch-date">${a.kunde} · ${new Date(a.ts).toLocaleString('de-DE')}</div>
-    </div>`).join('');
+// ═══════════════════════════════════
+// ARCHIVIO & DRAFT
+// ═══════════════════════════════════
+function renderArchiv(){
+  const a=getArchiv(),c=document.getElementById('arch-list');
+  if(!a.length){c.innerHTML='<p style="font-size:13px;color:var(--muted);padding:10px 0">Noch keine Berichte.</p>';return;}
+  c.innerHTML=a.map(x=>`<div class="arch-item">
+    <div class="arch-name">${x.name}</div>
+    <div class="arch-sub">${x.kunde||'—'} · ${new Date(x.ts).toLocaleString('de-DE')}</div>
+  </div>`).join('');
 }
 
-// ═══════════════════════════════════════════
-// DRAFT
-// ═══════════════════════════════════════════
-function saveDraft() {
-  const datum = document.getElementById('datum-input').value;
-  const archiv = getArchiv();
-  const name = `Entwurf_${datum}_${state.kunde ? state.kunde.name : 'keinKunde'}`;
-  archiv.unshift({ name, datum, kunde: state.kunde?.name || '—', ts: new Date().toISOString() });
-  if (archiv.length > 30) archiv.pop();
+function saveDraft(){
+  const datum=document.getElementById('datum-input').value;
+  const archiv=getArchiv();
+  archiv.unshift({name:`Entwurf_${datum}_${state.kunde?state.kunde.name:'keinKunde'}`,datum,kunde:state.kunde?.name||'—',ts:new Date().toISOString()});
+  if(archiv.length>30) archiv.pop();
   saveArchiv(archiv);
   showToast('Entwurf gespeichert ✓','gold');
 }
 
-// ═══════════════════════════════════════════
+// ═══════════════════════════════════
 // SPINNER & TOAST
-// ═══════════════════════════════════════════
-function showSpinner(txt) {
-  document.getElementById('spin-txt').textContent = txt || 'Bitte warten...';
+// ═══════════════════════════════════
+function showSpinner(txt){
+  document.getElementById('spin-txt').textContent=txt||'Bitte warten...';
   document.getElementById('spinner').classList.add('show');
 }
-function hideSpinner() { document.getElementById('spinner').classList.remove('show'); }
+function hideSpinner(){document.getElementById('spinner').classList.remove('show');}
 
-function showToast(msg, type='') {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.className = 'toast show' + (type ? ' '+type : '');
-  setTimeout(() => t.className = 'toast', 3000);
+function showToast(msg,type=''){
+  const t=document.getElementById('toast');
+  t.innerHTML=msg;
+  t.className='toast show'+(type?' '+type:'');
+  setTimeout(()=>t.className='toast',3500);
 }
 
-// ═══════════════════════════════════════════
-// MODALI — chiudi cliccando fuori
-// ═══════════════════════════════════════════
-document.querySelectorAll('.moverlay').forEach(o => {
-  o.addEventListener('click', e => { if(e.target===o) o.classList.remove('open'); });
+// Chiudi modal cliccando fuori
+document.querySelectorAll('.moverlay').forEach(o=>{
+  o.addEventListener('click',e=>{if(e.target===o) o.classList.remove('open');});
 });
 
 // SERVICE WORKER
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('sw.js').catch(e => console.log('SW:', e));
+if('serviceWorker' in navigator){
+  navigator.serviceWorker.register('sw.js').catch(e=>console.log('SW:',e));
 }
 </script>
 </body>
