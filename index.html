@@ -79,7 +79,7 @@ body{font-family:'Satoshi',Arial,sans-serif;background:var(--bg);min-height:100v
 .firma-sublbl{font-size:12px;color:var(--muted);font-weight:600;margin-bottom:6px}
 .firma-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
 .firma-clear{font-size:12px;color:var(--green);cursor:pointer;background:none;border:none;font-family:'Satoshi',Arial,sans-serif}
-.firma-canvas{border:1.5px solid var(--border);border-radius:8px;background:#fff;width:100%;height:160px;touch-action:none;display:block}
+.firma-canvas{border:1.5px solid var(--border);border-radius:8px;background:#fff;width:100%;height:200px;touch-action:none;display:block}
 .firma-name-input{width:100%;margin-top:8px;font-size:13px;padding:8px 10px;border:1px solid var(--border);border-radius:7px;background:var(--bg);color:var(--text);font-family:'Satoshi',Arial,sans-serif}
 .nofirma-row{display:flex;align-items:center;gap:8px;margin-top:8px}
 .nofirma-row label{font-size:12px;color:var(--muted)}
@@ -97,7 +97,6 @@ body{font-family:'Satoshi',Arial,sans-serif;background:var(--bg);min-height:100v
 .moverlay{display:none;position:fixed;inset:0;background:rgba(23,56,45,.5);z-index:300;align-items:flex-end;justify-content:center}
 .moverlay.open{display:flex}
 .modal{background:var(--surface);border-radius:20px 20px 0 0;width:100%;max-width:480px;padding:20px 16px 32px;max-height:88vh;overflow-y:auto}
-.modal-full{background:var(--surface);border-radius:20px 20px 0 0;width:100%;padding:20px 16px 32px;height:92vh;overflow-y:auto}
 .modal h3{font-size:16px;font-weight:700;color:var(--text);margin-bottom:14px}
 .mclose{float:right;font-size:24px;color:var(--muted);cursor:pointer;background:none;border:none;line-height:1}
 .modal input,.modal select,.modal textarea{width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:8px;font-size:14px;font-family:'Satoshi',Arial,sans-serif;margin-bottom:10px;color:var(--text);background:var(--bg)}
@@ -448,7 +447,7 @@ body{font-family:'Satoshi',Arial,sans-serif;background:var(--bg);min-height:100v
 </div>
 
 <div class="moverlay" id="m-prodotti">
-  <div class="modal-full">
+  <div class="modal">
     <button class="mclose" onclick="closeModal('m-prodotti')">×</button>
     <h3>Mittel auswählen</h3>
     <div id="psel-list"></div>
@@ -488,7 +487,7 @@ body{font-family:'Satoshi',Arial,sans-serif;background:var(--bg);min-height:100v
 </div>
 
 <div class="moverlay" id="m-new-azione">
-  <div class="modal-full">
+  <div class="modal">
     <button class="mclose" onclick="closeModal('m-new-azione')">×</button>
     <h3>Eigene Maßnahme</h3>
     <input type="text" id="na-label" placeholder="Kurzbezeichnung">
@@ -1169,19 +1168,19 @@ async function buildPDF(){
     doc.text('Unterschrift nicht möglich.',ml,y+12);
     if(reason){const rl=doc.splitTextToSize(reason,half);doc.text(rl,ml,y+17);}
   }else{
-    doc.setDrawColor(220,216,210);doc.roundedRect(ml,y+6,half,40,2,2,'S');
-    try{doc.addImage(document.getElementById('sig-k').toDataURL('image/png'),'PNG',ml+1,y+7,half-2,38);}catch(e){}
+    doc.setDrawColor(220,216,210);doc.roundedRect(ml,y+6,half,42,2,2,'S');
+    try{doc.addImage(document.getElementById('sig-k').toDataURL('image/png'),'PNG',ml+1,y+7,half-2,40);}catch(e){}
   }
 
   // Firma mia
   const sigX=ml+half+10;
   doc.setTextColor(...gray);doc.setFontSize(8);doc.setFont('helvetica','normal');
   doc.text('Unterschrift MadLeaf',sigX,y);
-  try{doc.addImage('Signature_giuseppe.png','PNG',sigX,y+6,half,40,undefined,'FAST');}
+  try{doc.addImage('Signature_giuseppe.png','PNG',sigX,y+6,half,42,undefined,'FAST');}
   catch(e){
-    doc.setFillColor(247,246,242);doc.roundedRect(sigX,y+6,half,40,2,2,'F');
+    doc.setFillColor(247,246,242);doc.roundedRect(sigX,y+6,half,42,2,2,'F');
     doc.setTextColor(...green);doc.setFontSize(22);doc.setFont('helvetica','bold');
-    doc.text('GM',sigX+half/2,y+28,{align:'center'});
+    doc.text('GM',sigX+half/2,y+30,{align:'center'});
   }
 
   // FOOTER TUTTE LE PAGINE
@@ -1290,7 +1289,7 @@ function sendViaMail(){
   const subject=encodeURIComponent(`MadLeaf – Arbeitsbericht ${_lastDatumFmt}`);
   const nc=_lastNextFmt?`\n\nNächste Kontrolle: ${_lastNextFmt}`:'';
   const body=encodeURIComponent(
-    `Sehr geehrte Damen und Herren,\n\nanbei erhalten Sie den Arbeitsbericht der Begehung vom ${_lastDatumFmt}.\n\n⚠ Bitte die Datei "${_lastFilename}" aus dem Download-Ordner anhängen!${nc}\n\nMit freundlichen Grüßen\n\nDr. Giuseppe Maddalena\nMadLeaf – Applied Entomology & Environmental Risk\n${MY_PHONE}\ngiuseppe.maddalena@madleaf.de\nwww.madleaf.de`
+    `Sehr geehrte Damen und Herren,\n\nanbei erhalten Sie den Arbeitsbericht der Begehung vom ${_lastDatumFmt}.\nBitte fügen Sie die Datei "${_lastFilename}" aus Ihrem Download-Ordner bei.${nc}\n\nMit freundlichen Grüßen\n\nDr. Giuseppe Maddalena\nMadLeaf – Applied Entomology & Environmental Risk\n${MY_PHONE}\ngiuseppe.maddalena@madleaf.de\nwww.madleaf.de`
   );
   window.location.href=`mailto:${to}?cc=${encodeURIComponent(MY_EMAIL)}&subject=${subject}&body=${body}`;
   setTimeout(()=>{
@@ -1314,6 +1313,8 @@ function sendViaWhatsApp(){
     setTimeout(()=>{if(confirm('Neuen Bericht erstellen? Alle Daten werden zurückgesetzt.')) resetAll();},400);
   },500);
 }
+
+
 
 // ═══════════════════════════════════
 // ARCHIVIO & DRAFT
