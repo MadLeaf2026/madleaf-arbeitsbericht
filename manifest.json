@@ -1,13 +1,25 @@
 {
   "name": "MadLeaf Arbeitsbericht",
   "short_name": "MadLeaf",
-  "start_url": "/index.html",
+  "description": "MadLeaf Field Report App",
+  "start_url": "/madleaf-arbeitsbericht/index.html",
+  "scope": "/madleaf-arbeitsbericht/",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#1a5c3a",
   "orientation": "portrait",
+  "background_color": "#17382d",
+  "theme_color": "#17382d",
   "icons": [
-    { "src": "logo.png", "sizes": "192x192", "type": "image/png" },
-    { "src": "logo.png", "sizes": "512x512", "type": "image/png" }
+    {
+      "src": "/madleaf-arbeitsbericht/logo.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/madleaf-arbeitsbericht/logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
   ]
 }

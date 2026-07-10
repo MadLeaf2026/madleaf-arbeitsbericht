@@ -168,7 +168,7 @@ body{font-family:'Satoshi',Arial,sans-serif;background:var(--bg);min-height:100v
 
 <div class="topbar">
   <div class="topbar-brand">
-    <div class="sub">MadLeaf · v3.4</div>
+    <div class="sub">MadLeaf · v3.5</div>
     <div class="title">Arbeitsbericht</div>
   </div>
   <div class="topbar-icons">
@@ -846,17 +846,8 @@ function addFotos(input){
   Array.from(input.files).forEach(file=>{
     const r=new FileReader();
     r.onload=e=>{
-      const img=new Image();
-      img.onload=()=>{
-        const MAX=800;
-        let w=img.width,h=img.height;
-        if(w>MAX||h>MAX){if(w>h){h=Math.round(h*MAX/w);w=MAX;}else{w=Math.round(w*MAX/h);h=MAX;}}
-        const c=document.createElement('canvas');c.width=w;c.height=h;
-        c.getContext('2d').drawImage(img,0,0,w,h);
-        state.fotos.push({data:c.toDataURL('image/jpeg',0.60),desc:'',gps:state.gps?`${state.gps.lat},${state.gps.lon}`:''});
-        renderFotos();
-      };
-      img.src=e.target.result;
+      state.fotos.push({data:e.target.result,desc:'',gps:state.gps?`${state.gps.lat},${state.gps.lon}`:''});
+      renderFotos();
     };
     r.readAsDataURL(file);
   });
@@ -1127,38 +1118,66 @@ async function buildPDF(){
     doc.text(`Nächste Kontrolle: ${nextFmt}`,ml+6,y+8.5);y+=18;
   }
 
-  // FOTO
+  // FOTO — 2 per riga, max altezza 85mm per foto
   if(state.fotos.length){
     _addFooter(doc,W,H,ml,mr,green,gray);doc.addPage();y=mt;
     doc.setFillColor(...green);doc.roundedRect(ml,y,W-ml-mr,7,1,1,'F');
     doc.setTextColor(255,255,255);doc.setFontSize(9);doc.setFont('helvetica','bold');
     doc.text('FOTODOKUMENTATION',ml+4,y+4.5);y+=12;
+
+    const colW=(W-ml-mr-6)/2; // larghezza colonna (2 per riga con gap 6mm)
+    let col=0; // 0=sinistra, 1=destra
+    let rowH=0; // altezza riga corrente
+
     for(const foto of state.fotos){
       try{
         const img=new Image();img.src=foto.data;
         await new Promise(r=>{img.onload=r;});
-        const maxW=W-ml-mr,maxH=90;
-        const ratio=Math.min(maxW/img.width,maxH/img.height);
+        const maxH=85;
+        const ratio=Math.min(colW/img.width,maxH/img.height);
         const fw=img.width*ratio,fh=img.height*ratio;
-        if(y+fh+18>H-35){_addFooter(doc,W,H,ml,mr,green,gray);doc.addPage();y=mt;}
-        doc.addImage(foto.data,'JPEG',ml,y,fw,fh,undefined,'MEDIUM');
-        if(foto.gps){
-          doc.setFillColor(247,246,242);doc.roundedRect(ml,y+fh-6,44,5.5,1,1,'F');
-          doc.setTextColor(...green);doc.setFontSize(7);
-          doc.text(`GPS: ${foto.gps}`,ml+2,y+fh-2.5);
+
+        const xPos = col===0 ? ml : ml+colW+6;
+
+        // Nuova riga se sinistra e non ci sta
+        if(col===0 && y+fh+18>H-40){
+          _addFooter(doc,W,H,ml,mr,green,gray);doc.addPage();y=mt;rowH=0;
         }
-        y+=fh+4;
+
+        doc.addImage(foto.data,'JPEG',xPos,y,fw,fh,undefined,'MEDIUM');
+
+        // GPS badge
+        if(foto.gps){
+          doc.setFillColor(247,246,242);doc.roundedRect(xPos,y+fh-5,40,5,1,1,'F');
+          doc.setTextColor(...green);doc.setFontSize(6);
+          doc.text(`GPS: ${foto.gps}`,xPos+1,y+fh-1.5);
+        }
+
+        // Descrizione sotto la foto
         if(foto.desc){
-          doc.setTextColor(...gray);doc.setFontSize(8);doc.setFont('helvetica','italic');
-          const dl=doc.splitTextToSize(foto.desc,W-ml-mr);
-          doc.text(dl,ml,y);y+=dl.length*4+6;
-        }else{y+=4;}
-      }catch(e){y+=4;}
+          doc.setTextColor(...gray);doc.setFontSize(7);doc.setFont('helvetica','italic');
+          const dl=doc.splitTextToSize(foto.desc,colW);
+          doc.text(dl,xPos,y+fh+3);
+        }
+
+        rowH=Math.max(rowH,fh+(foto.desc?8:4));
+
+        if(col===1){
+          // Fine riga — avanza y
+          y+=rowH+4;
+          rowH=0;
+          col=0;
+        } else {
+          col=1;
+        }
+      }catch(e){col=0;rowH=0;}
     }
+    // Se rimasta foto a sinistra senza destra
+    if(col===1) y+=rowH+4;
   }
 
   // FIRME
-  if(y+60>H-35){_addFooter(doc,W,H,ml,mr,green,gray);doc.addPage();y=mt;}
+  if(y+55>H-40){_addFooter(doc,W,H,ml,mr,green,gray);doc.addPage();y=mt;}
   else y+=6;
   doc.setDrawColor(220,216,210);doc.setLineWidth(0.3);doc.line(ml,y,W-mr,y);y+=8;
 
@@ -1178,9 +1197,11 @@ async function buildPDF(){
   }else{
     doc.setDrawColor(220,216,210);doc.roundedRect(ml,y+6,half,42,2,2,'S');
     try{
-      const sigkC=document.createElement('canvas');sigkC.width=600;sigkC.height=200;
-      sigkC.getContext('2d').drawImage(document.getElementById('sig-k'),0,0,600,200);
-      doc.addImage(sigkC.toDataURL('image/jpeg',0.5),'JPEG',ml+1,y+7,half-2,40);
+      const skc=document.createElement('canvas');skc.width=600;skc.height=200;
+      const skx=skc.getContext('2d');
+      skx.fillStyle='#ffffff';skx.fillRect(0,0,600,200);
+      skx.drawImage(document.getElementById('sig-k'),0,0,600,200);
+      doc.addImage(skc.toDataURL('image/jpeg',0.7),'JPEG',ml+1,y+7,half-2,40);
     }catch(e){}
   }
 
@@ -1189,7 +1210,18 @@ async function buildPDF(){
   doc.setTextColor(...gray);doc.setFontSize(8);doc.setFont('helvetica','normal');
   doc.text('Unterschrift MadLeaf',sigX,y);
   try{
-    await new Promise((res,rej)=>{const si=new Image();si.onload=()=>{const sc=document.createElement('canvas');sc.width=400;sc.height=160;sc.getContext('2d').drawImage(si,0,0,400,160);doc.addImage(sc.toDataURL('image/jpeg',0.6),'JPEG',sigX,y+6,half,42);res();};si.onerror=rej;si.src='Signature_giuseppe.png';});
+    await new Promise((res,rej)=>{
+      const si=new Image();
+      si.onload=()=>{
+        const sc=document.createElement('canvas');sc.width=400;sc.height=160;
+        const sx=sc.getContext('2d');
+        sx.fillStyle='#ffffff';sx.fillRect(0,0,400,160);
+        sx.drawImage(si,0,0,400,160);
+        doc.addImage(sc.toDataURL('image/jpeg',0.7),'JPEG',sigX,y+6,half,42);
+        res();
+      };
+      si.onerror=rej;si.src='Signature_giuseppe.png';
+    });
   }catch(e){
     doc.setFillColor(247,246,242);doc.roundedRect(sigX,y+6,half,42,2,2,'F');
     doc.setTextColor(...green);doc.setFontSize(22);doc.setFont('helvetica','bold');
