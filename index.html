@@ -846,20 +846,14 @@ function addFotos(input){
   Array.from(input.files).forEach(file=>{
     const r=new FileReader();
     r.onload=e=>{
-      // Comprimi foto: max 800px, qualità 60%
       const img=new Image();
       img.onload=()=>{
         const MAX=800;
-        let w=img.width, h=img.height;
-        if(w>MAX||h>MAX){
-          if(w>h){h=Math.round(h*MAX/w);w=MAX;}
-          else{w=Math.round(w*MAX/h);h=MAX;}
-        }
-        const canvas=document.createElement('canvas');
-        canvas.width=w; canvas.height=h;
-        canvas.getContext('2d').drawImage(img,0,0,w,h);
-        const compressed=canvas.toDataURL('image/jpeg',0.60);
-        state.fotos.push({data:compressed,desc:'',gps:state.gps?`${state.gps.lat},${state.gps.lon}`:''});
+        let w=img.width,h=img.height;
+        if(w>MAX||h>MAX){if(w>h){h=Math.round(h*MAX/w);w=MAX;}else{w=Math.round(w*MAX/h);h=MAX;}}
+        const c=document.createElement('canvas');c.width=w;c.height=h;
+        c.getContext('2d').drawImage(img,0,0,w,h);
+        state.fotos.push({data:c.toDataURL('image/jpeg',0.60),desc:'',gps:state.gps?`${state.gps.lat},${state.gps.lon}`:''});
         renderFotos();
       };
       img.src=e.target.result;
@@ -1184,8 +1178,9 @@ async function buildPDF(){
   }else{
     doc.setDrawColor(220,216,210);doc.roundedRect(ml,y+6,half,42,2,2,'S');
     try{
-      const sigkData=document.getElementById('sig-k').toDataURL('image/jpeg',0.70);
-      doc.addImage(sigkData,'JPEG',ml+1,y+7,half-2,40);
+      const sigkC=document.createElement('canvas');sigkC.width=600;sigkC.height=200;
+      sigkC.getContext('2d').drawImage(document.getElementById('sig-k'),0,0,600,200);
+      doc.addImage(sigkC.toDataURL('image/jpeg',0.5),'JPEG',ml+1,y+7,half-2,40);
     }catch(e){}
   }
 
@@ -1194,14 +1189,7 @@ async function buildPDF(){
   doc.setTextColor(...gray);doc.setFontSize(8);doc.setFont('helvetica','normal');
   doc.text('Unterschrift MadLeaf',sigX,y);
   try{
-    // Comprimi firma prima di inserire nel PDF
-    const sigImg=new Image();
-    await new Promise((res,rej)=>{sigImg.onload=res;sigImg.onerror=rej;sigImg.src='Signature_giuseppe.png';});
-    const sigCanvas=document.createElement('canvas');
-    sigCanvas.width=300;sigCanvas.height=120;
-    sigCanvas.getContext('2d').drawImage(sigImg,0,0,300,120);
-    const sigCompressed=sigCanvas.toDataURL('image/jpeg',0.70);
-    doc.addImage(sigCompressed,'JPEG',sigX,y+6,half,42);
+    await new Promise((res,rej)=>{const si=new Image();si.onload=()=>{const sc=document.createElement('canvas');sc.width=400;sc.height=160;sc.getContext('2d').drawImage(si,0,0,400,160);doc.addImage(sc.toDataURL('image/jpeg',0.6),'JPEG',sigX,y+6,half,42);res();};si.onerror=rej;si.src='Signature_giuseppe.png';});
   }catch(e){
     doc.setFillColor(247,246,242);doc.roundedRect(sigX,y+6,half,42,2,2,'F');
     doc.setTextColor(...green);doc.setFontSize(22);doc.setFont('helvetica','bold');
