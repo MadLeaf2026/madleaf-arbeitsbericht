@@ -2,434 +2,1474 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Audi TT RS 2.5 TFSI quattro — Nardograu, 400 PS</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@500;700;900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="MadLeaf">
+<meta name="theme-color" content="#17382d">
+<title>MadLeaf Arbeitsbericht</title>
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="logo.png">
+<link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
-  :root{
-    --graphite: #17181A;
-    --graphite-2: #202225;
-    --nardo: #8A8D8F;
-    --nardo-light: #C9CBCC;
-    --paper: #F3F2EF;
-    --paper-2: #E9E7E2;
-    --rs-red: #C8102E;
-    --rs-red-dim: #8C0C21;
-    --line: rgba(255,255,255,0.12);
-    --line-dark: rgba(0,0,0,0.10);
-    --ok-green: #3E8E5B;
-  }
-  *{box-sizing:border-box; margin:0; padding:0;}
-  html{scroll-behavior:smooth;}
-  body{
-    background:var(--paper);
-    color:var(--graphite);
-    font-family:'Inter',sans-serif;
-    line-height:1.55;
-    padding-bottom:0;
-  }
-  .mono{font-family:'JetBrains Mono',monospace;}
-  .display{font-family:'Big Shoulders Display',sans-serif; text-transform:uppercase;}
-
-  /* ===== HERO ===== */
-  .hero{
-    background:radial-gradient(ellipse at 70% 20%, #2b2d30 0%, var(--graphite) 55%, #0d0e0f 100%);
-    color:var(--paper);
-    padding:0 0 0 0;
-    position:relative;
-    overflow:hidden;
-    border-bottom:4px solid var(--rs-red);
-  }
-  .hero-top{
-    display:flex; justify-content:space-between; align-items:center;
-    padding:22px 24px 0 24px;
-    font-family:'JetBrains Mono',monospace;
-    font-size:11px;
-    letter-spacing:0.14em;
-    color:var(--nardo-light);
-    text-transform:uppercase;
-  }
-  .hero-top span.dot{color:var(--rs-red);}
-  .hero-inner{
-    padding:36px 24px 30px 24px;
-  }
-  .hero-eyebrow{
-    font-family:'JetBrains Mono',monospace;
-    font-size:12px;
-    letter-spacing:0.18em;
-    color:var(--rs-red);
-    text-transform:uppercase;
-    margin-bottom:10px;
-  }
-  .hero h1{
-    font-family:'Big Shoulders Display',sans-serif;
-    font-weight:900;
-    text-transform:uppercase;
-    font-size:clamp(42px,11vw,72px);
-    line-height:0.92;
-    letter-spacing:0.01em;
-  }
-  .hero h1 .thin{font-weight:500; color:var(--nardo-light); display:block; font-size:0.5em; letter-spacing:0.06em; margin-top:6px;}
-  .hero-sub{
-    margin-top:16px;
-    color:var(--nardo-light);
-    font-size:15px;
-    max-width:46ch;
-  }
-  .cockpit-strip{
-    display:grid;
-    grid-template-columns:repeat(4,1fr);
-    border-top:1px solid var(--line);
-    background:#111214;
-  }
-  .cockpit-stat{
-    padding:16px 12px;
-    text-align:center;
-    border-right:1px solid var(--line);
-  }
-  .cockpit-stat:last-child{border-right:none;}
-  .cockpit-stat .num{
-    font-family:'JetBrains Mono',monospace;
-    font-weight:700;
-    font-size:clamp(18px,4.4vw,26px);
-    color:var(--paper);
-  }
-  .cockpit-stat .num .unit{font-size:0.5em; color:var(--rs-red); margin-left:2px;}
-  .cockpit-stat .lbl{
-    margin-top:4px;
-    font-size:9.5px;
-    letter-spacing:0.12em;
-    text-transform:uppercase;
-    color:var(--nardo);
-  }
-  .hero-photo{
-    width:100%; display:block; aspect-ratio:16/10; object-fit:cover;
-    filter:saturate(1.03) contrast(1.02);
-    border-top:1px solid var(--line);
-  }
-
-  /* ===== SECTIONS ===== */
-  section{padding:52px 22px;}
-  .section-head{margin-bottom:26px;}
-  .section-eyebrow{
-    font-family:'JetBrains Mono',monospace;
-    font-size:11px; letter-spacing:0.16em; text-transform:uppercase;
-    color:var(--rs-red); margin-bottom:8px;
-  }
-  .section-title{
-    font-family:'Big Shoulders Display',sans-serif;
-    font-weight:800; text-transform:uppercase;
-    font-size:clamp(26px,6.5vw,36px);
-    letter-spacing:0.01em;
-    color:var(--graphite);
-  }
-  .section-title small{display:block; font-family:'Inter',sans-serif; text-transform:none; font-weight:400; font-size:14px; color:#5a5b5d; margin-top:6px; letter-spacing:0;}
-
-  .alt{background:var(--graphite); color:var(--paper);}
-  .alt .section-title{color:var(--paper);}
-  .alt .section-eyebrow{color:#ff5470;}
-
-  /* ===== STORIA / TIMELINE ===== */
-  .timeline{position:relative; padding-left:28px; border-left:2px solid var(--paper-2);}
-  .t-item{position:relative; padding-bottom:28px;}
-  .t-item:last-child{padding-bottom:0;}
-  .t-item::before{
-    content:''; position:absolute; left:-34px; top:2px;
-    width:12px; height:12px; border-radius:50%;
-    background:var(--rs-red); border:3px solid var(--paper);
-    box-shadow:0 0 0 2px var(--paper-2);
-  }
-  .t-date{
-    font-family:'JetBrains Mono',monospace; font-size:12px; font-weight:700;
-    color:var(--rs-red); letter-spacing:0.06em; margin-bottom:4px;
-  }
-  .t-body{font-size:15px; color:#333435; max-width:60ch;}
-  .t-body b{color:var(--graphite);}
-
-  .proof-box{
-    margin-top:28px;
-    background:#fff;
-    border:1px solid var(--paper-2);
-    border-left:4px solid var(--ok-green);
-    border-radius:4px;
-    padding:18px 20px;
-  }
-  .proof-box .proof-title{
-    font-family:'JetBrains Mono',monospace; font-size:12px; font-weight:700;
-    letter-spacing:0.08em; text-transform:uppercase; color:var(--ok-green);
-    margin-bottom:8px; display:flex; align-items:center; gap:6px;
-  }
-  .proof-box p{font-size:14.5px; color:#3a3b3d;}
-
-  .honesty-box{
-    margin-top:16px;
-    background:#fff;
-    border:1px solid var(--paper-2);
-    border-left:4px solid var(--nardo);
-    border-radius:4px;
-    padding:18px 20px;
-  }
-  .honesty-box .proof-title{
-    font-family:'JetBrains Mono',monospace; font-size:12px; font-weight:700;
-    letter-spacing:0.08em; text-transform:uppercase; color:#6b6c6e;
-    margin-bottom:8px;
-  }
-  .honesty-box p{font-size:14.5px; color:#3a3b3d;}
-
-  /* ===== SPEC GRID (virtual cockpit style) ===== */
-  .spec-grid{
-    display:grid; grid-template-columns:1fr 1fr; gap:1px;
-    background:var(--line); border:1px solid var(--line); border-radius:6px; overflow:hidden;
-  }
-  .spec-cell{background:#0d0e0f; padding:16px 14px;}
-  .spec-cell .k{font-size:10px; letter-spacing:0.1em; text-transform:uppercase; color:var(--nardo); margin-bottom:4px;}
-  .spec-cell .v{font-family:'JetBrains Mono',monospace; font-size:16px; font-weight:700; color:var(--paper);}
-  .spec-cell .v .accent{color:var(--rs-red);}
-
-  /* ===== EQUIPMENT TAGS ===== */
-  .tag-grid{display:flex; flex-wrap:wrap; gap:9px; margin-top:20px;}
-  .tag{
-    font-family:'JetBrains Mono',monospace; font-size:12.5px;
-    background:#fff; border:1px solid var(--paper-2); color:var(--graphite);
-    padding:8px 12px; border-radius:20px;
-  }
-
-  /* ===== GALLERY ===== */
-  .gallery{display:grid; grid-template-columns:1fr 1fr; gap:10px;}
-  .gallery img{width:100%; height:100%; object-fit:cover; border-radius:4px; display:block; aspect-ratio:4/3;}
-  .gallery .full{grid-column:1/-1;}
-  .gallery .full video{width:100%; height:auto; max-height:70vh; object-fit:contain; border-radius:4px; display:block; margin:0 auto;}
-  .g-cap{font-family:'JetBrains Mono',monospace; font-size:10.5px; color:var(--nardo); margin-top:6px; letter-spacing:0.04em; text-transform:uppercase;}
-
-  video{background:#000;}
-
-  /* ===== CTA BAR ===== */
-  .cta-bar{
-    background:var(--graphite); border-top:2px solid var(--rs-red);
-    display:flex; align-items:center; justify-content:space-between;
-    padding:16px 18px;
-  }
-  .cta-price{color:var(--paper);}
-  .cta-price .lbl{font-family:'JetBrains Mono',monospace; font-size:9px; letter-spacing:0.1em; color:var(--nardo); text-transform:uppercase;}
-  .cta-price .val{font-family:'Big Shoulders Display',sans-serif; font-weight:800; font-size:24px;}
-  .cta-btn{
-    background:var(--rs-red); color:#fff; text-decoration:none;
-    font-family:'JetBrains Mono',monospace; font-weight:700; font-size:13px;
-    padding:12px 20px; border-radius:4px; letter-spacing:0.03em;
-    display:flex; align-items:center; gap:8px;
-  }
-  .cta-btn:active{background:var(--rs-red-dim);}
-
-  .footer-note{
-    padding:30px 22px 20px 22px; text-align:center;
-    font-size:12px; color:#8b8c8e; max-width:60ch; margin:0 auto;
-  }
-
-  @media(min-width:720px){
-    section{padding:64px 60px;}
-    .hero-inner{padding:56px 60px 40px 60px;}
-    .hero-top{padding:26px 60px 0 60px;}
-    .gallery{grid-template-columns:repeat(3,1fr);}
-    .spec-grid{grid-template-columns:repeat(4,1fr);}
-    .cta-bar{padding:14px 60px;}
-  }
+:root{--green:#17382d;--green2:#1f4c3b;--gold:#d9a64f;--bg:#f7f6f2;--surface:#fcfbf8;--surface2:#f1eee8;--text:#28251d;--muted:#6f6c64;--border:rgba(23,56,45,0.12);--shadow:0 4px 16px rgba(23,56,45,0.10);--radius:12px}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:'Satoshi',Arial,sans-serif;background:var(--bg);min-height:100vh;padding-bottom:88px;color:var(--text)}
+.topbar{background:var(--green);padding:10px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(23,56,45,0.3)}
+.topbar-brand .sub{color:var(--gold);font-size:10px;letter-spacing:.12em;text-transform:uppercase;font-weight:700}
+.topbar-brand .title{color:#fff;font-size:17px;font-weight:700}
+.topbar-icons{display:flex;gap:8px}
+.icon-btn{background:rgba(255,255,255,.12);border:none;border-radius:8px;width:38px;height:38px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#fff;font-size:18px}
+.timer-bar{background:#0f2d24;padding:8px 16px;display:flex;align-items:center;gap:10px;position:sticky;top:58px;z-index:99}
+.tdot{width:9px;height:9px;border-radius:50%;background:#4b5563;flex-shrink:0;transition:all .3s}
+.tdot.on{background:#22c55e;animation:blink 1.2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.4}}
+.tval{color:#fff;font-size:15px;font-weight:700;flex:1;font-variant-numeric:tabular-nums}
+.tbtn{background:transparent;border:1.5px solid rgba(217,166,79,.6);color:var(--gold);font-size:12px;font-weight:700;padding:5px 14px;border-radius:6px;cursor:pointer}
+.tbtn.on{border-color:#f87171;color:#f87171}
+.obanner{display:none;background:#EAF3DE;color:#27500A;font-size:12px;padding:6px 16px;text-align:center;font-weight:700}
+.obanner.show{display:block}
+.section{background:var(--surface);margin:10px 12px;border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);border:1px solid var(--border)}
+.shead{padding:12px 14px 0;display:flex;align-items:center;justify-content:space-between}
+.slbl{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.09em;font-weight:700}
+.sbody{padding:10px 14px 14px}
+.krow{display:flex;align-items:center;gap:10px}
+.avatar{width:38px;height:38px;border-radius:50%;background:rgba(217,166,79,.15);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:var(--gold);flex-shrink:0;border:1.5px solid rgba(217,166,79,.3)}
+.kname{font-size:15px;font-weight:700;color:var(--text)}
+.ksub{font-size:11px;color:var(--muted);margin-top:2px}
+.wbtn{margin-left:auto;font-size:12px;color:var(--green);border:1px solid var(--border);border-radius:6px;padding:4px 10px;cursor:pointer;background:var(--surface2);flex-shrink:0}
+.drow{display:flex;align-items:center;gap:10px}
+.drow input[type=date]{border:1px solid var(--border);border-radius:8px;padding:8px 10px;font-size:14px;color:var(--text);background:var(--bg);flex:1;font-family:'Satoshi',Arial,sans-serif}
+.gpsbadge{font-size:11px;color:var(--green);background:rgba(23,56,45,.08);border-radius:6px;padding:5px 8px;display:flex;align-items:center;gap:4px;white-space:nowrap;border:1px solid var(--border)}
+.ablock{border:1px solid var(--border);border-radius:10px;margin-bottom:7px;overflow:hidden;background:var(--surface)}
+.ablock.on{border-color:var(--gold)}
+.ahead{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;cursor:pointer}
+.ablock.on .ahead{background:rgba(217,166,79,.08)}
+.achk{width:20px;height:20px;border-radius:5px;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;background:var(--surface)}
+.ablock.on .achk{background:var(--green);border-color:var(--green)}
+.achk svg{display:none}
+.ablock.on .achk svg{display:block}
+.alabel{font-size:13px;color:var(--text);flex:1;line-height:1.45}
+.ablock.on .alabel{color:var(--green);font-weight:600}
+.abody{padding:10px 12px 12px;border-top:1px solid rgba(217,166,79,.25);background:#fdfcf8}
+.abody .hint{font-size:10px;color:var(--muted);margin-bottom:5px;text-transform:uppercase;letter-spacing:.06em}
+.abody textarea{width:100%;font-size:13px;padding:8px 10px;border:1px solid var(--border);border-radius:7px;background:var(--surface);color:var(--text);resize:none;min-height:72px;line-height:1.55;font-family:'Satoshi',Arial,sans-serif}
+.abody textarea:focus{outline:none;border-color:var(--gold)}
+.ablank{font-size:13px;color:var(--muted);font-style:italic;flex:1;line-height:1.45}
+.pcard{border:1px solid var(--border);border-radius:10px;padding:10px 12px;margin-bottom:8px;background:var(--surface);position:relative}
+.pcard::before{content:"";position:absolute;left:0;top:12px;bottom:12px;width:3px;background:var(--gold);border-radius:0 2px 2px 0}
+.pname{font-size:13px;font-weight:700;color:var(--green);padding-left:8px}
+.pdetail{font-size:11px;color:var(--muted);margin-top:2px;line-height:1.5;padding-left:8px}
+.pbadge{display:inline-block;font-size:10px;padding:2px 7px;background:rgba(23,56,45,.08);color:var(--green);border-radius:4px;margin-top:3px;font-weight:700;margin-left:8px}
+.pqty{margin-top:6px;padding-left:8px}
+.pqty input{font-size:12px;padding:5px 8px;border:1px solid var(--border);border-radius:6px;width:100%;background:var(--bg);color:var(--text);font-family:'Satoshi',Arial,sans-serif}
+.pdel{position:absolute;top:8px;right:10px;font-size:18px;color:var(--muted);cursor:pointer;background:none;border:none;line-height:1}
+.addrow{border:1.5px dashed var(--border);border-radius:10px;padding:10px;text-align:center;font-size:13px;color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px}
+.ncheck-row{display:flex;align-items:center;gap:10px;padding:10px;background:rgba(217,166,79,.08);border-radius:8px;border:1px solid rgba(217,166,79,.25)}
+.ncheck-row label{font-size:12px;color:var(--green);font-weight:600;white-space:nowrap}
+.ncheck-row input{flex:1;font-size:13px;padding:6px 10px;border:1px solid var(--border);border-radius:6px;background:var(--surface);color:var(--text);font-family:'Satoshi',Arial,sans-serif}
+.fstrip{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px}
+.fthumb{width:80px;height:80px;border-radius:8px;background:var(--surface2);border:1px solid var(--border);display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;position:relative;overflow:hidden;cursor:pointer}
+.fthumb img{width:100%;height:100%;object-fit:cover}
+.fgeo{position:absolute;bottom:2px;left:2px;font-size:9px;color:var(--green);background:rgba(247,246,242,.9);padding:1px 5px;border-radius:3px;font-weight:700}
+.fdesc-badge{position:absolute;top:2px;left:2px;font-size:9px;color:#fff;background:rgba(23,56,45,.7);padding:1px 5px;border-radius:3px;max-width:70px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.fdel{position:absolute;top:2px;right:2px;background:rgba(23,56,45,.7);color:#fff;border:none;border-radius:50%;width:18px;height:18px;font-size:12px;line-height:18px;text-align:center;cursor:pointer;padding:0}
+.fadd{width:80px;height:80px;border-radius:8px;border:1.5px dashed var(--border);display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer;color:var(--muted);font-size:11px;gap:4px;background:var(--surface)}
+.firma-sublbl{font-size:12px;color:var(--muted);font-weight:600;margin-bottom:6px}
+.firma-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+.firma-clear{font-size:12px;color:var(--green);cursor:pointer;background:none;border:none;font-family:'Satoshi',Arial,sans-serif}
+.firma-canvas{border:1.5px solid var(--border);border-radius:8px;background:#fff;width:100%;height:200px;touch-action:none;display:block}
+.firma-name-input{width:100%;margin-top:8px;font-size:13px;padding:8px 10px;border:1px solid var(--border);border-radius:7px;background:var(--bg);color:var(--text);font-family:'Satoshi',Arial,sans-serif}
+.nofirma-row{display:flex;align-items:center;gap:8px;margin-top:8px}
+.nofirma-row label{font-size:12px;color:var(--muted)}
+.nofirma-ta{width:100%;margin-top:6px;font-size:12px;padding:7px 10px;border:1px solid var(--border);border-radius:7px;resize:none;min-height:52px;font-family:'Satoshi',Arial,sans-serif;display:none}
+.mia-firma{border:1px solid rgba(217,166,79,.4);border-radius:10px;background:rgba(217,166,79,.08);padding:12px 14px;display:flex;align-items:center;justify-content:space-between;margin-top:4px}
+.mia-sig{font-family:Georgia,serif;font-size:28px;color:var(--green);font-style:italic}
+.mia-info{text-align:right}
+.mia-name{font-size:12px;font-weight:700;color:var(--green)}
+.mia-title{font-size:10px;color:var(--muted);margin-top:2px}
+.woche-btn{width:100%;background:rgba(217,166,79,.12);border:1.5px solid rgba(217,166,79,.4);border-radius:10px;padding:12px;font-size:14px;font-weight:700;color:var(--green);cursor:pointer;font-family:'Satoshi',Arial,sans-serif;display:flex;align-items:center;justify-content:center;gap:8px}
+.bottombar{position:fixed;bottom:0;left:0;right:0;background:var(--surface);border-top:1px solid var(--border);padding:10px 14px;display:flex;gap:8px;z-index:200}
+.btnmain{flex:1;background:var(--green);color:#fff;border:none;border-radius:10px;padding:13px;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;font-family:'Satoshi',Arial,sans-serif}
+.btnmain:active{background:var(--green2)}
+.btnsave{background:var(--surface2);border:1px solid var(--border);color:var(--muted);border-radius:10px;padding:13px 15px;cursor:pointer;font-size:20px}
+.moverlay{display:none;position:fixed;inset:0;background:rgba(23,56,45,.5);z-index:300;align-items:flex-end;justify-content:center}
+.moverlay.open{display:flex}
+.modal{background:var(--surface);border-radius:20px 20px 0 0;width:100%;max-width:480px;padding:20px 16px 32px;max-height:88vh;overflow-y:auto}
+.modal-full{background:var(--surface);border-radius:20px 20px 0 0;width:100%;padding:20px 16px 32px;height:92vh;overflow-y:auto}
+.modal h3{font-size:16px;font-weight:700;color:var(--text);margin-bottom:14px}
+.mclose{float:right;font-size:24px;color:var(--muted);cursor:pointer;background:none;border:none;line-height:1}
+.modal input,.modal select,.modal textarea{width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:8px;font-size:14px;font-family:'Satoshi',Arial,sans-serif;margin-bottom:10px;color:var(--text);background:var(--bg)}
+.modal textarea{resize:none;min-height:60px}
+.modal input:focus,.modal select:focus,.modal textarea:focus{outline:none;border-color:var(--gold)}
+.mbtnrow{display:flex;gap:8px;margin-top:4px}
+.mbtn{flex:1;padding:11px;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;border:none;font-family:'Satoshi',Arial,sans-serif}
+.mbtn.p{background:var(--green);color:#fff}
+.mbtn.s{background:var(--surface2);color:var(--text)}
+.modal hr{border:none;border-top:1px solid var(--border);margin:14px 0}
+.klist-item{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);cursor:pointer}
+.klist-item:last-child{border-bottom:none}
+.klist-name{font-size:14px;font-weight:600;color:var(--text)}
+.klist-sub{font-size:12px;color:var(--muted)}
+.klist-del{margin-left:auto;background:none;border:none;color:var(--muted);font-size:16px;cursor:pointer;padding:4px}
+.psel-item{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);cursor:pointer}
+.psel-item:last-child{border-bottom:none}
+.psel-name{font-size:13px;font-weight:700;color:var(--green)}
+.psel-detail{font-size:11px;color:var(--muted);margin-top:2px;line-height:1.5}
+.psel-note{font-size:10px;color:var(--muted);margin-top:2px;font-style:italic}
+.pcat-title{font-size:11px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:.08em;padding:10px 0 4px;border-bottom:1px solid rgba(217,166,79,.2);margin-bottom:4px}
+.psel-del{margin-left:auto;background:none;border:none;color:var(--muted);font-size:16px;cursor:pointer;flex-shrink:0}
+.arch-item{padding:10px 0;border-bottom:1px solid var(--border)}
+.arch-item:last-child{border-bottom:none}
+.arch-name{font-size:13px;font-weight:600;color:var(--text)}
+.arch-sub{font-size:11px;color:var(--muted);margin-top:2px}
+.woche-item{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)}
+.woche-item:last-child{border-bottom:none}
+.woche-check{width:20px;height:20px;border-radius:5px;border:2px solid var(--border);flex-shrink:0;cursor:pointer;background:var(--surface)}
+.woche-check.done{background:var(--green);border-color:var(--green)}
+.toast{position:fixed;top:80px;left:50%;transform:translateX(-50%);background:var(--green);color:#fff;padding:10px 20px;border-radius:8px;font-size:13px;font-weight:700;z-index:500;opacity:0;transition:opacity .3s;pointer-events:none;white-space:nowrap;max-width:90vw;text-align:center}
+.toast.show{opacity:1}
+.toast.gold{background:var(--gold);color:var(--green)}
+.toast.red{background:#dc2626}
+.spinner{display:none;position:fixed;inset:0;background:rgba(23,56,45,.65);z-index:400;align-items:center;justify-content:center;flex-direction:column;gap:14px}
+.spinner.show{display:flex}
+.spin{width:44px;height:44px;border:4px solid rgba(255,255,255,.2);border-top-color:#fff;border-radius:50%;animation:rot .8s linear infinite}
+@keyframes rot{to{transform:rotate(360deg)}}
+.spin-txt{color:#fff;font-size:14px;font-weight:600;text-align:center;padding:0 20px}
+.pwd-modal{background:var(--surface);border-radius:16px;width:calc(100% - 40px);max-width:360px;padding:24px;box-shadow:0 20px 60px rgba(23,56,45,.3)}
+.pwd-modal h3{font-size:16px;font-weight:700;color:var(--text);margin-bottom:8px}
+.pwd-modal p{font-size:13px;color:var(--muted);margin-bottom:16px}
+.pwd-modal input{width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:8px;font-size:15px;font-family:'Satoshi',Arial,sans-serif;margin-bottom:14px;color:var(--text);background:var(--bg)}
+.pwd-modal input:focus{outline:none;border-color:var(--gold)}
+.pwd-overlay{display:none;position:fixed;inset:0;background:rgba(23,56,45,.5);z-index:350;align-items:center;justify-content:center}
+.pwd-overlay.open{display:flex}
 </style>
 </head>
 <body>
 
-  <!-- HERO -->
-  <div class="hero">
-    <div class="hero-top">
-      <span>WUAZZZFV7J1901014</span>
-      <span><span class="dot">●</span> ERSTZULASSUNG 02.10.2017</span>
-    </div>
-    <div class="hero-inner">
-      <div class="hero-eyebrow">Privatverkauf · Einzelstück</div>
-      <h1>TT RS<span class="thin">2.5 TFSI quattro S tronic — Nardograu</span></h1>
-      <p class="hero-sub">400 PS, 5-Zylinder ohne OPF, ca. 31.000 km — Fahrzeug wird gelegentlich noch bewegt. Lückenlos dokumentierte Historie — jedes Dokument einsehbar, nichts beschönigt.</p>
-    </div>
-    <img class="hero-photo" src="images/WhatsApp_Image_2026-06-11_at_11_05_38.jpeg" alt="Audi TT RS Innenraum">
-    <div class="cockpit-strip">
-      <div class="cockpit-stat"><div class="num">400<span class="unit">PS</span></div><div class="lbl">Leistung</div></div>
-      <div class="cockpit-stat"><div class="num">ca.31<span class="unit">TKM</span></div><div class="lbl">Laufleistung</div></div>
-      <div class="cockpit-stat"><div class="num">2028<span class="unit"></span></div><div class="lbl">TÜV bis 07/</div></div>
-      <div class="cockpit-stat"><div class="num">quattro</div><div class="lbl">Allrad</div></div>
+<div class="spinner" id="spinner">
+  <div class="spin"></div>
+  <div class="spin-txt" id="spin-txt">PDF wird erstellt...</div>
+</div>
+
+<!-- PASSWORD MODAL -->
+<div class="pwd-overlay" id="pwd-overlay">
+  <div class="pwd-modal">
+    <h3>E-Mail senden</h3>
+    <p>Bitte geben Sie Ihr E-Mail-Passwort ein. Es wird nur für diesen Versand verwendet und nicht gespeichert.</p>
+    <input type="password" id="pwd-input" placeholder="Passwort eingeben..." autocomplete="current-password">
+    <div class="mbtnrow">
+      <button class="mbtn s" onclick="cancelSend()">Abbrechen</button>
+      <button class="mbtn p" onclick="confirmSend()">Senden</button>
     </div>
   </div>
+</div>
 
-  <!-- STORIA -->
-  <section id="storia">
-    <div class="section-head">
-      <div class="section-eyebrow">Fahrzeughistorie</div>
-      <div class="section-title">Lückenlos dokumentiert<small>Jeder Abschnitt ist durch ein Dokument belegt — nichts davon wird verschwiegen.</small></div>
-    </div>
-
-    <div class="proof-box" style="border-left-color:var(--nardo); margin-top:0; margin-bottom:24px;">
-      <div class="proof-title" style="color:#6b6c6e;">Kurz vorab</div>
-      <p>Deutsches Auslieferungsfahrzeug (Erstzulassung 10/2017). 2019 verkauft, aus steuerlichen Gründen (Vermeidung der italienischen Luxussteuer „Superbollo") per Fahrzeugtransport nach Litauen überführt und dort kurzzeitig zugelassen, anschließend erneut per Transport nach Italien gebracht, wo es von einem Privatbesitzer rund 6 Monate gefahren wurde. Insgesamt zwei Vorbesitzer vor dem aktuellen Eigentümer. Seit 07/2026 wieder regulär in Deutschland zugelassen.</p>
-      <p style="margin-top:10px;"><b>Tatsächlich bewegt</b> wurde das Fahrzeug in seiner gesamten Geschichte nur rund 2,5 Jahre — ca. 2 Jahre beim Erstbesitzer in Deutschland, ca. 6 Monate beim zweiten Besitzer in Italien, und seit wenigen Tagen beim aktuellen Eigentümer, wieder in Deutschland. Der Rest entfällt auf den mehrjährigen Stillstand. Das erklärt die geringe Laufleistung.</p>
-    </div>
-
-    <div class="timeline">
-      <div class="t-item">
-        <div class="t-date">02.10.2017</div>
-        <div class="t-body">Auslieferung in Deutschland mit auf 5 Jahre <b>verlängerter Audi-Garantie</b> (bis 2022 / 100.000 km).</div>
-      </div>
-      <div class="t-item">
-        <div class="t-date">10.2019 · ca. 21.000 km</div>
-        <div class="t-body">Verkauf über Audi Bochum. Aus steuerlichen Gründen (Vermeidung des italienischen „Superbollo") per Fahrzeugtransport nach Litauen überführt und dort kurzzeitig zugelassen, anschließend erneut per Transport nach Italien gebracht und dort vom zweiten Vorbesitzer ca. 6 Monate gefahren. Die ersten beiden Inspektionen wurden bei autorisierten Audi-Partnern durchgeführt — zunächst in Deutschland, dann in Italien.</div>
-      </div>
-      <div class="t-item">
-        <div class="t-date">05.2020</div>
-        <div class="t-body">Das Fahrzeug wurde im Rahmen eines Gerichtsverfahrens beschlagnahmt und danach rund <b>sechs Jahre trocken eingelagert und praktisch nicht bewegt.</b> Erklärt die geringe Laufleistung bei einem Fahrzeug von 2017.</div>
-      </div>
-      <div class="t-item">
-        <div class="t-date">Mai 2026 · Erwerb</div>
-        <div class="t-body">Erwerb über eine <b>gerichtliche Versteigerung</b>. Kaufbeleg der Versteigerung liegt vor und kann eingesehen werden.</div>
-      </div>
-      <div class="t-item">
-        <div class="t-date">Mai/Juni 2026 · Wiederinbetriebnahme</div>
-        <div class="t-body">Technische Wiederinbetriebnahme in Italien (Inspektion, neue Batterie, alle erforderlichen Arbeiten), anschließend Import nach Deutschland.</div>
-      </div>
-      <div class="t-item">
-        <div class="t-date">01.07.2026 · 30.936 km</div>
-        <div class="t-body">Direkt bei Audi (Service Partner <b>Schmolck, Emmendingen</b>) an einem Termin durchgeführt: <b>Aktion 30E3</b>, <b>TÜV</b> und <b>deutsche Neuzulassung</b> — autorisierter Audi-Partner, im Serviceheft bestätigt.</div>
-      </div>
-      <div class="t-item">
-        <div class="t-date">Seit Neuzulassung</div>
-        <div class="t-body">Weniger als 500 km bewegt — der Wagen wird gelegentlich gefahren, vor allem um ihn zu zeigen. Originalbereifung noch montiert.</div>
-      </div>
-    </div>
-
-    <div class="proof-box">
-      <div class="proof-title">✓ Rechtlich &amp; finanziell unbelastet</div>
-      <p>Das Fahrzeug wurde in Deutschland regulär <b>neu zugelassen</b> — dafür ist die Bestätigung der Belastungsfreiheit zwingende Voraussetzung, sonst wäre keine Zulassung erfolgt. Zusätzlich bestätigt der unabhängige <b>CarVertical-Bericht</b> keine finanziellen oder rechtlichen Risiken, keinen Diebstahl und keine Unfallschäden.</p>
-    </div>
-
-    <div class="honesty-box">
-      <div class="proof-title">Ehrlich statt aufbereitet</div>
-      <p>Der originale Lack wurde bei der TÜV-Abnahme per Lackschichtmessung geprüft — keine Nachlackierungen. Der kleine Kratzer an der Frontstoßstange, eine sichtbare Macke an einer vorderen Felge sowie leichte Gebrauchsspuren an der Türgriffmulde fahrerseitig wurden <b>bewusst nicht kaschiert</b>: Ziel ist ein Fahrzeug, das genau so verkauft wird, wie es ist — nicht „schön gemacht" für den Verkauf. Alle Unterlagen liegen vollständig vor und können bei Besichtigung eingesehen werden.</p>
-    </div>
-  </section>
-
-  <!-- DATI TECNICI -->
-  <section class="alt" id="daten">
-    <div class="section-head">
-      <div class="section-eyebrow">Technische Daten</div>
-      <div class="section-title">Auf einen Blick</div>
-    </div>
-    <div class="spec-grid">
-      <div class="spec-cell"><div class="k">Motor</div><div class="v">2.5 TFSI <span class="accent">R5</span></div></div>
-      <div class="spec-cell"><div class="k">Leistung</div><div class="v">294 kW / <span class="accent">400 PS</span></div></div>
-      <div class="spec-cell"><div class="k">Drehmoment</div><div class="v">480 Nm</div></div>
-      <div class="spec-cell"><div class="k">Getriebe</div><div class="v">S tronic 7-Gang</div></div>
-      <div class="spec-cell"><div class="k">Antrieb</div><div class="v">quattro</div></div>
-      <div class="spec-cell"><div class="k">Farbe</div><div class="v">Nardograu</div></div>
-      <div class="spec-cell"><div class="k">Laufleistung</div><div class="v">ca. <span class="accent">31.100</span> km</div></div>
-      <div class="spec-cell"><div class="k">Erstzulassung</div><div class="v">10/2017</div></div>
-      <div class="spec-cell"><div class="k">Kraftstoff</div><div class="v">Benzin · ohne OPF</div></div>
-      <div class="spec-cell"><div class="k">Abgasnorm</div><div class="v">EU6 plus</div></div>
-      <div class="spec-cell"><div class="k">TÜV</div><div class="v"><span class="accent">07/2028</span></div></div>
-      <div class="spec-cell"><div class="k">Schlüssel</div><div class="v">2 Stück</div></div>
-    </div>
-  </section>
-
-  <!-- AUSSTATTUNG -->
-  <section id="ausstattung">
-    <div class="section-head">
-      <div class="section-eyebrow">Ausstattung</div>
-      <div class="section-title">Highlights</div>
-    </div>
-    <div class="tag-grid">
-      <span class="tag">Audi Virtual Cockpit</span>
-      <span class="tag">Bang &amp; Olufsen Sound</span>
-      <span class="tag">MMI Navigation plus</span>
-      <span class="tag">Audi Smartphone Interface</span>
-      <span class="tag">Audi Side Assist</span>
-      <span class="tag">Matrix LED-Scheinwerfer</span>
-      <span class="tag">LED-Heckleuchten dynamisch</span>
-      <span class="tag">Rückfahrkamera</span>
-      <span class="tag">Parkhilfe Plus</span>
-      <span class="tag">Feinnappa-Sportsitze, Wabensteppung</span>
-      <span class="tag">Sitzheizung</span>
-      <span class="tag">Elektr. verstellbare Sportsitze</span>
-      <span class="tag">20" Rotor-Felgen 255/30 R20</span>
-      <span class="tag">Bremssättel Rot</span>
-      <span class="tag">RS-Sportfahrwerk</span>
-      <span class="tag">Sportabgasanlage</span>
-      <span class="tag">Tempomat + Limiter</span>
-    </div>
-  </section>
-
-  <!-- GALLERY -->
-  <section class="alt" id="galerie">
-    <div class="section-head">
-      <div class="section-eyebrow">Bilder &amp; Video</div>
-      <div class="section-title">Innenraum, Motor, Tacho<small style="color:#9a9b9d;">Die Außenansicht siehst du gerade live vor dir.</small></div>
-    </div>
-    <div class="gallery">
-      <div>
-        <img src="images/WhatsApp_Image_2026-06-11_at_11_05_51.jpeg" alt="Innenraum Fahrersitz">
-        <div class="g-cap">Innenraum</div>
-      </div>
-      <div>
-        <img src="images/WhatsApp_Image_2026-06-11_at_11_06_09.jpeg" alt="Sportsitze RS">
-        <div class="g-cap">RS-Sportsitze</div>
-      </div>
-      <div>
-        <img src="images/WhatsApp_Image_2026-06-11_at_14_45_34__1_.jpeg" alt="Fahrerseite mit Ausblick">
-        <div class="g-cap">Fahrerseite</div>
-      </div>
-      <div>
-        <img src="images/WhatsApp_Image_2026-05-10_at_09_44_47.jpeg" alt="Motorraum 2.5 TFSI">
-        <div class="g-cap">Motorraum 2.5 TFSI</div>
-      </div>
-      <div>
-        <img src="images/WhatsApp_Image_2026-07-02_at_17_40_35.jpeg" alt="Tacho 31011 km">
-        <div class="g-cap">Tacho — 31.011 km</div>
-      </div>
-      <div class="full">
-        <video controls preload="metadata" poster="images/poster-unterboden.jpg" width="848" height="478">
-          <source src="images/WhatsApp_Video_2026-06-11_at_13_14_01.mp4" type="video/mp4">
-        </video>
-        <div class="g-cap">Video — Unterboden auf der Hebebühne</div>
-      </div>
-      <div class="full">
-        <video controls preload="metadata" poster="images/poster-rundgang.jpg" width="478" height="850">
-          <source src="images/WhatsApp_Video_2026-06-30_at_20_21_47.mp4" type="video/mp4">
-        </video>
-        <div class="g-cap">Video — Rundgang außen</div>
-      </div>
-    </div>
-  </section>
-
-  <!-- BESICHTIGUNG -->
-  <section id="kontakt">
-    <div class="section-head">
-      <div class="section-eyebrow">Besichtigung</div>
-      <div class="section-title">Alle Unterlagen liegen vor<small>CarVertical-Bericht, Serviceheft, Kaufbeleg der Versteigerung — auf Wunsch alles zur Ansicht. Eine unabhängige Inspektion ist jederzeit möglich.</small></div>
-    </div>
-    <div class="tag-grid">
-      <a class="tag" href="docs/CarVertical-Bericht.pdf" target="_blank" rel="noopener">↓ CarVertical-Bericht (PDF)</a>
-      <a class="tag" href="docs/Audi-Serviceheft.pdf" target="_blank" rel="noopener">↓ Audi Serviceheft (PDF)</a>
-      <span class="tag">✓ Kaufbeleg Versteigerung — vor Ort einsehbar</span>
-      <span class="tag">✓ Unfallfrei (Lackschichtmessung)</span>
-    </div>
-  </section>
-
-  <div class="footer-note">Privatverkauf — keine Garantie, keine Rücknahme. Nach dem üblichen Recht für den Verkauf gebrauchter Sachen zwischen Privatpersonen.</div>
-
-  <!-- CTA BAR -->
-  <div class="cta-bar">
-    <div class="cta-price">
-      <div class="lbl">Preis</div>
-      <div class="val">47.999 €</div>
-    </div>
-    <a class="cta-btn" href="https://wa.me/4917672002500" target="_blank" rel="noopener">
-      WhatsApp ↗
-    </a>
+<div class="topbar">
+  <div class="topbar-brand">
+    <div class="sub">MadLeaf · v3.5</div>
+    <div class="title">Arbeitsbericht</div>
   </div>
+  <div class="topbar-icons">
+    <button class="icon-btn" onclick="openModal('m-archiv')" title="Archiv">
+      <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+    </button>
+  </div>
+</div>
 
+<div id="obanner" class="obanner">✓ Online — E-Mail-Warteschlange wird verarbeitet...</div>
+
+<div class="timer-bar">
+  <div class="tdot" id="tdot"></div>
+  <span class="tval" id="tval">00h 00m 00s</span>
+  <button class="tbtn" id="tbtn" onclick="toggleTimer()">START</button>
+</div>
+
+<!-- KUNDE -->
+<div class="section">
+  <div class="shead"><div class="slbl">Kunde</div></div>
+  <div class="sbody">
+    <div class="krow">
+      <div class="avatar" id="k-avatar">–</div>
+      <div style="flex:1;min-width:0">
+        <div class="kname" id="k-name">Kunde auswählen</div>
+        <div class="ksub" id="k-sub">Antippen um Kunde zu wählen</div>
+      </div>
+      <button class="wbtn" onclick="openModal('m-kunden')">Wählen</button>
+    </div>
+  </div>
+</div>
+
+<!-- DATUM -->
+<div class="section">
+  <div class="shead"><div class="slbl">Datum &amp; Standort</div></div>
+  <div class="sbody">
+    <div class="drow">
+      <input type="date" id="datum-input">
+      <div class="gpsbadge" id="gps-badge">GPS...</div>
+    </div>
+  </div>
+</div>
+
+<!-- AZIONI -->
+<div class="section">
+  <div class="shead"><div class="slbl">Durchgeführte Maßnahmen</div></div>
+  <div class="sbody" id="azioni-wrap">
+
+    <div class="ablock" data-id="a1">
+      <div class="ahead" onclick="toggleA('a1')">
+        <div class="achk"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="alabel">Geländebegehung zur Erfassung und Bewertung biologischer Risikofaktoren</div>
+      </div>
+      <div class="abody" style="display:none"><div class="hint">Text bearbeiten:</div>
+        <textarea>Geländebegehung zur Erfassung und Bewertung biologischer Risikofaktoren. Zielorganismus: [bitte ergänzen]. Befund und Empfehlungen werden im Detailbericht übermittelt.</textarea></div>
+    </div>
+
+    <div class="ablock" data-id="a2">
+      <div class="ahead" onclick="toggleA('a2')">
+        <div class="achk"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="alabel">Monitoring-Kontrolle — Auswertung und Bericht folgen separat</div>
+      </div>
+      <div class="abody" style="display:none"><div class="hint">Text bearbeiten:</div>
+        <textarea>Monitoring-Kontrolle durchgeführt. [Anzahl] Fallen kontrolliert, [Anzahl] ersetzt. Ergebnisse werden nach Auswertung separat übermittelt. Nächste Kontrolle: [Datum/KW].</textarea></div>
+    </div>
+
+    <div class="ablock" data-id="a3">
+      <div class="ahead" onclick="toggleA('a3')">
+        <div class="achk"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="alabel">Behandlung mit Pflanzenschutz- / Biozidmittel durchgeführt</div>
+      </div>
+      <div class="abody" style="display:none"><div class="hint">Text bearbeiten:</div>
+        <textarea>Behandlung durchgeführt mit [Mittelname] gegen [Zielorganismus]. Wirkstoff: [Wirkstoff], Dosierung: [Menge]. Behandelte Fläche: [m²]. Nächste Kontrolle: [Datum].</textarea></div>
+    </div>
+
+    <div class="ablock" data-id="a4">
+      <div class="ahead" onclick="toggleA('a4')">
+        <div class="achk"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="alabel">Thermische Behandlung — Heißdampf 180 °C</div>
+      </div>
+      <div class="abody" style="display:none"><div class="hint">Text bearbeiten:</div>
+        <textarea>Thermische Behandlung mit Heißdampf (180 °C) durchgeführt gegen [Zielorganismus]. Behandelte Bereiche: [Beschreibung]. Keine chemischen Rückstände. Nächste Kontrolle: [Datum].</textarea></div>
+    </div>
+
+    <div class="ablock" data-id="a5">
+      <div class="ahead" onclick="toggleA('a5')">
+        <div class="achk"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="alabel">Mechanische Absaugung durchgeführt</div>
+      </div>
+      <div class="abody" style="display:none"><div class="hint">Text bearbeiten:</div>
+        <textarea>Mechanische Absaugung durchgeführt — Entfernung von [Zielorganismus / Nestern / Kokons / Rückständen]. Behandelte Bereiche: [Beschreibung]. Material fachgerecht entsorgt.</textarea></div>
+    </div>
+
+    <div class="ablock" data-id="a6">
+      <div class="ahead" onclick="toggleA('a6')">
+        <div class="achk"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="alabel">Fallen / Pheromone positioniert oder kontrolliert</div>
+      </div>
+      <div class="abody" style="display:none"><div class="hint">Text bearbeiten:</div>
+        <textarea>Fallen / Pheromonfallen positioniert / kontrolliert. Typ: [Fallentyp]. Anzahl: [n]. Fangzahl: [n]. Befallsdruck: [gering / mittel / hoch]. Nächste Kontrolle: [Datum/KW].</textarea></div>
+    </div>
+
+    <div class="ablock" data-id="a7">
+      <div class="ahead" onclick="toggleA('a7')">
+        <div class="achk"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="alabel">Bettwanzen-Monitoring mit zertifizierten Geräten</div>
+      </div>
+      <div class="abody" style="display:none"><div class="hint">Text bearbeiten:</div>
+        <textarea>Bettwanzen-Monitoring durchgeführt mit ClimbUp Interceptor / Blackout Bed Bug Monitor. Anzahl Geräte: [n]. Befund: [positiv / negativ]. Nächste Kontrolle: [Datum].</textarea></div>
+    </div>
+
+    <div class="ablock" data-id="a8">
+      <div class="ahead" onclick="toggleA('a8')">
+        <div class="achk"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="alabel">Larvenbekämpfung an Gewässern / Wasseransammlungen</div>
+      </div>
+      <div class="abody" style="display:none"><div class="hint">Text bearbeiten:</div>
+        <textarea>Larvenbekämpfung durchgeführt an [Anzahl] Gewässern / Wasseransammlungen mit [Mittelname / Bti]. Behandelte Fläche: [m²]. Nächste Kontrolle: [Datum].</textarea></div>
+    </div>
+
+    <div class="ablock" data-id="a9">
+      <div class="ahead" onclick="toggleA('a9')">
+        <div class="achk"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="alabel">Nachkontrolle / Follow-up nach vorheriger Behandlung</div>
+      </div>
+      <div class="abody" style="display:none"><div class="hint">Text bearbeiten:</div>
+        <textarea>Nachkontrolle nach Behandlung vom [Datum]. Befund: [Beschreibung]. Wirksamkeit: [sehr gut / gut / ausreichend / unzureichend]. Weiteres Vorgehen: [Beschreibung].</textarea></div>
+    </div>
+
+    <div class="ablock" data-id="a10">
+      <div class="ahead" onclick="toggleA('a10')">
+        <div class="achk"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="alabel">Risikoeinschätzung vor Ort — Detailbericht folgt</div>
+      </div>
+      <div class="abody" style="display:none"><div class="hint">Text bearbeiten:</div>
+        <textarea>Risikoeinschätzung vor Ort durchgeführt bezüglich [Thema / Zielorganismus]. Ein ausführlicher Detailbericht wird in Kürze nachgereicht.</textarea></div>
+    </div>
+
+    <div class="ablock" data-id="a11">
+      <div class="ahead" onclick="toggleA('a11')">
+        <div class="achk"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="alabel">Beratungsgespräch — schriftliche Empfehlungen folgen</div>
+      </div>
+      <div class="abody" style="display:none"><div class="hint">Text bearbeiten:</div>
+        <textarea>Beratungsgespräch geführt zum Thema [Thema]. Schriftliche Empfehlungen und Maßnahmenplan werden separat übermittelt.</textarea></div>
+    </div>
+
+    <div class="ablock" data-id="a12">
+      <div class="ahead" onclick="toggleA('a12')">
+        <div class="achk"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="ablank">Freie Eingabe — eigene Maßnahme beschreiben</div>
+      </div>
+      <div class="abody" style="display:none"><div class="hint">Beschreibung:</div>
+        <textarea placeholder="Hier frei beschreiben..."></textarea></div>
+    </div>
+
+    <div id="custom-azioni"></div>
+    <div class="addrow" onclick="openModal('m-new-azione')" style="margin-top:4px">
+      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      Eigene Maßnahme hinzufügen
+    </div>
+  </div>
+</div>
+
+<!-- NÄCHSTE KONTROLLE -->
+<div class="section">
+  <div class="shead"><div class="slbl">Nächste Kontrolle</div></div>
+  <div class="sbody">
+    <div class="ncheck-row">
+      <svg width="16" height="16" fill="none" stroke="var(--gold)" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      <label>Datum</label>
+      <input type="date" id="next-check-input">
+    </div>
+    <p style="font-size:11px;color:var(--muted);margin-top:6px">📧 Erinnerung 3 Tage vorher per E-Mail.</p>
+  </div>
+</div>
+
+<!-- PRODOTTI -->
+<div class="section">
+  <div class="shead"><div class="slbl">Eingesetzte Mittel</div></div>
+  <div class="sbody">
+    <div id="prod-list"></div>
+    <div class="addrow" onclick="openModal('m-prodotti')">
+      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      Mittel hinzufügen
+    </div>
+  </div>
+</div>
+
+<!-- FOTO -->
+<div class="section">
+  <div class="shead">
+    <div class="slbl">Fotodokumentation</div>
+    <span style="font-size:11px;color:var(--muted)">antippen für Beschriftung</span>
+  </div>
+  <div class="sbody">
+    <div class="fstrip" id="fstrip">
+      <div class="fadd" onclick="document.getElementById('foto-input').click()">
+        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+        Foto
+      </div>
+    </div>
+    <input type="file" id="foto-input" accept="image/*" multiple style="display:none" onchange="addFotos(this)">
+  </div>
+</div>
+
+<!-- WOCHENBERICHT -->
+<div class="section">
+  <div class="shead"><div class="slbl">Wochenbericht</div></div>
+  <div class="sbody">
+    <button class="woche-btn" onclick="openWochenbericht()">
+      <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      Wochenübersicht Kontrollen
+    </button>
+    <p style="font-size:11px;color:var(--muted);margin-top:8px">Alle ausstehenden Nachkontrollen dieser Woche auf einen Blick.</p>
+  </div>
+</div>
+
+<!-- FIRME -->
+<div class="section">
+  <div class="shead"><div class="slbl">Unterschriften</div></div>
+  <div class="sbody">
+    <div style="margin-bottom:18px">
+      <div class="firma-row">
+        <div class="firma-sublbl">Unterschrift Kunde</div>
+        <button class="firma-clear" onclick="clearCanvas('sig-k')">Löschen</button>
+      </div>
+      <canvas class="firma-canvas" id="sig-k" width="600" height="160"></canvas>
+      <input type="text" class="firma-name-input" id="sig-k-name" placeholder="Name der unterschreibenden Person">
+      <div class="nofirma-row">
+        <input type="checkbox" id="nofirma-cb" onchange="toggleNofirma()">
+        <label for="nofirma-cb">Unterschrift nicht möglich — Begründung angeben</label>
+      </div>
+      <textarea class="nofirma-ta" id="nofirma-ta" placeholder="Begründung..."></textarea>
+    </div>
+    <div>
+      <div class="firma-sublbl">Unterschrift MadLeaf</div>
+      <div class="mia-firma">
+        <div class="mia-sig">GM</div>
+        <div class="mia-info">
+          <div class="mia-name">Dr. Giuseppe Maddalena</div>
+          <div class="mia-title">Applied Entomology &amp; Environmental Risk</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="bottombar">
+  <button class="btnsave" onclick="saveDraft()" title="Entwurf speichern">
+    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+  </button>
+  <button class="btnmain" onclick="generatePDF()">
+    <svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+    PDF erstellen &amp; senden
+  </button>
+</div>
+
+<!-- MODALI -->
+<div class="moverlay" id="m-kunden">
+  <div class="modal">
+    <button class="mclose" onclick="closeModal('m-kunden')">×</button>
+    <h3>Kunde auswählen</h3>
+    <div id="klist"></div>
+    <hr>
+    <div style="font-size:13px;font-weight:700;margin-bottom:10px">Neuen Kunden anlegen</div>
+    <input type="text" id="nk-name" placeholder="Name *">
+    <input type="text" id="nk-address" placeholder="Adresse">
+    <input type="text" id="nk-city" placeholder="Ort">
+    <input type="email" id="nk-email" placeholder="E-Mail *">
+    <input type="tel" id="nk-phone" placeholder="Telefon">
+    <div class="mbtnrow">
+      <button class="mbtn s" onclick="closeModal('m-kunden')">Abbrechen</button>
+      <button class="mbtn p" onclick="saveKunde()">Speichern</button>
+    </div>
+  </div>
+</div>
+
+<div class="moverlay" id="m-prodotti">
+  <div class="modal-full">
+    <button class="mclose" onclick="closeModal('m-prodotti')">×</button>
+    <h3>Mittel auswählen</h3>
+    <div id="psel-list"></div>
+    <hr>
+    <div style="font-size:13px;font-weight:700;margin-bottom:10px">Neues Mittel anlegen</div>
+    <input type="text" id="np-name" placeholder="Handelsname *">
+    <input type="text" id="np-kategorie" placeholder="Kategorie (z.B. Gel, Pheromon, Falle...)">
+    <input type="text" id="np-wirkstoff" placeholder="Wirkstoff">
+    <input type="text" id="np-dosierung" placeholder="Dosierung / Anwendung">
+    <input type="text" id="np-klasse" placeholder="Wirkstoffklasse">
+    <textarea id="np-note" placeholder="Hinweise Sicherheitsdatenblatt / Antidot"></textarea>
+    <div class="mbtnrow">
+      <button class="mbtn s" onclick="closeModal('m-prodotti')">Abbrechen</button>
+      <button class="mbtn p" onclick="saveProdotto()">Speichern &amp; hinzufügen</button>
+    </div>
+  </div>
+</div>
+
+<div class="moverlay" id="m-foto">
+  <div class="modal">
+    <button class="mclose" onclick="closeModal('m-foto')">×</button>
+    <h3>Fotobeschriftung</h3>
+    <textarea id="foto-desc-ta" placeholder="Beschreibung dieser Aufnahme..." style="min-height:90px;width:100%;padding:10px;border:1px solid var(--border);border-radius:8px;font-size:14px;font-family:'Satoshi',Arial,sans-serif;resize:none"></textarea>
+    <div class="mbtnrow" style="margin-top:10px">
+      <button class="mbtn s" onclick="closeModal('m-foto')">Abbrechen</button>
+      <button class="mbtn p" onclick="saveFotoDesc()">Speichern</button>
+    </div>
+  </div>
+</div>
+
+<div class="moverlay" id="m-archiv">
+  <div class="modal">
+    <button class="mclose" onclick="closeModal('m-archiv')">×</button>
+    <h3>Archiv</h3>
+    <div id="arch-list"></div>
+  </div>
+</div>
+
+<div class="moverlay" id="m-new-azione">
+  <div class="modal-full">
+    <button class="mclose" onclick="closeModal('m-new-azione')">×</button>
+    <h3>Eigene Maßnahme</h3>
+    <input type="text" id="na-label" placeholder="Kurzbezeichnung">
+    <textarea id="na-text" placeholder="Vorbereiteter Text..." style="min-height:100px"></textarea>
+    <label style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted);margin-bottom:10px">
+      <input type="checkbox" id="na-save"> Als Vorlage speichern
+    </label>
+    <div class="mbtnrow">
+      <button class="mbtn s" onclick="closeModal('m-new-azione')">Abbrechen</button>
+      <button class="mbtn p" onclick="addCustomAzione()">Hinzufügen</button>
+    </div>
+  </div>
+</div>
+
+<div class="moverlay" id="m-woche">
+  <div class="modal">
+    <button class="mclose" onclick="closeModal('m-woche')">×</button>
+    <h3>Kontrollen diese Woche</h3>
+    <div id="woche-list"></div>
+    <div class="mbtnrow" style="margin-top:14px">
+      <button class="mbtn s" onclick="closeModal('m-woche')">Schließen</button>
+      <button class="mbtn p" onclick="sendWochenbericht()">Per E-Mail senden</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL POST-PDF — invia -->
+<div class="moverlay" id="m-send">
+  <div class="modal">
+    <button class="mclose" onclick="closeModal('m-send')">×</button>
+    <h3>Bericht erstellt ✓</h3>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:16px">
+      PDF gespeichert &amp; E-Mail automatisch gesendet. Auch per WhatsApp teilen?
+    </p>
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <button class="btnmain" style="border-radius:10px;padding:14px;background:#25d366" onclick="sendViaWhatsApp()">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.554 4.116 1.526 5.845L.057 23.009a.75.75 0 0 0 .934.934l5.164-1.469A11.945 11.945 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.75a9.726 9.726 0 0 1-4.964-1.362l-.356-.212-3.685 1.048 1.048-3.685-.212-.356A9.726 9.726 0 0 1 2.25 12C2.25 6.615 6.615 2.25 12 2.25S21.75 6.615 21.75 12 17.385 21.75 12 21.75z"/></svg>
+        Auch per WhatsApp senden
+      </button>
+      <button class="mbtn s" onclick="closeModal('m-send');setTimeout(()=>{if(confirm('Neuen Bericht erstellen? Alle Daten werden zurückgesetzt.')) resetAll();},200)">
+        Schließen
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ═══════════════════════════════════
+// CONFIG — sostituisci con URL Render dopo deploy
+// ═══════════════════════════════════
+const MAIL_SERVER = 'https://madleaf-mailserver.onrender.com';
+const MY_EMAIL    = 'giuseppe.maddalena@madleaf.de';
+const BREVO_KEY   = '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';
+const BREVO_FROM  = 'giuseppe.maddalena@madleaf.de';
+const MY_PHONE    = '+49 176 72002500';
+
+// ═══════════════════════════════════
+// STATO
+// ═══════════════════════════════════
+let state = { kunde:null, prodotti:[], fotos:[], gps:null, curFoto:null };
+let pendingSend = false;
+
+// ═══════════════════════════════════
+// STORAGE
+// ═══════════════════════════════════
+const PRODOTTI_DEFAULT = [
+  {cat:'Gel Blattella',name:'Advion Cockroach Gel',wirkstoff:'Indoxacarb 0,6%',dosierung:'Kleine Punkte 0,5 g alle 30 cm',klasse:'Oxadiazin',note:'Sicher für Tiere nach Trocknung. Antidot: symptomatisch.',custom:false},
+  {cat:'Gel Blattella',name:'Blattanex Gel',wirkstoff:'Propoxur 1%',dosierung:'0,5 g/Applikationspunkt',klasse:'Carbamat',note:'Nicht bei Tierpräsenz verwenden. Antidot: Atropin.',custom:false},
+  {cat:'Gel Blattella',name:'Goliath Gel',wirkstoff:'Fipronil 0,05%',dosierung:'Punkte 0,3–0,5 g',klasse:'Phenylpyrazol',note:'Dominoeffekt. Antidot: symptomatisch.',custom:false},
+  {cat:'Gel Blattella',name:'Maxforce FC Magnum',wirkstoff:'Fipronil 0,05%',dosierung:'1 g/m²',klasse:'Phenylpyrazol',note:'Hohe Restwirkung. Antidot: symptomatisch.',custom:false},
+  {cat:'Gel Blattella',name:'Maxforce Quantum',wirkstoff:'Imidacloprid 0,03%',dosierung:'Punkte 0,5 g alle 20–30 cm',klasse:'Neonikotinoid',note:'Rotation mit Fipronil empfohlen. Antidot: symptomatisch.',custom:false},
+  {cat:'Gel Blattella',name:'Invict Gold',wirkstoff:'Imidacloprid 2,15%',dosierung:'Minimale Punkte, hohe Konzentration',klasse:'Neonikotinoid',note:'Bei starkem Befall. Antidot: symptomatisch.',custom:false},
+  {cat:'Insektizidstaub',name:'Ficam W',wirkstoff:'Bendiocarb 80%',dosierung:'25–50 g/m²',klasse:'Carbamat',note:'Anwendung in Ritzen und Hohlräumen. Antidot: Atropinsulfat 2mg IM.',custom:false},
+  {cat:'Insektizidstaub',name:'Kieselgur / Kieselerde',wirkstoff:'Amorphes Siliziumdioxid >90%',dosierung:'Dünne Schicht in Ritzen',klasse:'Physikalisch-mechanisch',note:'Sicher für Menschen und Tiere. Kein Antidot erforderlich.',custom:false},
+  {cat:'Bettwanzen',name:'ClimbUp Interceptor',wirkstoff:'Mechanisches Gerät',dosierung:'1 pro Bettbein',klasse:'Monitoring',note:'Kontrolle nach 48–72 Std.',custom:false},
+  {cat:'Bettwanzen',name:'Blackout Bed Bug Monitor',wirkstoff:'CO2 + synthetische Pheromone',dosierung:'1–2 pro Zimmer',klasse:'Aktives Monitoring',note:'Ablesung nach 24 Std.',custom:false},
+  {cat:'Prozessionsspinner',name:'Pheromon-Halsband PPM',wirkstoff:'Synthetisches Pheromon Kiefer',dosierung:'1 Halsband / Baum',klasse:'Pheromonalle',note:'Alle 4–6 Wochen ersetzen.',custom:false},
+  {cat:'Prozessionsspinner',name:'Pheromonfalle EPS',wirkstoff:'Synthetisches Pheromon Eiche',dosierung:'1 Falle / 500 m²',klasse:'Pheromonfalle',note:'Wöchentliche Kontrolle in der Saison.',custom:false},
+  {cat:'Wespen',name:'VPL Wespenfalle',wirkstoff:'Nahrungslockmittel',dosierung:'1–3 Fallen pro Bereich',klasse:'Mechanische Falle',note:'Lockmittel alle 7–10 Tage erneuern.',custom:false},
+  {cat:'Motten',name:'Pheromonfalle Lebensmittelmotten',wirkstoff:'Synthetisches Pheromon',dosierung:'1 pro Küche / Vorratskammer',klasse:'Pheromonfalle',note:'Alle 3 Monate ersetzen.',custom:false},
+  {cat:'Motten',name:'Pheromonfalle Kleidermotten',wirkstoff:'Synthetisches Pheromon Textil',dosierung:'1 pro Kleiderschrank',klasse:'Pheromonfalle',note:'Alle 3 Monate ersetzen.',custom:false},
+  {cat:'Stechmücken',name:'BG-GAT (ohne CO2)',wirkstoff:'Synthetisches Lockmittel BG-Sweetscent',dosierung:'1 pro Bereich',klasse:'Erwachsenenfalle',note:'Wöchentliche Kontrolle.',custom:false},
+  {cat:'Stechmücken',name:'Ovitrappola',wirkstoff:'Wasser + Eiablageplatte',dosierung:'1 pro 100 m²',klasse:'Eiermonitoring',note:'Eierzählung alle 7 Tage.',custom:false},
+  {cat:'Stechmücken',name:'VectoBac WG',wirkstoff:'Bacillus thuringiensis israelensis',dosierung:'0,5–5 g/m² Wasserfläche',klasse:'Biologisches Larvizid',note:'Sicher für aquatische Nichtzielorganismen.',custom:false},
+  {cat:'Stechmücken',name:'Steinernema feltiae',wirkstoff:'Entomopathogene Nematoden',dosierung:'0,5 Mio/m²',klasse:'Biologisch',note:'Kühl lagern. Abends ausbringen.',custom:false},
+  {cat:'Stechmücken',name:'Heterorhabditis bacteriophora',wirkstoff:'Entomopathogene Nematoden',dosierung:'0,5 Mio/m²',klasse:'Biologisch',note:'Für Larven im Boden. Nach Ausbringen bewässern.',custom:false},
+  {cat:'Silberfischchen',name:'Klebefalle Lepisma',wirkstoff:'Nahrungslockmittel',dosierung:'1 pro feuchte Ecke',klasse:'Monitoring',note:'Kontrolle alle 2 Wochen.',custom:false},
+];
+
+function getProdottiDB(){try{const s=JSON.parse(localStorage.getItem('ml_prodotti')||'null');if(s&&s.length)return s;}catch(e){}return[...PRODOTTI_DEFAULT];}
+function saveProdottiDB(p){localStorage.setItem('ml_prodotti',JSON.stringify(p));}
+function getKunden(){try{return JSON.parse(localStorage.getItem('ml_kunden')||'[]');}catch(e){return[];}}
+function saveKunden(k){localStorage.setItem('ml_kunden',JSON.stringify(k));}
+function getArchiv(){try{return JSON.parse(localStorage.getItem('ml_archiv')||'[]');}catch(e){return[];}}
+function saveArchiv(a){localStorage.setItem('ml_archiv',JSON.stringify(a));}
+function getNachkontrollen(){try{return JSON.parse(localStorage.getItem('ml_nk')||'[]');}catch(e){return[];}}
+function saveNachkontrollen(n){localStorage.setItem('ml_nk',JSON.stringify(n));}
+function getCustomAzioni(){try{return JSON.parse(localStorage.getItem('ml_custom_az')||'[]');}catch(e){return[];}}
+function saveCustomAzioni(a){localStorage.setItem('ml_custom_az',JSON.stringify(a));}
+
+// ═══════════════════════════════════
+// INIT
+// ═══════════════════════════════════
+document.addEventListener('DOMContentLoaded',()=>{
+  setToday();
+  initGPS();
+  initSig('sig-k');
+  renderCustomAzioni();
+});
+
+window.addEventListener('online',()=>{
+  document.getElementById('obanner').classList.add('show');
+  setTimeout(()=>document.getElementById('obanner').classList.remove('show'),4000);
+});
+
+// ═══════════════════════════════════
+// DATE & GPS
+// ═══════════════════════════════════
+function setToday(){
+  const d=new Date();
+  d.setMinutes(d.getMinutes()-d.getTimezoneOffset());
+  document.getElementById('datum-input').value=d.toISOString().split('T')[0];
+}
+
+function initGPS(){
+  const b=document.getElementById('gps-badge');
+  if(!navigator.geolocation){b.textContent='Kein GPS';return;}
+  navigator.geolocation.getCurrentPosition(p=>{
+    state.gps={lat:p.coords.latitude.toFixed(5),lon:p.coords.longitude.toFixed(5)};
+    b.textContent=`📍 ${state.gps.lat}, ${state.gps.lon}`;
+  },()=>{b.textContent='GPS n/v';});
+}
+
+// ═══════════════════════════════════
+// TIMER — riscritto con setInterval semplice
+// ═══════════════════════════════════
+let _timerInterval = null;
+let _timerStart = null;
+let _timerOn = false;
+
+function toggleTimer(){_timerOn?_stopTimer():_startTimer();}
+
+function _startTimer(){
+  if(!_timerStart) _timerStart = Date.now() - (_getSavedElapsed()||0);
+  _timerOn=true;
+  document.getElementById('tdot').classList.add('on');
+  document.getElementById('tbtn').textContent='STOP';
+  document.getElementById('tbtn').classList.add('on');
+  _timerInterval=setInterval(_tickTimer,500);
+}
+
+function _stopTimer(){
+  clearInterval(_timerInterval);
+  _timerInterval=null;
+  _timerOn=false;
+  document.getElementById('tdot').classList.remove('on');
+  document.getElementById('tbtn').textContent='START';
+  document.getElementById('tbtn').classList.remove('on');
+  if(_timerStart) localStorage.setItem('ml_timer_elapsed', Date.now()-_timerStart);
+}
+
+function _resetTimer(){
+  _stopTimer();
+  _timerStart=null;
+  localStorage.removeItem('ml_timer_elapsed');
+  document.getElementById('tval').textContent='00h 00m 00s';
+}
+
+function _tickTimer(){
+  if(!_timerStart) return;
+  const s=Math.floor((Date.now()-_timerStart)/1000);
+  document.getElementById('tval').textContent=
+    `${String(Math.floor(s/3600)).padStart(2,'0')}h ${String(Math.floor((s%3600)/60)).padStart(2,'0')}m ${String(s%60).padStart(2,'0')}s`;
+}
+
+function _getSavedElapsed(){
+  const v=localStorage.getItem('ml_timer_elapsed');
+  return v?parseInt(v):0;
+}
+
+function getTimerStr(){return document.getElementById('tval').textContent;}
+
+// ═══════════════════════════════════
+// KUNDEN
+// ═══════════════════════════════════
+function openModal(id){
+  if(id==='m-kunden') renderKunden();
+  if(id==='m-prodotti') renderProdottiSel();
+  if(id==='m-archiv') renderArchiv();
+  document.getElementById(id).classList.add('open');
+}
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+
+function renderKunden(){
+  const k=getKunden(),c=document.getElementById('klist');
+  if(!k.length){c.innerHTML='<p style="font-size:13px;color:var(--muted);padding:10px 0">Noch keine Kunden.</p>';return;}
+  c.innerHTML=k.map((k,i)=>`<div class="klist-item" onclick="selectKunde(${i})">
+    <div class="avatar" style="width:32px;height:32px;font-size:11px">${k.name.substring(0,2).toUpperCase()}</div>
+    <div><div class="klist-name">${k.name}</div><div class="klist-sub">${k.city||''} · ${k.email||''}</div></div>
+    <button class="klist-del" onclick="event.stopPropagation();delKunde(${i})">×</button>
+  </div>`).join('');
+}
+
+function selectKunde(i){
+  const k=getKunden()[i];state.kunde=k;
+  document.getElementById('k-avatar').textContent=k.name.substring(0,2).toUpperCase();
+  document.getElementById('k-name').textContent=k.name;
+  document.getElementById('k-sub').textContent=`${k.city||''} · ${k.email||''}`;
+  closeModal('m-kunden');
+}
+
+function delKunde(i){
+  if(!confirm('Kunde löschen?'))return;
+  const k=getKunden();k.splice(i,1);saveKunden(k);renderKunden();
+}
+
+function saveKunde(){
+  const name=document.getElementById('nk-name').value.trim();
+  if(!name){showToast('Name erforderlich','red');return;}
+  const k={name,email:document.getElementById('nk-email').value.trim(),
+    address:document.getElementById('nk-address').value.trim(),
+    city:document.getElementById('nk-city').value.trim(),
+    phone:document.getElementById('nk-phone').value.trim()};
+  const kunden=getKunden();kunden.push(k);saveKunden(kunden);
+  ['nk-name','nk-address','nk-city','nk-email','nk-phone'].forEach(id=>document.getElementById(id).value='');
+  state.kunde=k;
+  document.getElementById('k-avatar').textContent=k.name.substring(0,2).toUpperCase();
+  document.getElementById('k-name').textContent=k.name;
+  document.getElementById('k-sub').textContent=`${k.city||''} · ${k.email||''}`;
+  renderKunden();closeModal('m-kunden');showToast('Kunde gespeichert ✓','gold');
+}
+
+// ═══════════════════════════════════
+// AZIONI
+// ═══════════════════════════════════
+function toggleA(id){
+  const b=document.querySelector(`[data-id="${id}"]`);
+  const body=b.querySelector('.abody');
+  const on=b.classList.contains('on');
+  b.classList.toggle('on',!on);
+  body.style.display=on?'none':'block';
+}
+
+function getAzioni(){
+  const res=[];
+  document.querySelectorAll('.ablock.on').forEach(b=>{
+    const ta=b.querySelector('textarea');
+    if(ta&&ta.value.trim()) res.push(ta.value.trim());
+  });
+  return res;
+}
+
+function renderCustomAzioni(){
+  const custom=getCustomAzioni();
+  document.getElementById('custom-azioni').innerHTML=custom.map((a,i)=>`
+    <div class="ablock" data-id="ca${i}">
+      <div class="ahead" onclick="toggleA('ca${i}')">
+        <div class="achk"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="alabel">${a.label}</div>
+      </div>
+      <div class="abody" style="display:none"><div class="hint">Text bearbeiten:</div>
+        <textarea>${a.text}</textarea></div>
+    </div>`).join('');
+}
+
+function addCustomAzione(){
+  const label=document.getElementById('na-label').value.trim();
+  const text=document.getElementById('na-text').value.trim();
+  if(!label){showToast('Bezeichnung erforderlich','red');return;}
+  if(document.getElementById('na-save').checked){
+    const c=getCustomAzioni();c.push({label,text});saveCustomAzioni(c);
+  }
+  const wrap=document.getElementById('custom-azioni');
+  const id='ca_'+Date.now();
+  const div=document.createElement('div');
+  div.className='ablock on';div.setAttribute('data-id',id);
+  div.innerHTML=`<div class="ahead" onclick="toggleA('${id}')">
+    <div class="achk" style="background:var(--green);border-color:var(--green)"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <div class="alabel" style="color:var(--green);font-weight:600">${label}</div></div>
+  <div class="abody"><div class="hint">Text bearbeiten:</div><textarea>${text}</textarea></div>`;
+  wrap.appendChild(div);
+  document.getElementById('na-label').value='';
+  document.getElementById('na-text').value='';
+  document.getElementById('na-save').checked=false;
+  closeModal('m-new-azione');
+}
+
+// ═══════════════════════════════════
+// PRODOTTI
+// ═══════════════════════════════════
+function renderProdottiSel(){
+  const db=getProdottiDB();
+  const cats=[...new Set(db.map(p=>p.cat))];
+  document.getElementById('psel-list').innerHTML=cats.map(cat=>{
+    return`<div class="pcat-title">${cat}</div>`+
+      db.filter(p=>p.cat===cat).map(p=>{
+        const i=db.indexOf(p);
+        return`<div class="psel-item" onclick="addProdotto(${i})">
+          <div>
+            <div class="psel-name">${p.name}</div>
+            <div class="psel-detail">${p.wirkstoff} · ${p.dosierung}</div>
+            ${p.note?`<div class="psel-note">${p.note.substring(0,70)}${p.note.length>70?'...':''}</div>`:''}
+          </div>
+          ${p.custom?`<button class="psel-del" onclick="event.stopPropagation();delProdottoDB(${i})">×</button>`:''}
+        </div>`;
+      }).join('');
+  }).join('');
+}
+
+function addProdotto(i){
+  const p=getProdottiDB()[i];
+  state.prodotti.push({...p,qty:''});
+  renderProdottiForm();closeModal('m-prodotti');
+}
+
+function delProdottoDB(i){
+  if(!confirm('Mittel löschen?'))return;
+  const db=getProdottiDB();db.splice(i,1);saveProdottiDB(db);renderProdottiSel();
+}
+
+function saveProdotto(){
+  const name=document.getElementById('np-name').value.trim();
+  if(!name){showToast('Handelsname erforderlich','red');return;}
+  const p={cat:document.getElementById('np-kategorie').value.trim()||'Sonstiges',
+    name,wirkstoff:document.getElementById('np-wirkstoff').value.trim(),
+    dosierung:document.getElementById('np-dosierung').value.trim(),
+    klasse:document.getElementById('np-klasse').value.trim(),
+    note:document.getElementById('np-note').value.trim(),custom:true};
+  const db=getProdottiDB();db.push(p);saveProdottiDB(db);
+  state.prodotti.push({...p,qty:''});
+  renderProdottiForm();
+  ['np-name','np-kategorie','np-wirkstoff','np-dosierung','np-klasse','np-note'].forEach(id=>document.getElementById(id).value='');
+  closeModal('m-prodotti');showToast('Mittel gespeichert ✓','gold');
+}
+
+function renderProdottiForm(){
+  document.getElementById('prod-list').innerHTML=state.prodotti.map((p,i)=>`
+    <div class="pcard">
+      <div class="pname">${p.name}</div>
+      <div class="pdetail">${p.wirkstoff} · ${p.dosierung}</div>
+      ${p.klasse?`<span class="pbadge">${p.klasse}</span>`:''}
+      <div class="pqty"><input type="text" placeholder="Verbrauchte Menge / Einheit" value="${p.qty||''}" oninput="state.prodotti[${i}].qty=this.value"></div>
+      <button class="pdel" onclick="removeProdotto(${i})">×</button>
+    </div>`).join('');
+}
+
+function removeProdotto(i){state.prodotti.splice(i,1);renderProdottiForm();}
+
+// ═══════════════════════════════════
+// FOTO
+// ═══════════════════════════════════
+function addFotos(input){
+  Array.from(input.files).forEach(file=>{
+    const r=new FileReader();
+    r.onload=e=>{
+      state.fotos.push({data:e.target.result,desc:'',gps:state.gps?`${state.gps.lat},${state.gps.lon}`:''});
+      renderFotos();
+    };
+    r.readAsDataURL(file);
+  });
+  input.value='';
+}
+
+function renderFotos(){
+  const strip=document.getElementById('fstrip');
+  const add=strip.querySelector('.fadd');
+  strip.querySelectorAll('.fthumb').forEach(el=>el.remove());
+  state.fotos.forEach((f,i)=>{
+    const div=document.createElement('div');
+    div.className='fthumb';
+    div.innerHTML=`<img src="${f.data}" onclick="openFotoDesc(${i})">
+      ${f.gps?`<div class="fgeo">GPS</div>`:''}
+      ${f.desc?`<div class="fdesc-badge">${f.desc}</div>`:''}
+      <button class="fdel" onclick="delFoto(event,${i})">×</button>`;
+    strip.insertBefore(div,add);
+  });
+}
+
+function openFotoDesc(i){
+  state.curFoto=i;
+  document.getElementById('foto-desc-ta').value=state.fotos[i].desc||'';
+  openModal('m-foto');
+}
+
+function saveFotoDesc(){
+  if(state.curFoto!==null) state.fotos[state.curFoto].desc=document.getElementById('foto-desc-ta').value.trim();
+  closeModal('m-foto');
+  renderFotos();
+}
+
+function delFoto(e,i){e.stopPropagation();state.fotos.splice(i,1);renderFotos();}
+
+// ═══════════════════════════════════
+// FIRMA
+// ═══════════════════════════════════
+function initSig(id){
+  const canvas=document.getElementById(id);
+  const ctx=canvas.getContext('2d');
+  let drawing=false;
+  const pos=e=>{
+    const r=canvas.getBoundingClientRect();
+    const src=e.touches?e.touches[0]:e;
+    return{x:(src.clientX-r.left)*(canvas.width/r.width),y:(src.clientY-r.top)*(canvas.height/r.height)};
+  };
+  const start=e=>{e.preventDefault();drawing=true;ctx.beginPath();const p=pos(e);ctx.moveTo(p.x,p.y);};
+  const move=e=>{e.preventDefault();if(!drawing)return;const p=pos(e);ctx.lineTo(p.x,p.y);ctx.strokeStyle='#17382d';ctx.lineWidth=2.5;ctx.lineCap='round';ctx.lineJoin='round';ctx.stroke();};
+  const end=()=>drawing=false;
+  canvas.addEventListener('mousedown',start);canvas.addEventListener('mousemove',move);
+  canvas.addEventListener('mouseup',end);canvas.addEventListener('mouseleave',end);
+  canvas.addEventListener('touchstart',start,{passive:false});
+  canvas.addEventListener('touchmove',move,{passive:false});
+  canvas.addEventListener('touchend',end);
+}
+
+function clearCanvas(id){
+  const c=document.getElementById(id);
+  c.getContext('2d').clearRect(0,0,c.width,c.height);
+}
+
+function toggleNofirma(){
+  const checked=document.getElementById('nofirma-cb').checked;
+  document.getElementById('nofirma-ta').style.display=checked?'block':'none';
+  if(checked) clearCanvas('sig-k');
+}
+
+// ═══════════════════════════════════
+// WOCHENBERICHT
+// ═══════════════════════════════════
+function openWochenbericht(){
+  const nk=getNachkontrollen();
+  const now=new Date();
+  const startW=new Date(now);
+  startW.setDate(now.getDate()-now.getDay()+1);
+  startW.setHours(0,0,0,0);
+  const endW=new Date(startW);
+  endW.setDate(startW.getDate()+6);
+  endW.setHours(23,59,59,999);
+
+  const questa=nk.filter(k=>{
+    const d=new Date(k.datum);
+    return d>=startW&&d<=endW&&!k.done;
+  });
+  // Aggiunge anche quelle scadute settimane precedenti
+  const scadute=nk.filter(k=>{
+    const d=new Date(k.datum);
+    return d<startW&&!k.done;
+  });
+  const tutte=[...scadute.map(k=>({...k,scaduta:true})),...questa];
+
+  const c=document.getElementById('woche-list');
+  if(!tutte.length){
+    c.innerHTML='<p style="font-size:13px;color:var(--muted);padding:10px 0">Keine Kontrollen diese Woche.</p>';
+  } else {
+    c.innerHTML=tutte.map((k,i)=>`
+      <div class="woche-item">
+        <div class="woche-check ${k.done?'done':''}" onclick="toggleNK(${nk.indexOf(k)},this)"></div>
+        <div style="flex:1">
+          <div style="font-size:14px;font-weight:600;color:var(--green)">${k.kunde}</div>
+          <div style="font-size:12px;color:${k.scaduta?'#dc2626':'var(--muted)'}">
+            ${k.typ||'Kontrolle'} · ${k.datumFmt}${k.scaduta?' ⚠ Überfällig':''}
+          </div>
+        </div>
+      </div>`).join('');
+  }
+  openModal('m-woche');
+}
+
+function toggleNK(i,el){
+  const nk=getNachkontrollen();
+  if(i>=0&&i<nk.length){
+    nk[i].done=!nk[i].done;
+    saveNachkontrollen(nk);
+    el.classList.toggle('done',nk[i].done);
+  }
+}
+
+async function sendWochenbericht(){
+  const nk=getNachkontrollen().filter(k=>!k.done);
+  if(!nk.length){showToast('Keine offenen Kontrollen','');closeModal('m-woche');return;}
+  showPwdModal(async(pwd)=>{
+    showSpinner('Wochenbericht wird gesendet...');
+    try{
+      const res=await fetch(`${MAIL_SERVER}/send-wochenbericht`,{
+        method:'POST',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({password:pwd,kontrollen:nk.map(k=>({kunde:k.kunde,typ:k.typ||'Kontrolle',datum:k.datumFmt}))})
+      });
+      const json=await res.json();
+      hideSpinner();
+      if(json.ok){showToast('Wochenbericht gesendet ✓','gold');closeModal('m-woche');}
+      else showToast('Fehler: '+json.error,'red');
+    }catch(e){hideSpinner();showToast('Verbindungsfehler','red');}
+  });
+}
+
+// ═══════════════════════════════════
+// RESET
+// ═══════════════════════════════════
+function resetAll(){
+  state.kunde=null;state.prodotti=[];state.fotos=[];state.curFoto=null;
+  document.getElementById('k-avatar').textContent='–';
+  document.getElementById('k-name').textContent='Kunde auswählen';
+  document.getElementById('k-sub').textContent='Antippen um Kunde zu wählen';
+  document.querySelectorAll('.ablock').forEach(b=>{
+    b.classList.remove('on');
+    const body=b.querySelector('.abody');
+    if(body) body.style.display='none';
+  });
+  document.getElementById('custom-azioni').innerHTML='';
+  renderProdottiForm();renderFotos();
+  clearCanvas('sig-k');
+  document.getElementById('sig-k-name').value='';
+  document.getElementById('nofirma-cb').checked=false;
+  document.getElementById('nofirma-ta').style.display='none';
+  document.getElementById('nofirma-ta').value='';
+  document.getElementById('next-check-input').value='';
+  setToday();_resetTimer();
+}
+
+// ═══════════════════════════════════
+// PDF GENERATION
+// ═══════════════════════════════════
+async function buildPDF(){
+  const{jsPDF}=window.jspdf;
+  const doc=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
+  const W=210,H=297,ml=16,mr=16,mt=16;
+  let y=mt;
+  const green=[23,56,45],gold=[217,166,79],gray=[111,108,100],black=[40,37,29];
+
+  const datum=document.getElementById('datum-input').value;
+  const datumFmt=datum?new Date(datum+'T12:00:00').toLocaleDateString('de-DE',{day:'2-digit',month:'long',year:'numeric'}):'—';
+  const azioni=getAzioni();
+  const nextCheck=document.getElementById('next-check-input').value;
+  const nextFmt=nextCheck?new Date(nextCheck+'T12:00:00').toLocaleDateString('de-DE',{day:'2-digit',month:'long',year:'numeric'}):null;
+
+  // HEADER
+  doc.setFillColor(...green);doc.rect(0,0,W,28,'F');
+  doc.setFillColor(...gold);doc.rect(0,28,W,1.5,'F');
+  doc.setTextColor(...gold);doc.setFontSize(11);doc.setFont('helvetica','bold');
+  doc.text('MADLEAF',ml,14);
+  doc.setTextColor(255,255,255);doc.setFontSize(16);doc.setFont('helvetica','bold');
+  doc.text('Arbeitsbericht',ml,22);
+  doc.setFontSize(9);doc.setFont('helvetica','normal');doc.setTextColor(200,220,210);
+  doc.text(datumFmt,W-mr,17,{align:'right'});
+  y=36;
+
+  // ABSENDER / EMPFÄNGER
+  doc.setTextColor(...black);doc.setFontSize(8);doc.setFont('helvetica','bold');
+  doc.text('Dr. Giuseppe Maddalena',ml,y);
+  doc.setFont('helvetica','normal');doc.setTextColor(...gray);
+  doc.text('Applied Entomology & Environmental Risk',ml,y+4);
+  doc.text('Schillerstraße 8, 79369 Wyhl am Kaiserstuhl',ml,y+8);
+  doc.text(`${MY_PHONE}  |  ${MY_EMAIL}`,ml,y+12);
+  if(state.kunde){
+    doc.setTextColor(...black);doc.setFont('helvetica','bold');
+    doc.text(state.kunde.name,W-mr,y,{align:'right'});
+    doc.setFont('helvetica','normal');doc.setTextColor(...gray);
+    if(state.kunde.address) doc.text(state.kunde.address,W-mr,y+4,{align:'right'});
+    if(state.kunde.city) doc.text(state.kunde.city,W-mr,y+8,{align:'right'});
+    if(state.kunde.email) doc.text(state.kunde.email,W-mr,y+12,{align:'right'});
+    if(state.kunde.phone) doc.text(state.kunde.phone,W-mr,y+16,{align:'right'});
+  }
+  y+=22;
+  doc.setDrawColor(220,216,210);doc.setLineWidth(0.3);doc.line(ml,y,W-mr,y);y+=6;
+
+  // INFO BOX
+  doc.setFillColor(247,246,242);doc.roundedRect(ml,y,W-ml-mr,18,2,2,'F');
+  doc.setFillColor(...gold);doc.rect(ml,y,2,18,'F');
+  doc.setTextColor(...gold);doc.setFontSize(7);doc.setFont('helvetica','bold');
+  doc.text('DATUM',ml+5,y+5);doc.text('ARBEITSZEIT',ml+65,y+5);
+  if(state.gps) doc.text('GPS',ml+125,y+5);
+  doc.setTextColor(...black);doc.setFontSize(10);doc.setFont('helvetica','bold');
+  doc.text(datumFmt,ml+5,y+13);doc.text(getTimerStr(),ml+65,y+13);
+  if(state.gps){doc.setFontSize(8);doc.text(`${state.gps.lat}, ${state.gps.lon}`,ml+125,y+13);}
+  y+=24;
+
+  // AZIONI
+  if(azioni.length){
+    doc.setFillColor(...green);doc.roundedRect(ml,y,W-ml-mr,7,1,1,'F');
+    doc.setTextColor(255,255,255);doc.setFontSize(9);doc.setFont('helvetica','bold');
+    doc.text('DURCHGEFÜHRTE MASSNAHMEN',ml+4,y+4.5);y+=10;
+    azioni.forEach(az=>{
+      const lines=doc.splitTextToSize(az,W-ml-mr-10);
+      const bh=lines.length*4.5+8;
+      if(y+bh>H-35){_addFooter(doc,W,H,ml,mr,green,gray);doc.addPage();y=mt;}
+      doc.setFillColor(252,251,248);doc.roundedRect(ml,y,W-ml-mr,bh,2,2,'F');
+      doc.setFillColor(...gold);doc.rect(ml,y,2.5,bh,'F');
+      doc.setDrawColor(235,230,220);doc.setLineWidth(0.3);doc.roundedRect(ml,y,W-ml-mr,bh,2,2,'S');
+      doc.setTextColor(...black);doc.setFontSize(9);doc.setFont('helvetica','normal');
+      lines.forEach((l,li)=>doc.text(l,ml+6,y+5.5+li*4.5));
+      y+=bh+4;
+    });y+=4;
+  }
+
+  // PRODOTTI
+  if(state.prodotti.length){
+    if(y+30>H-35){_addFooter(doc,W,H,ml,mr,green,gray);doc.addPage();y=mt;}
+    doc.setFillColor(...gold);doc.roundedRect(ml,y,W-ml-mr,7,1,1,'F');
+    doc.setTextColor(...green);doc.setFontSize(9);doc.setFont('helvetica','bold');
+    doc.text('EINGESETZTE MITTEL',ml+4,y+4.5);y+=10;
+    state.prodotti.forEach(p=>{
+      if(y+22>H-35){_addFooter(doc,W,H,ml,mr,green,gray);doc.addPage();y=mt;}
+      doc.setFillColor(252,251,248);doc.roundedRect(ml,y,W-ml-mr,22,2,2,'F');
+      doc.setFillColor(...gold);doc.rect(ml,y,2.5,22,'F');
+      doc.setDrawColor(235,230,220);doc.setLineWidth(0.3);doc.roundedRect(ml,y,W-ml-mr,22,2,2,'S');
+      doc.setTextColor(...black);doc.setFontSize(10);doc.setFont('helvetica','bold');doc.text(p.name,ml+6,y+6);
+      doc.setFontSize(8);doc.setFont('helvetica','normal');doc.setTextColor(...gray);
+      doc.text(`${p.wirkstoff}  ·  ${p.dosierung}`,ml+6,y+11);
+      if(p.qty){doc.setTextColor(...green);doc.text(`Verbraucht: ${p.qty}`,ml+6,y+16);}
+      if(p.klasse){
+        doc.setFillColor(240,244,240);doc.roundedRect(W-mr-32,y+4,28,6,1,1,'F');
+        doc.setTextColor(...green);doc.setFontSize(7);doc.setFont('helvetica','bold');
+        doc.text(p.klasse,W-mr-18,y+8,{align:'center'});
+      }
+      y+=26;
+    });y+=4;
+  }
+
+  // NÄCHSTE KONTROLLE
+  if(nextFmt){
+    if(y+16>H-35){_addFooter(doc,W,H,ml,mr,green,gray);doc.addPage();y=mt;}
+    doc.setFillColor(252,247,235);doc.roundedRect(ml,y,W-ml-mr,14,2,2,'F');
+    doc.setFillColor(...gold);doc.rect(ml,y,2.5,14,'F');
+    doc.setDrawColor(...gold);doc.setLineWidth(0.5);doc.roundedRect(ml,y,W-ml-mr,14,2,2,'S');
+    doc.setTextColor(...green);doc.setFontSize(9);doc.setFont('helvetica','bold');
+    doc.text(`Nächste Kontrolle: ${nextFmt}`,ml+6,y+8.5);y+=18;
+  }
+
+  // FOTO — 2 per riga, max altezza 85mm per foto
+  if(state.fotos.length){
+    _addFooter(doc,W,H,ml,mr,green,gray);doc.addPage();y=mt;
+    doc.setFillColor(...green);doc.roundedRect(ml,y,W-ml-mr,7,1,1,'F');
+    doc.setTextColor(255,255,255);doc.setFontSize(9);doc.setFont('helvetica','bold');
+    doc.text('FOTODOKUMENTATION',ml+4,y+4.5);y+=12;
+
+    const colW=(W-ml-mr-6)/2; // larghezza colonna (2 per riga con gap 6mm)
+    let col=0; // 0=sinistra, 1=destra
+    let rowH=0; // altezza riga corrente
+
+    for(const foto of state.fotos){
+      try{
+        const img=new Image();img.src=foto.data;
+        await new Promise(r=>{img.onload=r;});
+        const maxH=85;
+        const ratio=Math.min(colW/img.width,maxH/img.height);
+        const fw=img.width*ratio,fh=img.height*ratio;
+
+        const xPos = col===0 ? ml : ml+colW+6;
+
+        // Nuova riga se sinistra e non ci sta
+        if(col===0 && y+fh+18>H-40){
+          _addFooter(doc,W,H,ml,mr,green,gray);doc.addPage();y=mt;rowH=0;
+        }
+
+        doc.addImage(foto.data,'JPEG',xPos,y,fw,fh,undefined,'MEDIUM');
+
+        // GPS badge
+        if(foto.gps){
+          doc.setFillColor(247,246,242);doc.roundedRect(xPos,y+fh-5,40,5,1,1,'F');
+          doc.setTextColor(...green);doc.setFontSize(6);
+          doc.text(`GPS: ${foto.gps}`,xPos+1,y+fh-1.5);
+        }
+
+        // Descrizione sotto la foto
+        if(foto.desc){
+          doc.setTextColor(...gray);doc.setFontSize(7);doc.setFont('helvetica','italic');
+          const dl=doc.splitTextToSize(foto.desc,colW);
+          doc.text(dl,xPos,y+fh+3);
+        }
+
+        rowH=Math.max(rowH,fh+(foto.desc?8:4));
+
+        if(col===1){
+          // Fine riga — avanza y
+          y+=rowH+4;
+          rowH=0;
+          col=0;
+        } else {
+          col=1;
+        }
+      }catch(e){col=0;rowH=0;}
+    }
+    // Se rimasta foto a sinistra senza destra
+    if(col===1) y+=rowH+4;
+  }
+
+  // FIRME
+  if(y+55>H-40){_addFooter(doc,W,H,ml,mr,green,gray);doc.addPage();y=mt;}
+  else y+=6;
+  doc.setDrawColor(220,216,210);doc.setLineWidth(0.3);doc.line(ml,y,W-mr,y);y+=8;
+
+  const half=(W-ml-mr)/2-5;
+  const nofirma=document.getElementById('nofirma-cb').checked;
+  const sigName=document.getElementById('sig-k-name').value.trim();
+
+  // Firma cliente
+  doc.setTextColor(...gray);doc.setFontSize(8);doc.setFont('helvetica','normal');
+  doc.text('Unterschrift Kunde',ml,y);
+  if(sigName){doc.setFont('helvetica','bold');doc.setTextColor(...black);doc.text(sigName,ml,y+5);doc.setFont('helvetica','normal');}
+  if(nofirma){
+    const reason=document.getElementById('nofirma-ta').value;
+    doc.setTextColor(...black);doc.setFontSize(8);
+    doc.text('Unterschrift nicht möglich.',ml,y+12);
+    if(reason){const rl=doc.splitTextToSize(reason,half);doc.text(rl,ml,y+17);}
+  }else{
+    doc.setDrawColor(220,216,210);doc.roundedRect(ml,y+6,half,42,2,2,'S');
+    try{
+      const skc=document.createElement('canvas');skc.width=600;skc.height=200;
+      const skx=skc.getContext('2d');
+      skx.fillStyle='#ffffff';skx.fillRect(0,0,600,200);
+      skx.drawImage(document.getElementById('sig-k'),0,0,600,200);
+      doc.addImage(skc.toDataURL('image/jpeg',0.7),'JPEG',ml+1,y+7,half-2,40);
+    }catch(e){}
+  }
+
+  // Firma mia
+  const sigX=ml+half+10;
+  doc.setTextColor(...gray);doc.setFontSize(8);doc.setFont('helvetica','normal');
+  doc.text('Unterschrift MadLeaf',sigX,y);
+  try{
+    await new Promise((res,rej)=>{
+      const si=new Image();
+      si.onload=()=>{
+        const sc=document.createElement('canvas');sc.width=400;sc.height=160;
+        const sx=sc.getContext('2d');
+        sx.fillStyle='#ffffff';sx.fillRect(0,0,400,160);
+        sx.drawImage(si,0,0,400,160);
+        doc.addImage(sc.toDataURL('image/jpeg',0.7),'JPEG',sigX,y+6,half,42);
+        res();
+      };
+      si.onerror=rej;si.src='Signature_giuseppe.png';
+    });
+  }catch(e){
+    doc.setFillColor(247,246,242);doc.roundedRect(sigX,y+6,half,42,2,2,'F');
+    doc.setTextColor(...green);doc.setFontSize(22);doc.setFont('helvetica','bold');
+    doc.text('GM',sigX+half/2,y+30,{align:'center'});
+  }
+
+  // FOOTER TUTTE LE PAGINE
+  const pages=doc.internal.getNumberOfPages();
+  for(let i=1;i<=pages;i++){doc.setPage(i);_addFooter(doc,W,H,ml,mr,green,gray);}
+  return doc;
+}
+
+function _addFooter(doc,W,H,ml,mr,green,gray){
+  doc.setFillColor(...green);doc.rect(0,H-10,W,10,'F');
+  doc.setTextColor(200,220,210);doc.setFontSize(7);doc.setFont('helvetica','normal');
+  doc.text(`MadLeaf · Dr. Giuseppe Maddalena · Schillerstraße 8 · 79369 Wyhl am Kaiserstuhl · ${MY_PHONE}`,ml,H-4.5);
+  doc.text(`Seite ${doc.internal.getCurrentPageInfo().pageNumber}`,W-mr,H-4.5,{align:'right'});
+}
+
+// ═══════════════════════════════════
+// FILENAME
+// ═══════════════════════════════════
+function buildFilename(){
+  const datum=document.getElementById('datum-input').value;
+  const d=datum?datum.split('-').reverse().join('.'):'keinDatum';
+  const k=state.kunde?state.kunde.name.replace(/\s+/g,'_').replace(/[^a-zA-Z0-9_äöüÄÖÜß]/g,''):'keinKunde';
+  return `MadLeaf_Bericht_${d}_${k}.pdf`;
+}
+
+// ═══════════════════════════════════
+// PASSWORD MODAL
+// ═══════════════════════════════════
+let _pwdCallback=null;
+
+function showPwdModal(callback){
+  _pwdCallback=callback;
+  document.getElementById('pwd-input').value='';
+  document.getElementById('pwd-overlay').classList.add('open');
+  setTimeout(()=>document.getElementById('pwd-input').focus(),300);
+}
+
+function cancelSend(){
+  document.getElementById('pwd-overlay').classList.remove('open');
+  _pwdCallback=null;
+}
+
+function confirmSend(){
+  const pwd=document.getElementById('pwd-input').value;
+  if(!pwd){showToast('Passwort eingeben','red');return;}
+  document.getElementById('pwd-overlay').classList.remove('open');
+  if(_pwdCallback) _pwdCallback(pwd);
+  _pwdCallback=null;
+}
+
+document.getElementById('pwd-input').addEventListener('keydown',e=>{
+  if(e.key==='Enter') confirmSend();
+});
+
+// ═══════════════════════════════════
+// GENERA PDF E APRE MODAL INVIO
+// ═══════════════════════════════════
+let _lastFilename = '';
+let _lastDatumFmt = '';
+let _lastNextFmt = '';
+
+async function generatePDF(){
+  if(!state.kunde){showToast('Bitte zuerst Kunde auswählen','red');return;}
+  if(_timerOn) _stopTimer();
+  showSpinner('PDF wird erstellt...');
+  try{
+    const doc=await buildPDF();
+    _lastFilename=buildFilename();
+    _lastDatumFmt=document.getElementById('datum-input').value
+      ? new Date(document.getElementById('datum-input').value+'T12:00:00').toLocaleDateString('de-DE',{day:'2-digit',month:'long',year:'numeric'})
+      : '—';
+    const nextCheck=document.getElementById('next-check-input').value;
+    _lastNextFmt=nextCheck
+      ? new Date(nextCheck+'T12:00:00').toLocaleDateString('de-DE',{day:'2-digit',month:'long',year:'numeric'})
+      : '';
+
+    // Scarica PDF sul telefono
+    doc.save(_lastFilename);
+
+    // Salva in archivio
+    const archiv=getArchiv();
+    archiv.unshift({name:_lastFilename,datum:document.getElementById('datum-input').value,kunde:state.kunde.name,ts:new Date().toISOString()});
+    if(archiv.length>30) archiv.pop();
+    saveArchiv(archiv);
+
+    // Salva Nachkontrolle
+    if(nextCheck&&state.kunde){
+      const nk=getNachkontrollen();
+      nk.push({kunde:state.kunde.name,datum:nextCheck,datumFmt:_lastNextFmt,typ:'Nachkontrolle',done:false,ts:new Date().toISOString()});
+      saveNachkontrollen(nk);
+    }
+
+    // Manda mail automaticamente via Brevo con PDF allegato
+    showSpinner('E-Mail wird gesendet...');
+    const pdfB64 = doc.output('datauristring').split(',')[1];
+    await sendViaBrevo(pdfB64);
+
+  }catch(e){
+    hideSpinner();
+    console.error(e);
+    showToast('Fehler beim Erstellen','red');
+  }
+}
+
+async function sendViaBrevo(pdfB64){
+  const nc = _lastNextFmt ? `<br><br>📅 <strong>Nächste Kontrolle:</strong> ${_lastNextFmt}` : '';
+  const htmlBody = `
+    <div style="font-family:Arial,sans-serif;max-width:560px;margin:0 auto">
+      <div style="background:#17382d;padding:20px 24px;border-radius:12px 12px 0 0">
+        <p style="margin:0;color:#d9a64f;font-size:10px;letter-spacing:3px;text-transform:uppercase;font-weight:700">MADLEAF</p>
+        <p style="margin:4px 0 0;color:#fff;font-size:18px;font-weight:700">Arbeitsbericht</p>
+      </div>
+      <div style="background:#fcfbf8;padding:24px;border:1px solid rgba(23,56,45,0.12);border-top:none;border-radius:0 0 12px 12px">
+        <p style="color:#28251d;font-size:15px;line-height:1.7;margin:0 0 12px">Sehr geehrte Damen und Herren,</p>
+        <p style="color:#28251d;font-size:15px;line-height:1.7;margin:0 0 20px">
+          anbei erhalten Sie den Arbeitsbericht der Begehung vom <strong>${_lastDatumFmt}</strong>.${nc}
+        </p>
+        <p style="color:#28251d;font-size:15px;margin:0 0 4px">Mit freundlichen Grüßen</p>
+        <hr style="border:none;border-top:1px solid rgba(23,56,45,0.12);margin:16px 0">
+        <p style="margin:0;color:#17382d;font-size:16px;font-weight:700">Dr. Giuseppe Maddalena</p>
+        <p style="margin:2px 0 12px;color:#6f6c64;font-size:12px;text-transform:uppercase;letter-spacing:0.08em">Applied Entomology &amp; Environmental Risk</p>
+        <p style="margin:0;color:#28251d;font-size:13px">📞 ${MY_PHONE}</p>
+        <p style="margin:2px 0;color:#28251d;font-size:13px">✉ ${MY_EMAIL}</p>
+        <p style="margin:2px 0;color:#28251d;font-size:13px">🌐 www.madleaf.de</p>
+      </div>
+    </div>`;
+
+  const toEmail = state.kunde?.email || '';
+  const payload = {
+    sender: { name: 'MadLeaf – Dr. Giuseppe Maddalena', email: BREVO_FROM },
+    to: toEmail ? [{ email: toEmail, name: state.kunde.name }] : [],
+    cc: [{ email: MY_EMAIL, name: 'Dr. Giuseppe Maddalena' }],
+    subject: `MadLeaf – Arbeitsbericht ${_lastDatumFmt}`,
+    htmlContent: htmlBody,
+    attachment: [{ content: pdfB64, name: _lastFilename }]
+  };
+
+  // Se nessuna email cliente, manda solo a me
+  if (!toEmail) payload.to = [{ email: MY_EMAIL, name: 'Dr. Giuseppe Maddalena' }];
+
+  try {
+    const res = await fetch('https://api.brevo.com/v3/smtp/email', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'api-key': BREVO_KEY
+      },
+      body: JSON.stringify(payload)
+    });
+    hideSpinner();
+    if(res.ok){
+      showToast('PDF gespeichert & E-Mail gesendet ✓', 'gold');
+    } else {
+      const err = await res.json();
+      console.error('Brevo error:', err);
+      showToast('PDF gespeichert — E-Mail-Fehler', 'red');
+    }
+  } catch(e) {
+    hideSpinner();
+    showToast('PDF gespeichert — offline, E-Mail nicht gesendet', '');
+  }
+
+  // Apre modal solo per WhatsApp
+  openModal('m-send');
+}
+
+function sendViaMail(){
+  const to=state.kunde?.email||'';
+  const subject=encodeURIComponent(`MadLeaf – Arbeitsbericht ${_lastDatumFmt}`);
+  const nc=_lastNextFmt?`\n\nNächste Kontrolle: ${_lastNextFmt}`:'';
+  const body=encodeURIComponent(
+    `Sehr geehrte Damen und Herren,\n\nanbei erhalten Sie den Arbeitsbericht der Begehung vom ${_lastDatumFmt}.\nBitte fügen Sie die Datei "${_lastFilename}" aus Ihrem Download-Ordner bei.${nc}\n\nMit freundlichen Grüßen\n\nDr. Giuseppe Maddalena\nMadLeaf – Applied Entomology & Environmental Risk\n${MY_PHONE}\ngiuseppe.maddalena@madleaf.de\nwww.madleaf.de`
+  );
+  window.location.href=`mailto:${to}?cc=${encodeURIComponent(MY_EMAIL)}&subject=${subject}&body=${body}`;
+  setTimeout(()=>{
+    closeModal('m-send');
+    setTimeout(()=>{if(confirm('Neuen Bericht erstellen? Alle Daten werden zurückgesetzt.')) resetAll();},400);
+  },500);
+}
+
+function sendViaWhatsApp(){
+  const phone=(state.kunde?.phone||'').replace(/\D/g,'');
+  const nc=_lastNextFmt?`\n\n📅 Nächste Kontrolle: ${_lastNextFmt}`:'';
+  const msg=encodeURIComponent(
+    `Sehr geehrte Damen und Herren,\n\nanbei der Arbeitsbericht vom ${_lastDatumFmt}.\nBitte öffnen Sie die Datei "${_lastFilename}" aus Ihrem Download-Ordner.${nc}\n\nMit freundlichen Grüßen\nDr. Giuseppe Maddalena – MadLeaf`
+  );
+  const url=phone
+    ? `https://wa.me/${phone}?text=${msg}`
+    : `https://wa.me/?text=${msg}`;
+  window.open(url,'_blank');
+  setTimeout(()=>{
+    closeModal('m-send');
+    setTimeout(()=>{if(confirm('Neuen Bericht erstellen? Alle Daten werden zurückgesetzt.')) resetAll();},400);
+  },500);
+}
+
+
+
+// ═══════════════════════════════════
+// ARCHIVIO & DRAFT
+// ═══════════════════════════════════
+function renderArchiv(){
+  const a=getArchiv(),c=document.getElementById('arch-list');
+  if(!a.length){c.innerHTML='<p style="font-size:13px;color:var(--muted);padding:10px 0">Noch keine Berichte.</p>';return;}
+  c.innerHTML=a.map(x=>`<div class="arch-item">
+    <div class="arch-name">${x.name}</div>
+    <div class="arch-sub">${x.kunde||'—'} · ${new Date(x.ts).toLocaleString('de-DE')}</div>
+  </div>`).join('');
+}
+
+function saveDraft(){
+  const datum=document.getElementById('datum-input').value;
+  const archiv=getArchiv();
+  archiv.unshift({name:`Entwurf_${datum}_${state.kunde?state.kunde.name:'keinKunde'}`,datum,kunde:state.kunde?.name||'—',ts:new Date().toISOString()});
+  if(archiv.length>30) archiv.pop();
+  saveArchiv(archiv);
+  showToast('Entwurf gespeichert ✓','gold');
+}
+
+// ═══════════════════════════════════
+// SPINNER & TOAST
+// ═══════════════════════════════════
+function showSpinner(txt){
+  document.getElementById('spin-txt').textContent=txt||'Bitte warten...';
+  document.getElementById('spinner').classList.add('show');
+}
+function hideSpinner(){document.getElementById('spinner').classList.remove('show');}
+
+function showToast(msg,type=''){
+  const t=document.getElementById('toast');
+  t.innerHTML=msg;
+  t.className='toast show'+(type?' '+type:'');
+  setTimeout(()=>t.className='toast',3500);
+}
+
+// Chiudi modal cliccando fuori
+document.querySelectorAll('.moverlay').forEach(o=>{
+  o.addEventListener('click',e=>{if(e.target===o) o.classList.remove('open');});
+});
+
+// SERVICE WORKER
+if('serviceWorker' in navigator){
+  navigator.serviceWorker.register('sw.js').catch(e=>console.log('SW:',e));
+}
+</script>
 </body>
 </html>
