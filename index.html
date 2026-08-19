@@ -168,7 +168,7 @@ body{font-family:'Satoshi',Arial,sans-serif;background:var(--bg);min-height:100v
 
 <div class="topbar">
   <div class="topbar-brand">
-    <div class="sub">MadLeaf · v3.6</div>
+    <div class="sub">MadLeaf · v3.8</div>
     <div class="title">Arbeitsbericht</div>
   </div>
   <div class="topbar-icons">
@@ -553,9 +553,12 @@ body{font-family:'Satoshi',Arial,sans-serif;background:var(--bg);min-height:100v
     <button class="mclose" onclick="closeModal('m-send')">×</button>
     <h3>Bericht erstellt ✓</h3>
     <p style="font-size:13px;color:var(--muted);margin-bottom:16px">
-      PDF gespeichert &amp; E-Mail automatisch gesendet. Auch per WhatsApp teilen?
+      <span id="send-status-msg">PDF gespeichert. E-Mail-Versand wird geprüft.</span>
     </p>
     <div style="display:flex;flex-direction:column;gap:10px">
+      <button class="mbtn p" style="border-radius:10px;padding:13px" onclick="sendViaMail()">
+        E-Mail manuell öffnen
+      </button>
       <button class="btnmain" style="border-radius:10px;padding:14px;background:#25d366" onclick="sendViaWhatsApp()">
         <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.554 4.116 1.526 5.845L.057 23.009a.75.75 0 0 0 .934.934l5.164-1.469A11.945 11.945 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.75a9.726 9.726 0 0 1-4.964-1.362l-.356-.212-3.685 1.048 1.048-3.685-.212-.356A9.726 9.726 0 0 1 2.25 12C2.25 6.615 6.615 2.25 12 2.25S21.75 6.615 21.75 12 17.385 21.75 12 21.75z"/></svg>
         Auch per WhatsApp senden
@@ -1132,230 +1135,199 @@ function resetAll(){
 async function buildPDF(){
   const{jsPDF}=window.jspdf;
   const doc=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
-  const W=210,H=297,ml=16,mr=16,mt=16;
-  let y=mt;
-  const green=[23,56,45],gold=[217,166,79],gray=[111,108,100],black=[40,37,29];
+  const W=210,H=297,ml=16,mr=16;
+  const green=[31,91,69],softGreen=[238,246,242],line=[203,217,211],gray=[105,105,105],black=[34,34,34],gold=[217,166,79];
 
   const datum=document.getElementById('datum-input').value;
-  const datumFmt=datum?new Date(datum+'T12:00:00').toLocaleDateString('de-DE',{day:'2-digit',month:'long',year:'numeric'}):'—';
+  const datumFmt=datum?new Date(datum+'T12:00:00').toLocaleDateString('de-DE',{day:'2-digit',month:'2-digit',year:'numeric'}):'—';
   const azioni=getAzioni();
   const nextCheck=document.getElementById('next-check-input').value;
   const nextFmt=nextCheck?new Date(nextCheck+'T12:00:00').toLocaleDateString('de-DE',{day:'2-digit',month:'long',year:'numeric'}):null;
+  const clientName=state.kunde?.name||'—';
+  const clientRef=[state.kunde?.address||'',state.kunde?.city||''].filter(Boolean).join(', ');
 
-  // HEADER
-  doc.setFillColor(...green);doc.rect(0,0,W,28,'F');
-  doc.setFillColor(...gold);doc.rect(0,28,W,1.5,'F');
-  doc.setTextColor(...gold);doc.setFontSize(11);doc.setFont('helvetica','bold');
-  doc.text('MADLEAF',ml,14);
-  doc.setTextColor(255,255,255);doc.setFontSize(16);doc.setFont('helvetica','bold');
-  doc.text('Arbeitsbericht',ml,22);
-  doc.setFontSize(9);doc.setFont('helvetica','normal');doc.setTextColor(200,220,210);
-  doc.text(datumFmt,W-mr,17,{align:'right'});
-  y=36;
+  function drawHeader(first=false){
+    // Head nello stile dei Fachberichte MadLeaf: bianco, logo/titolo, pill, linea sottile.
+    doc.setTextColor(...green);doc.setFont('helvetica','bold');doc.setFontSize(18);
+    doc.text('MadLeaf',ml,18);
+    doc.setTextColor(...gray);doc.setFont('helvetica','normal');doc.setFontSize(6.5);
+    doc.text('APPLIED ENTOMOLOGY & ENVIRONMENTAL RISK',ml,22);
+    doc.setFontSize(7.5);doc.text(datumFmt,W-mr,18,{align:'right'});
 
-  // ABSENDER / EMPFÄNGER
-  doc.setTextColor(...black);doc.setFontSize(8);doc.setFont('helvetica','bold');
-  doc.text('Dr. Giuseppe Maddalena',ml,y);
-  doc.setFont('helvetica','normal');doc.setTextColor(...gray);
-  doc.text('Applied Entomology & Environmental Risk',ml,y+4);
-  doc.text('Schillerstraße 8, 79369 Wyhl am Kaiserstuhl',ml,y+8);
-  doc.text(`${MY_PHONE}  |  ${MY_EMAIL}`,ml,y+12);
-  if(state.kunde){
-    doc.setTextColor(...black);doc.setFont('helvetica','bold');
-    doc.text(state.kunde.name,W-mr,y,{align:'right'});
-    doc.setFont('helvetica','normal');doc.setTextColor(...gray);
-    if(state.kunde.address) doc.text(state.kunde.address,W-mr,y+4,{align:'right'});
-    if(state.kunde.city) doc.text(state.kunde.city,W-mr,y+8,{align:'right'});
-    if(state.kunde.email) doc.text(state.kunde.email,W-mr,y+12,{align:'right'});
-    if(state.kunde.phone) doc.text(state.kunde.phone,W-mr,y+16,{align:'right'});
+    if(first){
+      doc.setFillColor(...softGreen);doc.setDrawColor(...line);doc.setLineWidth(0.35);
+      doc.roundedRect(W-mr-40,27,40,8,4,4,'FD');
+      doc.setTextColor(...green);doc.setFont('helvetica','bold');doc.setFontSize(6.7);
+      doc.text('ARBEITSBERICHT',W-mr-20,32.1,{align:'center'});
+      doc.setDrawColor(...green);doc.setLineWidth(0.55);doc.line(ml,40,W-mr,40);
+
+      doc.setTextColor(...gray);doc.setFontSize(6.5);doc.setFont('helvetica','bold');
+      doc.text('KUNDE',ml,49);doc.text('OBJEKT / ADRESSE',70,49);doc.text('ARBEITSZEIT / GPS',150,49);
+      doc.setTextColor(...black);doc.setFontSize(9);doc.setFont('helvetica','bold');
+      doc.text(clientName,ml,56);
+      doc.setFont('helvetica','normal');doc.setFontSize(7.5);
+      const addr=doc.splitTextToSize(clientRef||'—',70);
+      doc.text(addr,70,56);
+      doc.setFont('helvetica','bold');doc.setFontSize(8.5);doc.text(getTimerStr(),150,56);
+      doc.setFont('helvetica','normal');doc.setFontSize(6.8);
+      if(state.gps) doc.text(`${state.gps.lat}, ${state.gps.lon}`,150,61);
+      doc.setFillColor(255,255,255);doc.setDrawColor(...line);doc.setLineWidth(0.5);
+      doc.roundedRect(ml,68,W-ml-mr,205,5,5,'FD');
+      return 78;
+    }
+
+    doc.setTextColor(...gray);doc.setFontSize(6.8);doc.setFont('helvetica','normal');
+    doc.text(`${clientName} · Arbeitsbericht`,ml,29);
+    doc.setDrawColor(...green);doc.setLineWidth(0.45);doc.line(ml,33,W-mr,33);
+    doc.setFillColor(255,255,255);doc.setDrawColor(...line);doc.setLineWidth(0.5);
+    doc.roundedRect(ml,39,W-ml-mr,234,5,5,'FD');
+    return 49;
   }
-  y+=22;
-  doc.setDrawColor(220,216,210);doc.setLineWidth(0.3);doc.line(ml,y,W-mr,y);y+=6;
 
-  // INFO BOX
-  doc.setFillColor(247,246,242);doc.roundedRect(ml,y,W-ml-mr,18,2,2,'F');
-  doc.setFillColor(...gold);doc.rect(ml,y,2,18,'F');
-  doc.setTextColor(...gold);doc.setFontSize(7);doc.setFont('helvetica','bold');
-  doc.text('DATUM',ml+5,y+5);doc.text('ARBEITSZEIT',ml+65,y+5);
-  if(state.gps) doc.text('GPS',ml+125,y+5);
-  doc.setTextColor(...black);doc.setFontSize(10);doc.setFont('helvetica','bold');
-  doc.text(datumFmt,ml+5,y+13);doc.text(getTimerStr(),ml+65,y+13);
-  if(state.gps){doc.setFontSize(8);doc.text(`${state.gps.lat}, ${state.gps.lon}`,ml+125,y+13);}
-  y+=24;
+  function newPage(){
+    doc.addPage();
+    return drawHeader(false);
+  }
 
-  // AZIONI
+  function sectionTitle(text,y){
+    doc.setTextColor(...black);doc.setFont('helvetica','bold');doc.setFontSize(10);
+    doc.text(text,ml+6,y);
+    doc.setDrawColor(...line);doc.setLineWidth(0.35);doc.line(ml+6,y+2,W-mr-6,y+2);
+    return y+12;
+  }
+
+  function ensure(y,needed){
+    if(y+needed>266) return newPage();
+    return y;
+  }
+
+  function textBlock(text,y,opts={}){
+    const x=ml+7,w=W-ml-mr-14;
+    doc.setTextColor(...black);doc.setFont('helvetica',opts.bold?'bold':'normal');doc.setFontSize(opts.size||8.6);
+    const lines=doc.splitTextToSize(text,w-(opts.bar?4:0));
+    const lh=opts.leading||4.35;
+    const bh=lines.length*lh+(opts.pad||3);
+    y=ensure(y,bh+3);
+    if(opts.bar){doc.setFillColor(...gold);doc.roundedRect(x,y-1,1.4,Math.max(5,bh-1),0.7,0.7,'F');}
+    doc.text(lines,x+(opts.bar?4:0),y+3);
+    return y+bh+2;
+  }
+
+  let y=drawHeader(true);
+
   if(azioni.length){
-    doc.setFillColor(...green);doc.roundedRect(ml,y,W-ml-mr,7,1,1,'F');
-    doc.setTextColor(255,255,255);doc.setFontSize(9);doc.setFont('helvetica','bold');
-    doc.text('DURCHGEFÜHRTE MASSNAHMEN',ml+4,y+4.5);y+=10;
-    azioni.forEach(az=>{
-      const lines=doc.splitTextToSize(az,W-ml-mr-10);
-      const bh=lines.length*4.5+8;
-      if(y+bh>H-35){_addFooter(doc,W,H,ml,mr,green,gray);doc.addPage();y=mt;}
-      doc.setFillColor(252,251,248);doc.roundedRect(ml,y,W-ml-mr,bh,2,2,'F');
-      doc.setFillColor(...gold);doc.rect(ml,y,2.5,bh,'F');
-      doc.setDrawColor(235,230,220);doc.setLineWidth(0.3);doc.roundedRect(ml,y,W-ml-mr,bh,2,2,'S');
-      doc.setTextColor(...black);doc.setFontSize(9);doc.setFont('helvetica','normal');
-      lines.forEach((l,li)=>doc.text(l,ml+6,y+5.5+li*4.5));
-      y+=bh+4;
-    });y+=4;
+    y=sectionTitle('Durchgeführte Maßnahmen / Befund',y);
+    for(const az of azioni) y=textBlock(az,y,{bar:true,size:8.7,leading:4.4,pad:4});
+    y+=2;
   }
 
-  // PRODOTTI
   if(state.prodotti.length){
-    if(y+30>H-35){_addFooter(doc,W,H,ml,mr,green,gray);doc.addPage();y=mt;}
-    doc.setFillColor(...gold);doc.roundedRect(ml,y,W-ml-mr,7,1,1,'F');
-    doc.setTextColor(...green);doc.setFontSize(9);doc.setFont('helvetica','bold');
-    doc.text('EINGESETZTE MITTEL',ml+4,y+4.5);y+=10;
-    state.prodotti.forEach(p=>{
-      if(y+22>H-35){_addFooter(doc,W,H,ml,mr,green,gray);doc.addPage();y=mt;}
-      doc.setFillColor(252,251,248);doc.roundedRect(ml,y,W-ml-mr,22,2,2,'F');
-      doc.setFillColor(...gold);doc.rect(ml,y,2.5,22,'F');
-      doc.setDrawColor(235,230,220);doc.setLineWidth(0.3);doc.roundedRect(ml,y,W-ml-mr,22,2,2,'S');
-      doc.setTextColor(...black);doc.setFontSize(10);doc.setFont('helvetica','bold');doc.text(p.name,ml+6,y+6);
-      doc.setFontSize(8);doc.setFont('helvetica','normal');doc.setTextColor(...gray);
-      doc.text(`${p.wirkstoff}  ·  ${p.dosierung}`,ml+6,y+11);
-      if(p.qty){doc.setTextColor(...green);doc.text(`Verbraucht: ${p.qty}`,ml+6,y+16);}
-      if(p.klasse){
-        doc.setFillColor(240,244,240);doc.roundedRect(W-mr-32,y+4,28,6,1,1,'F');
-        doc.setTextColor(...green);doc.setFontSize(7);doc.setFont('helvetica','bold');
-        doc.text(p.klasse,W-mr-18,y+8,{align:'center'});
-      }
-      y+=26;
-    });y+=4;
+    y=ensure(y,16);y=sectionTitle('Eingesetzte Mittel',y);
+    for(const p of state.prodotti){
+      const base=`${p.name}${p.wirkstoff?` · ${p.wirkstoff}`:''}${p.dosierung?` · ${p.dosierung}`:''}${p.qty?` · Verbraucht: ${p.qty}`:''}`;
+      y=textBlock(base,y,{bar:true,size:8.4,leading:4.2,pad:4});
+    }
+    y+=2;
   }
 
-  // NÄCHSTE KONTROLLE
   if(nextFmt){
-    if(y+16>H-35){_addFooter(doc,W,H,ml,mr,green,gray);doc.addPage();y=mt;}
-    doc.setFillColor(252,247,235);doc.roundedRect(ml,y,W-ml-mr,14,2,2,'F');
-    doc.setFillColor(...gold);doc.rect(ml,y,2.5,14,'F');
-    doc.setDrawColor(...gold);doc.setLineWidth(0.5);doc.roundedRect(ml,y,W-ml-mr,14,2,2,'S');
-    doc.setTextColor(...green);doc.setFontSize(9);doc.setFont('helvetica','bold');
-    doc.text(`Nächste Kontrolle: ${nextFmt}`,ml+6,y+8.5);y+=18;
+    y=ensure(y,20);y=sectionTitle('Nächste Kontrolle',y);
+    doc.setFillColor(...softGreen);doc.setDrawColor(...line);doc.setLineWidth(0.4);
+    doc.roundedRect(ml+6,y-2,W-ml-mr-12,11,2,2,'FD');
+    doc.setTextColor(...green);doc.setFont('helvetica','bold');doc.setFontSize(8.7);
+    doc.text(nextFmt,ml+11,y+4.5);y+=15;
   }
 
-  // FOTO — 2 per riga, max altezza 85mm per foto
+  // Fotodokumentation su pagine dedicate, con lo stesso head/footer del report.
   if(state.fotos.length){
-    _addFooter(doc,W,H,ml,mr,green,gray);doc.addPage();y=mt;
-    doc.setFillColor(...green);doc.roundedRect(ml,y,W-ml-mr,7,1,1,'F');
-    doc.setTextColor(255,255,255);doc.setFontSize(9);doc.setFont('helvetica','bold');
-    doc.text('FOTODOKUMENTATION',ml+4,y+4.5);y+=12;
-
-    const colW=(W-ml-mr-6)/2; // larghezza colonna (2 per riga con gap 6mm)
-    let col=0; // 0=sinistra, 1=destra
-    let rowH=0; // altezza riga corrente
-
+    y=newPage();
+    y=sectionTitle('Fotodokumentation',y);
+    const colW=(W-ml-mr-18)/2;
+    let col=0,rowH=0;
     for(const foto of state.fotos){
       try{
         const img=new Image();img.src=foto.data;
-        await new Promise(r=>{img.onload=r;});
-        const maxH=85;
+        await new Promise(r=>{img.onload=r;img.onerror=r;});
+        const maxH=73;
         const ratio=Math.min(colW/img.width,maxH/img.height);
         const fw=img.width*ratio,fh=img.height*ratio;
-
-        const xPos = col===0 ? ml : ml+colW+6;
-
-        // Nuova riga se sinistra e non ci sta
-        if(col===0 && y+fh+18>H-40){
-          _addFooter(doc,W,H,ml,mr,green,gray);doc.addPage();y=mt;rowH=0;
-        }
-
+        const captionLines=foto.desc?doc.splitTextToSize(foto.desc,colW):[];
+        const itemH=fh+(captionLines.length?captionLines.length*3.6+5:4);
+        if(col===0 && y+itemH>264){y=newPage();y=sectionTitle('Fotodokumentation (Fortsetzung)',y);rowH=0;}
+        const xPos=col===0?ml+6:ml+12+colW;
         doc.addImage(foto.data,'JPEG',xPos,y,fw,fh,undefined,'MEDIUM');
-
-        // GPS badge
-        if(foto.gps){
-          doc.setFillColor(247,246,242);doc.roundedRect(xPos,y+fh-5,40,5,1,1,'F');
-          doc.setTextColor(...green);doc.setFontSize(6);
-          doc.text(`GPS: ${foto.gps}`,xPos+1,y+fh-1.5);
-        }
-
-        // Descrizione sotto la foto
-        if(foto.desc){
-          doc.setTextColor(...gray);doc.setFontSize(7);doc.setFont('helvetica','italic');
-          const dl=doc.splitTextToSize(foto.desc,colW);
-          doc.text(dl,xPos,y+fh+3);
-        }
-
-        rowH=Math.max(rowH,fh+(foto.desc?8:4));
-
-        if(col===1){
-          // Fine riga — avanza y
-          y+=rowH+4;
-          rowH=0;
-          col=0;
-        } else {
-          col=1;
-        }
+        if(foto.gps){doc.setTextColor(...gray);doc.setFont('helvetica','normal');doc.setFontSize(5.8);doc.text(`GPS: ${foto.gps}`,xPos,y+fh+3);}
+        if(captionLines.length){doc.setTextColor(...gray);doc.setFont('helvetica','italic');doc.setFontSize(6.8);doc.text(captionLines,xPos,y+fh+(foto.gps?7:4));}
+        rowH=Math.max(rowH,itemH);
+        if(col===1){y+=rowH+5;rowH=0;col=0;}else col=1;
       }catch(e){col=0;rowH=0;}
     }
-    // Se rimasta foto a sinistra senza destra
-    if(col===1) y+=rowH+4;
+    if(col===1)y+=rowH+5;
   }
 
-  // FIRME
-  if(y+55>H-40){_addFooter(doc,W,H,ml,mr,green,gray);doc.addPage();y=mt;}
-  else y+=6;
-  doc.setDrawColor(220,216,210);doc.setLineWidth(0.3);doc.line(ml,y,W-mr,y);y+=8;
-
-  const half=(W-ml-mr)/2-5;
+  // FIRME: sempre in calce alla pagina finale, non immediatamente dopo il testo.
+  const sigY=236;
+  if(y>sigY-8) y=newPage();
+  const half=(W-ml-mr-22)/2;
+  const leftX=ml+6,rightX=ml+16+half;
   const nofirma=document.getElementById('nofirma-cb').checked;
   const sigName=document.getElementById('sig-k-name').value.trim();
 
-  // Firma cliente
-  doc.setTextColor(...gray);doc.setFontSize(8);doc.setFont('helvetica','normal');
-  doc.text('Unterschrift Kunde',ml,y);
-  if(sigName){doc.setFont('helvetica','bold');doc.setTextColor(...black);doc.text(sigName,ml,y+5);doc.setFont('helvetica','normal');}
+  doc.setDrawColor(...line);doc.setLineWidth(0.35);doc.line(ml+6,sigY-5,W-mr-6,sigY-5);
+  doc.setTextColor(...gray);doc.setFont('helvetica','normal');doc.setFontSize(7);
+  doc.text('Unterschrift Kunde',leftX,sigY);
+  doc.text('Unterschrift MadLeaf',rightX,sigY);
+
   if(nofirma){
-    const reason=document.getElementById('nofirma-ta').value;
-    doc.setTextColor(...black);doc.setFontSize(8);
-    doc.text('Unterschrift nicht möglich.',ml,y+12);
-    if(reason){const rl=doc.splitTextToSize(reason,half);doc.text(rl,ml,y+17);}
+    const reason=document.getElementById('nofirma-ta').value.trim();
+    doc.setTextColor(...black);doc.setFontSize(7.5);doc.text('Unterschrift nicht möglich.',leftX,sigY+8);
+    if(reason)doc.text(doc.splitTextToSize(reason,half),leftX,sigY+13);
   }else{
-    doc.setDrawColor(220,216,210);doc.roundedRect(ml,y+6,half,42,2,2,'S');
     try{
-      const skc=document.createElement('canvas');skc.width=600;skc.height=200;
-      const skx=skc.getContext('2d');
-      skx.fillStyle='#ffffff';skx.fillRect(0,0,600,200);
-      skx.drawImage(document.getElementById('sig-k'),0,0,600,200);
-      doc.addImage(skc.toDataURL('image/jpeg',0.7),'JPEG',ml+1,y+7,half-2,40);
+      const skc=document.createElement('canvas');skc.width=600;skc.height=180;
+      const skx=skc.getContext('2d');skx.fillStyle='#ffffff';skx.fillRect(0,0,600,180);
+      skx.drawImage(document.getElementById('sig-k'),0,0,600,180);
+      doc.addImage(skc.toDataURL('image/jpeg',0.78),'JPEG',leftX,sigY+4,half,20);
     }catch(e){}
   }
+  doc.setDrawColor(170,170,170);doc.setLineWidth(0.3);
+  doc.line(leftX,sigY+27,leftX+half,sigY+27);
+  doc.setTextColor(...gray);doc.setFont('helvetica','normal');doc.setFontSize(6.8);
+  doc.text(sigName||clientName,leftX,sigY+31);
 
-  // Firma mia
-  const sigX=ml+half+10;
-  doc.setTextColor(...gray);doc.setFontSize(8);doc.setFont('helvetica','normal');
-  doc.text('Unterschrift MadLeaf',sigX,y);
   try{
     await new Promise((res,rej)=>{
       const si=new Image();
       si.onload=()=>{
-        const sc=document.createElement('canvas');sc.width=400;sc.height=160;
-        const sx=sc.getContext('2d');
-        sx.fillStyle='#ffffff';sx.fillRect(0,0,400,160);
-        sx.drawImage(si,0,0,400,160);
-        doc.addImage(sc.toDataURL('image/jpeg',0.7),'JPEG',sigX,y+6,half,42);
-        res();
+        const sc=document.createElement('canvas');sc.width=600;sc.height=220;
+        const sx=sc.getContext('2d');sx.fillStyle='#ffffff';sx.fillRect(0,0,600,220);sx.drawImage(si,0,0,600,220);
+        doc.addImage(sc.toDataURL('image/jpeg',0.8),'JPEG',rightX,sigY+3,half,21);res();
       };
       si.onerror=rej;si.src='Signature_giuseppe.png';
     });
   }catch(e){
-    doc.setFillColor(247,246,242);doc.roundedRect(sigX,y+6,half,42,2,2,'F');
-    doc.setTextColor(...green);doc.setFontSize(22);doc.setFont('helvetica','bold');
-    doc.text('GM',sigX+half/2,y+30,{align:'center'});
+    doc.setTextColor(...green);doc.setFont('helvetica','bold');doc.setFontSize(16);doc.text('GM',rightX+half/2,sigY+17,{align:'center'});
   }
+  doc.setDrawColor(170,170,170);doc.line(rightX,sigY+27,rightX+half,sigY+27);
+  doc.setTextColor(...black);doc.setFont('helvetica','bold');doc.setFontSize(6.8);doc.text('Dr. Giuseppe Maddalena',rightX,sigY+31);
 
-  // FOOTER TUTTE LE PAGINE
+  // Footer finale con numerazione x/y, nello stile dei Fachberichte MadLeaf.
   const pages=doc.internal.getNumberOfPages();
-  for(let i=1;i<=pages;i++){doc.setPage(i);_addFooter(doc,W,H,ml,mr,green,gray);}
+  for(let i=1;i<=pages;i++){
+    doc.setPage(i);
+    _addFooter(doc,W,H,ml,mr,green,gray,clientName,pages);
+  }
   return doc;
 }
 
-function _addFooter(doc,W,H,ml,mr,green,gray){
-  doc.setFillColor(...green);doc.rect(0,H-10,W,10,'F');
-  doc.setTextColor(200,220,210);doc.setFontSize(7);doc.setFont('helvetica','normal');
-  doc.text(`MadLeaf · Dr. Giuseppe Maddalena · Schillerstraße 8 · 79369 Wyhl am Kaiserstuhl · ${MY_PHONE}`,ml,H-4.5);
-  doc.text(`Seite ${doc.internal.getCurrentPageInfo().pageNumber}`,W-mr,H-4.5,{align:'right'});
+function _addFooter(doc,W,H,ml,mr,green,gray,clientName,totalPages){
+  doc.setDrawColor(203,217,211);doc.setLineWidth(0.45);doc.line(ml,H-18,W-mr,H-18);
+  doc.setTextColor(...green);doc.setFont('helvetica','bold');doc.setFontSize(5.9);doc.text('MadLeaf',ml,H-12.5);
+  doc.setTextColor(...gray);doc.setFont('helvetica','normal');doc.setFontSize(5.7);
+  doc.text('· Dr. Giuseppe Maddalena · Schillerstraße 8 · 79369 Wyhl am Kaiserstuhl',ml+11,H-12.5);
+  doc.text(MY_EMAIL,ml,H-9.2);
+  doc.text(`Arbeitsbericht · ${clientName||'Kunde'}`,W-mr,H-12.5,{align:'right'});
+  doc.text(`Seite ${doc.internal.getCurrentPageInfo().pageNumber} von ${totalPages}`,W-mr,H-9.2,{align:'right'});
 }
 
 // ═══════════════════════════════════
@@ -1494,15 +1466,20 @@ async function sendViaBrevo(pdfB64){
     });
     hideSpinner();
     if(res.ok){
-      showToast('PDF gespeichert & E-Mail gesendet ✓', 'gold');
+      let info={}; try{info=await res.json();}catch(e){}
+      console.log('Brevo accepted:', info.messageId||'OK');
+      showToast('PDF gespeichert · E-Mail an Brevo übergeben ✓', 'gold');
+      const sm=document.getElementById('send-status-msg');if(sm)sm.textContent='PDF gespeichert. Brevo hat den Versand angenommen. Zur Sicherheit kann die E-Mail unten auch manuell geöffnet werden.';
     } else {
-      const err = await res.json();
-      console.error('Brevo error:', err);
+      let err={}; try{err=await res.json();}catch(e){err={status:res.status};}
+      console.error('Brevo error:', res.status, err);
       showToast('PDF gespeichert — E-Mail-Fehler', 'red');
+      const sm=document.getElementById('send-status-msg');if(sm)sm.textContent='PDF gespeichert. Automatischer E-Mail-Versand fehlgeschlagen - bitte "E-Mail manuell öffnen" verwenden.';
     }
   } catch(e) {
     hideSpinner();
-    showToast('PDF gespeichert — offline, E-Mail nicht gesendet', '');
+    showToast('PDF gespeichert — E-Mail nicht gesendet', 'red');
+    const sm=document.getElementById('send-status-msg');if(sm)sm.textContent='PDF gespeichert. Automatischer E-Mail-Versand nicht möglich - bitte manuell senden.';
   }
 
   // Apre modal solo per WhatsApp
