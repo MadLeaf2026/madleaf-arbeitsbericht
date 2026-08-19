@@ -1,4 +1,4 @@
-const CACHE = 'madleaf-v6';
+const CACHE = 'madleaf-v7';
 const BASE = '/madleaf-arbeitsbericht/';
 
 self.addEventListener('install', e => {
