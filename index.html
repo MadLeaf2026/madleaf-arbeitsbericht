@@ -28,6 +28,7 @@ body{font-family:'Satoshi',Arial,sans-serif;background:var(--bg);min-height:100v
 .tval{color:#fff;font-size:15px;font-weight:700;flex:1;font-variant-numeric:tabular-nums}
 .tbtn{background:transparent;border:1.5px solid rgba(217,166,79,.6);color:var(--gold);font-size:12px;font-weight:700;padding:5px 14px;border-radius:6px;cursor:pointer}
 .tbtn.on{border-color:#f87171;color:#f87171}
+.trestart{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.22);color:#fff;font-size:11px;font-weight:700;padding:6px 9px;border-radius:6px;cursor:pointer;white-space:nowrap}
 .obanner{display:none;background:#EAF3DE;color:#27500A;font-size:12px;padding:6px 16px;text-align:center;font-weight:700}
 .obanner.show{display:block}
 .section{background:var(--surface);margin:10px 12px;border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);border:1px solid var(--border)}
@@ -99,6 +100,7 @@ body{font-family:'Satoshi',Arial,sans-serif;background:var(--bg);min-height:100v
 .bottombar{position:fixed;bottom:0;left:0;right:0;background:var(--surface);border-top:1px solid var(--border);padding:10px 14px;display:flex;gap:8px;z-index:200}
 .btnmain{flex:1;background:var(--green);color:#fff;border:none;border-radius:10px;padding:13px;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;font-family:'Satoshi',Arial,sans-serif}
 .btnmain:active{background:var(--green2)}
+.btnshare{flex:1;background:var(--gold);color:var(--green);border:none;border-radius:10px;padding:13px 9px;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;font-family:'Satoshi',Arial,sans-serif}
 .btnsave{background:var(--surface2);border:1px solid var(--border);color:var(--muted);border-radius:10px;padding:13px 15px;cursor:pointer;font-size:20px}
 .moverlay{display:none;position:fixed;inset:0;background:rgba(23,56,45,.5);z-index:300;align-items:flex-end;justify-content:center}
 .moverlay.open{display:flex}
@@ -145,6 +147,15 @@ body{font-family:'Satoshi',Arial,sans-serif;background:var(--bg);min-height:100v
 .spin{width:44px;height:44px;border:4px solid rgba(255,255,255,.2);border-top-color:#fff;border-radius:50%;animation:rot .8s linear infinite}
 @keyframes rot{to{transform:rotate(360deg)}}
 .spin-txt{color:#fff;font-size:14px;font-weight:600;text-align:center;padding:0 20px}
+@media(max-width:420px){
+  .timer-bar{padding:8px 10px;gap:7px}
+  .tval{font-size:13px;min-width:92px}
+  .tbtn{padding:5px 10px}
+  .trestart{font-size:10px;padding:6px 7px}
+  .bottombar{padding:8px;gap:6px}
+  .btnsave{padding:12px}
+  .btnmain,.btnshare{font-size:12px;padding:12px 7px;gap:5px;min-width:0}
+}
 </style>
 </head>
 <body>
@@ -156,7 +167,7 @@ body{font-family:'Satoshi',Arial,sans-serif;background:var(--bg);min-height:100v
 
 <div class="topbar">
   <div class="topbar-brand">
-    <div class="sub">MadLeaf · v3.10</div>
+    <div class="sub">MadLeaf · v3.11</div>
     <div class="title">Arbeitsbericht</div>
   </div>
   <div class="topbar-icons">
@@ -172,6 +183,7 @@ body{font-family:'Satoshi',Arial,sans-serif;background:var(--bg);min-height:100v
   <div class="tdot" id="tdot"></div>
   <span class="tval" id="tval">00h 00m 00s</span>
   <button class="tbtn" id="tbtn" onclick="toggleTimer()">START</button>
+  <button class="trestart" id="trestart" onclick="restartTimer()">Timer neu starten</button>
 </div>
 
 <!-- KUNDE -->
@@ -455,6 +467,10 @@ body{font-family:'Satoshi',Arial,sans-serif;background:var(--bg);min-height:100v
     <svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
     PDF erstellen
   </button>
+  <button class="btnshare" onclick="sharePDF()">
+    <svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.3" viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.6" y1="10.7" x2="15.4" y2="6.3"/><line x1="8.6" y1="13.3" x2="15.4" y2="17.7"/></svg>
+    PDF teilen
+  </button>
 </div>
 
 <!-- MODALI -->
@@ -631,6 +647,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   initSig('sig-k');
   renderCustomAzioni();
   document.getElementById('bericht-text').addEventListener('input',onMainTextInput);
+  restoreTimerState();
 });
 
 window.addEventListener('online',()=>{
@@ -667,10 +684,14 @@ function toggleTimer(){_timerOn?_stopTimer():_startTimer();}
 
 function _startTimer(){
   if(!_timerStart) _timerStart = Date.now() - (_getSavedElapsed()||0);
+  if(_timerInterval) clearInterval(_timerInterval);
   _timerOn=true;
+  localStorage.setItem('ml_timer_running','1');
+  localStorage.setItem('ml_timer_started_at',String(_timerStart));
   document.getElementById('tdot').classList.add('on');
   document.getElementById('tbtn').textContent='STOP';
   document.getElementById('tbtn').classList.add('on');
+  _tickTimer();
   _timerInterval=setInterval(_tickTimer,500);
 }
 
@@ -681,7 +702,16 @@ function _stopTimer(){
   document.getElementById('tdot').classList.remove('on');
   document.getElementById('tbtn').textContent='START';
   document.getElementById('tbtn').classList.remove('on');
-  if(_timerStart) localStorage.setItem('ml_timer_elapsed', Date.now()-_timerStart);
+  if(_timerStart) localStorage.setItem('ml_timer_elapsed',String(Date.now()-_timerStart));
+  _timerStart=null;
+  localStorage.removeItem('ml_timer_running');
+  localStorage.removeItem('ml_timer_started_at');
+}
+
+function _clearTimerPersistence(){
+  localStorage.removeItem('ml_timer_elapsed');
+  localStorage.removeItem('ml_timer_running');
+  localStorage.removeItem('ml_timer_started_at');
 }
 
 function _resetTimer(){
@@ -689,11 +719,44 @@ function _resetTimer(){
   _timerInterval=null;
   _timerOn=false;
   _timerStart=null;
-  localStorage.removeItem('ml_timer_elapsed');
+  _clearTimerPersistence();
   document.getElementById('tdot').classList.remove('on');
   document.getElementById('tbtn').textContent='START';
   document.getElementById('tbtn').classList.remove('on');
   document.getElementById('tval').textContent='00h 00m 00s';
+}
+
+function restartTimer(){
+  if(!confirm('Timer wirklich auf null setzen und neu starten?')) return;
+  if(_timerInterval) clearInterval(_timerInterval);
+  _timerInterval=null;
+  _timerOn=false;
+  _timerStart=null;
+  _clearTimerPersistence();
+  document.getElementById('tdot').classList.remove('on');
+  document.getElementById('tbtn').textContent='START';
+  document.getElementById('tbtn').classList.remove('on');
+  document.getElementById('tval').textContent='00h 00m 00s';
+  _timerStart=Date.now();
+  localStorage.setItem('ml_timer_elapsed','0');
+  _startTimer();
+  showToast('Timer wurde neu gestartet ✓','gold');
+}
+
+function restoreTimerState(){
+  const persistedStart=Number(localStorage.getItem('ml_timer_started_at'));
+  const wasRunning=localStorage.getItem('ml_timer_running')==='1';
+  if(wasRunning&&Number.isFinite(persistedStart)&&persistedStart>0&&persistedStart<=Date.now()){
+    _timerStart=persistedStart;
+    _startTimer();
+    return;
+  }
+  const elapsed=Math.max(0,_getSavedElapsed()||0);
+  if(elapsed){
+    _timerStart=Date.now()-elapsed;
+    _tickTimer();
+    _timerStart=null;
+  }
 }
 
 function _tickTimer(){
@@ -1442,6 +1505,42 @@ async function generatePDF(){
     openModal('m-send');
     showToast('PDF lokal gespeichert ✓','gold');
 
+  }catch(e){
+    hideSpinner();
+    console.error(e);
+    showToast('Fehler beim Erstellen','red');
+  }
+}
+
+async function sharePDF(){
+  if(!state.kunde){showToast('Bitte zuerst Kunde auswählen','red');return;}
+  if(!validateFinalReport()) return;
+  showSpinner('PDF wird zum Teilen vorbereitet...');
+  try{
+    const doc=await buildPDF();
+    const filename=buildFilename();
+    const pdfFile=new File([doc.output('arraybuffer')],filename,{type:'application/pdf',lastModified:Date.now()});
+    const canShareFile=typeof navigator.share==='function'
+      &&typeof navigator.canShare==='function'
+      &&navigator.canShare({files:[pdfFile]});
+    hideSpinner();
+    if(canShareFile){
+      try{
+        await navigator.share({files:[pdfFile],title:'MadLeaf Arbeitsbericht',text:'Arbeitsbericht als PDF'});
+        showToast('PDF-Teilen abgeschlossen. Berichtsdaten bleiben erhalten.','gold');
+      }catch(shareError){
+        if(shareError&&shareError.name==='AbortError'){
+          showToast('Teilen abgebrochen — Berichtsdaten bleiben erhalten.','gold');
+          return;
+        }
+        console.warn('Dateifreigabe nicht möglich:',shareError);
+        doc.save(filename);
+        showToast('PDF heruntergeladen — bitte manuell anhängen.','gold');
+      }
+      return;
+    }
+    doc.save(filename);
+    showToast('PDF heruntergeladen — bitte manuell anhängen.','gold');
   }catch(e){
     hideSpinner();
     console.error(e);

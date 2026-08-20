@@ -42,8 +42,8 @@ def function_body(name: str) -> str:
 
 
 class BerichtEmailAndContentSafetyTests(unittest.TestCase):
-    def test_canonical_version_is_3_10(self):
-        self.assertIn("MadLeaf · v3.10", HTML)
+    def test_canonical_version_is_3_11(self):
+        self.assertIn("MadLeaf · v3.11", HTML)
 
     def test_main_report_text_is_explicit_and_empty_by_default(self):
         match = re.search(r'<textarea[^>]+id="bericht-text"[^>]*>(.*?)</textarea>', HTML, re.S)
@@ -135,13 +135,41 @@ class BerichtEmailAndContentSafetyTests(unittest.TestCase):
         self.assertNotIn("resetAll", body)
         self.assertNotIn("bericht-text", body)
 
+    def test_timer_restart_is_confirmed_and_immediately_running_from_zero(self):
+        body = function_body("restartTimer")
+        self.assertIn("Timer wirklich auf null setzen und neu starten?", body)
+        self.assertIn("clearInterval(_timerInterval)", body)
+        self.assertIn("_clearTimerPersistence()", body)
+        self.assertIn("00h 00m 00s", body)
+        self.assertIn("_timerStart=Date.now()", body)
+        self.assertIn("setItem('ml_timer_elapsed','0')", body)
+        self.assertIn("_startTimer()", body)
+
+    def test_timer_restart_does_not_touch_report_content(self):
+        body = function_body("restartTimer")
+        for forbidden in ("resetAll", "state.kunde", "bericht-text", "prodotti", "fotos", "sig-k"):
+            self.assertNotIn(forbidden, body)
+
+    def test_running_timer_survives_page_reload(self):
+        self.assertIn("restoreTimerState()", function_body("restoreTimerState") + function_body("_startTimer") + HTML[HTML.index("document.addEventListener('DOMContentLoaded'"):HTML.index("window.addEventListener('online'")])
+        start = function_body("_startTimer")
+        self.assertIn("setItem('ml_timer_running','1')", start)
+        self.assertIn("setItem('ml_timer_started_at',String(_timerStart))", start)
+        restore = function_body("restoreTimerState")
+        self.assertIn("ml_timer_started_at", restore)
+        self.assertIn("ml_timer_running", restore)
+        self.assertIn("_startTimer()", restore)
+
     def test_new_report_resets_timer_atomically(self):
         body = function_body("_resetTimer")
         self.assertNotIn("_stopTimer", body)
         self.assertIn("_timerInterval=null", body)
         self.assertIn("_timerOn=false", body)
         self.assertIn("_timerStart=null", body)
-        self.assertIn("removeItem('ml_timer_elapsed')", body)
+        self.assertIn("_clearTimerPersistence()", body)
+        persistence = function_body("_clearTimerPersistence")
+        for key in ("ml_timer_elapsed", "ml_timer_running", "ml_timer_started_at"):
+            self.assertIn(f"removeItem('{key}')", persistence)
         self.assertIn("00h 00m 00s", body)
         self.assertIn("resetAll()", function_body("requestNewReport"))
 
@@ -155,9 +183,27 @@ class BerichtEmailAndContentSafetyTests(unittest.TestCase):
         self.assertIn('name="viewport"', HTML[:1000])
         self.assertIn("width:100%;max-width:480px", HTML)
         self.assertIn("max-width:90vw", HTML)
+        self.assertIn("@media(max-width:420px)", HTML)
+        self.assertIn(".btnmain,.btnshare", HTML)
+        self.assertIn("min-width:0", HTML)
+
+    def test_pdf_share_passes_a_real_pdf_file_to_native_share(self):
+        body = function_body("sharePDF")
+        self.assertIn("new File([doc.output('arraybuffer')]", body)
+        self.assertIn("type:'application/pdf'", body)
+        self.assertIn("navigator.canShare({files:[pdfFile]})", body)
+        self.assertIn("navigator.share({files:[pdfFile]", body)
+
+    def test_pdf_share_cancel_and_fallback_preserve_report(self):
+        body = function_body("sharePDF")
+        self.assertIn("shareError.name==='AbortError'", body)
+        self.assertIn("doc.save(filename)", body)
+        self.assertIn("bitte manuell anhängen", body)
+        for forbidden in ("resetAll", "sendViaBrevo", "fetch(", "_stopTimer", "state="):
+            self.assertNotIn(forbidden, body)
 
     def test_service_worker_cache_is_bumped(self):
-        self.assertIn("madleaf-v10", SW)
+        self.assertIn("madleaf-v11", SW)
         self.assertIn("self.skipWaiting()", SW)
 
 
