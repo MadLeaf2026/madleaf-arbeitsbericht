@@ -42,8 +42,8 @@ def function_body(name: str) -> str:
 
 
 class BerichtEmailAndContentSafetyTests(unittest.TestCase):
-    def test_canonical_version_is_3_9(self):
-        self.assertIn("MadLeaf · v3.9", HTML)
+    def test_canonical_version_is_3_10(self):
+        self.assertIn("MadLeaf · v3.10", HTML)
 
     def test_main_report_text_is_explicit_and_empty_by_default(self):
         match = re.search(r'<textarea[^>]+id="bericht-text"[^>]*>(.*?)</textarea>', HTML, re.S)
@@ -58,6 +58,27 @@ class BerichtEmailAndContentSafetyTests(unittest.TestCase):
         validation = function_body("hasMeaningfulMainText")
         self.assertIn("text.length>=20", validation)
         self.assertIn("words.length>=3", validation)
+
+    def test_preset_text_is_copied_into_visible_main_field(self):
+        body = function_body("insertPresetIntoMainText")
+        self.assertIn("querySelector('textarea')", body)
+        self.assertIn("field.value=presetText", body)
+        self.assertIn("hasMeaningfulMainText(presetText)", body)
+        self.assertIn("insertPresetIntoMainText(b)", function_body("toggleA"))
+
+    def test_preset_name_without_real_text_is_not_accepted(self):
+        body = function_body("insertPresetIntoMainText")
+        self.assertIn("if(!hasMeaningfulMainText(presetText)) return false", body)
+        self.assertNotIn(".alabel", body)
+
+    def test_manual_and_preset_text_use_the_same_validation(self):
+        self.assertIn("hasMeaningfulMainText()", function_body("validateFinalReport"))
+        self.assertIn("hasMeaningfulMainText(presetText)", function_body("insertPresetIntoMainText"))
+
+    def test_deleting_generated_text_reenables_blocking(self):
+        self.assertIn("addEventListener('input',onMainTextInput)", HTML)
+        self.assertIn("delete field.dataset.presetText", function_body("onMainTextInput"))
+        self.assertIn("if(!validateFinalReport()) return", function_body("generatePDF"))
 
     def test_draft_does_not_require_main_text(self):
         body = function_body("saveDraft")
@@ -114,13 +135,29 @@ class BerichtEmailAndContentSafetyTests(unittest.TestCase):
         self.assertNotIn("resetAll", body)
         self.assertNotIn("bericht-text", body)
 
+    def test_new_report_resets_timer_atomically(self):
+        body = function_body("_resetTimer")
+        self.assertNotIn("_stopTimer", body)
+        self.assertIn("_timerInterval=null", body)
+        self.assertIn("_timerOn=false", body)
+        self.assertIn("_timerStart=null", body)
+        self.assertIn("removeItem('ml_timer_elapsed')", body)
+        self.assertIn("00h 00m 00s", body)
+        self.assertIn("resetAll()", function_body("requestNewReport"))
+
+    def test_reopened_draft_restores_timer(self):
+        body = function_body("restoreDraftPayload")
+        self.assertIn("payload.timer?.elapsedMs", body)
+        self.assertIn("payload.timer?.running", body)
+        self.assertIn("_startTimer()", body)
+
     def test_mobile_breakpoint_is_preserved(self):
         self.assertIn('name="viewport"', HTML[:1000])
         self.assertIn("width:100%;max-width:480px", HTML)
         self.assertIn("max-width:90vw", HTML)
 
     def test_service_worker_cache_is_bumped(self):
-        self.assertIn("madleaf-v9", SW)
+        self.assertIn("madleaf-v10", SW)
         self.assertIn("self.skipWaiting()", SW)
 
 

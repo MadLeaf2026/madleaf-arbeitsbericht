@@ -156,7 +156,7 @@ body{font-family:'Satoshi',Arial,sans-serif;background:var(--bg);min-height:100v
 
 <div class="topbar">
   <div class="topbar-brand">
-    <div class="sub">MadLeaf · v3.9</div>
+    <div class="sub">MadLeaf · v3.10</div>
     <div class="title">Arbeitsbericht</div>
   </div>
   <div class="topbar-icons">
@@ -630,7 +630,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   initGPS();
   initSig('sig-k');
   renderCustomAzioni();
-  document.getElementById('bericht-text').addEventListener('input',clearMainTextError);
+  document.getElementById('bericht-text').addEventListener('input',onMainTextInput);
 });
 
 window.addEventListener('online',()=>{
@@ -685,9 +685,14 @@ function _stopTimer(){
 }
 
 function _resetTimer(){
-  _stopTimer();
+  if(_timerInterval) clearInterval(_timerInterval);
+  _timerInterval=null;
+  _timerOn=false;
   _timerStart=null;
   localStorage.removeItem('ml_timer_elapsed');
+  document.getElementById('tdot').classList.remove('on');
+  document.getElementById('tbtn').textContent='START';
+  document.getElementById('tbtn').classList.remove('on');
   document.getElementById('tval').textContent='00h 00m 00s';
 }
 
@@ -849,6 +854,7 @@ function toggleA(id){
 
   b.classList.toggle('on',!on);
   if(body)body.style.display=on?'none':'block';
+  if(!on) insertPresetIntoMainText(b);
 }
 
 function getAzioni(){
@@ -872,6 +878,28 @@ function hasMeaningfulMainText(text=getMainText()){
 function clearMainTextError(){
   document.getElementById('bericht-text').classList.remove('invalid');
   document.getElementById('bericht-text-error').classList.remove('show');
+}
+
+function onMainTextInput(){
+  const field=document.getElementById('bericht-text');
+  delete field.dataset.presetText;
+  clearMainTextError();
+}
+
+function insertPresetIntoMainText(block){
+  const presetText=block?.querySelector('textarea')?.value?.trim()||'';
+  if(!hasMeaningfulMainText(presetText)) return false;
+  const field=document.getElementById('bericht-text');
+  const current=field.value.trim();
+  const previousPreset=field.dataset.presetText||'';
+  if(!current || (block.dataset.group && previousPreset && current===previousPreset)){
+    field.value=presetText;
+  }else if(!current.includes(presetText)){
+    field.value=`${current}\n\n${presetText}`;
+  }
+  field.dataset.presetText=presetText;
+  clearMainTextError();
+  return true;
 }
 
 function validateFinalReport(){
@@ -914,6 +942,7 @@ function addCustomAzione(){
     <div class="alabel" style="color:var(--green);font-weight:600">${label}</div></div>
   <div class="abody"><div class="hint">Text bearbeiten:</div><textarea>${text}</textarea></div>`;
   wrap.appendChild(div);
+  insertPresetIntoMainText(div);
   document.getElementById('na-label').value='';
   document.getElementById('na-text').value='';
   document.getElementById('na-save').checked=false;
